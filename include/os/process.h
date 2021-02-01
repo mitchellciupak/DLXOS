@@ -69,6 +69,6 @@ extern void ProcessDestroy();
 extern void ProcessDestroy();
 
 //Added by mciupak
-unsigned int GetCurrentPid();
+extern unsigned int GetCurrentPid();
 
 #endif	/* _process_h_ */
