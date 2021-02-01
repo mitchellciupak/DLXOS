@@ -66,5 +66,9 @@ extern void ProcessWakeup (PCB *);
 extern void ProcessSetResult (PCB *, uint32);
 extern void ProcessSleep ();
 extern void ProcessDestroy();
+extern void ProcessDestroy();
+
+//Added by mciupak
+unsigned int GetCurrentPid();
 
 #endif	/* _process_h_ */

@@ -16,7 +16,7 @@
 #include "filesys.h"
 
 
-int ProcessGetCodeInfo (const char *file, uint32 *startAddr, uint32 *codeStart, 
+int ProcessGetCodeInfo (const char *file, uint32 *startAddr, uint32 *codeStart,
                         uint32 *codeSize, uint32 *dataStart, uint32 *dataSize);
 int ProcessGetFromFile (int fd, unsigned char *buf, uint32 *addr, int max);
 
@@ -660,6 +660,21 @@ ProcessGetFromFile (int fd, unsigned char *buf, uint32 *addr, int max)
 
 //----------------------------------------------------------------------
 //
+//	Getpid
+//
+//	 returns an integer representing the ID of the current process.
+//   The ID of a process in DLXOS can be defined as simply the process
+//   control block's index in the array of all process control blocks.
+//
+//----------------------------------------------------------------------
+unsigned
+int
+GetCurrentPid() {
+  return 0;
+}
+
+//----------------------------------------------------------------------
+//
 //	main
 //
 //	This routine is called when the OS starts up.  It allocates a
@@ -763,5 +778,3 @@ void main (int argc, char *argv[])
   // are no runnable processes left.
   exitsim();	// NEVER RETURNS!
 }
-
-
