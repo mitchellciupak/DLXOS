@@ -37,32 +37,19 @@ Information about how are code works goes here
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-What things you need to install the software and how to install them.
-
-```
-Give examples
-```
+* Linux
+* gcc-dlx
+* dlxsim
+* dlxasm
 
 ### Installing
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+Simply, unzip and run given you have the required programs
 
 ```
-Give the example
+unzip ee469lab2_g24.tar.gz
+gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c #TODO-is this correct Compiling Step
+#TODO-is this correct run (dlxsim) Step
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
-
-### Compiling
-
-    gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c
 
 ## 🔧 Running the tests <a name = "tests"></a>
 Explain how to run the automated tests for this system.
