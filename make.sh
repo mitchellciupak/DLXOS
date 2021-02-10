@@ -6,8 +6,7 @@
     * -R : Run
     * -A : Compile and Run
     * -T : Compile and Run Unit Tests
-    * -Mov_Ciupak : Move Dir to Ciupak Home Directory
-    * -Mov_Kemmet : Move Dir to Ciupak Home Directory
+    * -Mov : Move Dir From/To $USER and /tmp/
 
     # ARGS[1]
     * $COMPILEFLAGS
@@ -28,6 +27,18 @@ function compile() {
 
 function run() {
     dlxsim -x ./os/work/os.dlx.obj -a -u ./apps/work/userprog.dlx.obj
+}
+
+function move() {
+    if [ $(pwd) = /tmp/$USER/ee469 ]
+    then
+        cp -r . /home/shay/a/$USER/469ECE/DLXOS 2>/dev/null
+        echo 'This project has been copied to:' /home/shay/a/$USER/469ECE/DLXOS
+    else
+        rm -rf /tmp/$USER/ee469/*
+        cp -r . /tmp/$USER/ee469/ 2>/dev/null
+        echo 'This project has been copied to:' /tmp/$USER/ee469
+    fi
 }
 
 ## Main - Flag Control
@@ -55,16 +66,7 @@ then
 elif [ ${args[0]} = '-Mov' ]
 then
     echo 'This project is currently at:' $(pwd)
-    if [ ${args[1]} = 'ciupak' ]
-    then
-        pwd
-    elif [ ${args[0]} = '-Mov' ]
-    then
-        pwd
-    fi
-# elif [ ${args[0]} = '-Mov' ]
-# then
-#     echo Lets Go Home
+    move
 
 else
     echo "Total Arguments:" $#
