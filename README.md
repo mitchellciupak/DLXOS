@@ -1,8 +1,73 @@
-# DLXOS-ECE469
-#### Chempak Kernels
-#### DLXOS Introduction at https://engineering.purdue.edu/~ee469/labs_2021/lab1.html
+<p align="center">
+  <a href="" rel="noopener">
+ <img width=200px height=200px src="https://cdn2.vectorstock.com/i/thumb-large/28/96/corn-kernel-vector-7732896.jpg" alt="Project logo"></a>
+</p>
 
-## WARNING
+<h3 align="center">DLXOS</h3>
+
+<div align="center">
+
+  [![Status](https://img.shields.io/badge/status-active-success.svg)]()
+  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/mitchellciupak/DLXOS/pulls)
+
+</div>
+
+---
+
+<p align="center"> Lab 2 - Process Synchronization by Kempak Kernels (Team No. 24)
+    <br>
+</p>
+
+## 📝 Table of Contents
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Deployment](#deployment)
+- [Usage](#usage)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgement)
+- [Appendix](#appendix)
+
+## 🧐 About <a name = "about"></a>
+Information about how are code works goes here
+
+## 🏁 Getting Started <a name = "getting_started"></a>
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+
+### Prerequisites
+What things you need to install the software and how to install them.
+
+```
+Give examples
+```
+
+### Installing
+A step by step series of examples that tell you how to get a development env running.
+
+Say what the step will be
+
+```
+Give the example
+```
+
+And repeat
+
+```
+until finished
+```
+
+End with an example of getting some data out of the system or using it for a little demo.
+
+# Compiling
+
+    gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c
+
+## 🔧 Running the tests <a name = "tests"></a>
+Explain how to run the automated tests for this system.
+
+## 🎈 Usage <a name="usage"></a>
+Add notes about how to use the system.
+
+### WARNING
 * before you exit from ssh session: Please make sure that you copy the contents of your tmp folder into your home for backup
 
         cp -r /tmp/$USER/ee469 ~/
@@ -11,7 +76,21 @@
 
         cp -r ~/ee469 /tmp/$USER/"
 
-## File Structure
+## 🚀 Deployment <a name = "deployment"></a>
+Add additional notes about how to deploy this on a live system.
+
+## ✍️ Authors <a name = "authors"></a>
+- [@mitchellciupak](https://github.com/mitchellciupak) - Teammate
+- [@ckemmet](https://github.com/ckemmet) - Teammate
+
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+- Hat tip to anyone whose code was used
+- Inspiration
+- References
+
+## 🔎 Appendix <a name = "appendix"></a>
+
+### File Structure
     ./
         apps/: user programs go here
         bin/: put any executable DLX files here
@@ -21,11 +100,7 @@
         lib/: precompiled object files for user programs (i.e. usertraps.o) go here
         os/
 
-
-## DLX Operating System:
-Since it is beyond the scope of this course to write an operating system completely from scratch, we are providing you with a set of basic skeleton source files that can be compiled into a DLX-based operating system. This operating system will be referred to as DLXOS. You will be editing these source files throughout this course as you implement new features. The initial set of source files are as follows:
-
-### C Source Files:
+#### C Source Files:
 * memory.c: contains functions dealing with paging and other memory managment tasks.
 * process.c: contains functions dealing with process maintenance and switching.
 * misc.c: contains miscellaneous helpful functions such as string manipulation functions.
@@ -35,12 +110,8 @@ Since it is beyond the scope of this course to write an operating system complet
 * traps.c: contains functions that respond to traps.
 * filesys.c: contains functions for reading and writing to a filesystem.
 
-### Assembly Source Files:
+#### Assembly Source Files:
 * dlxos.s: contains low-level operating system code such as the bootloader.
 * osend.s: a bookkeeping file listing the last address of the operating system.
 * trap_random.s: contains the trap subroutines to generate random numbers.
 * usertraps.s: contains the trap subroutines that are available to user programs.
-
-# Compiling
-
-    gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c
