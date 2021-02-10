@@ -28,6 +28,9 @@
 - [Appendix](#appendix)
 
 ## 🧐 About <a name = "about"></a>
+
+For answers to the questions listed in the assignment description please visit [Assignements](./ASSIGNMENT.md)
+
 Information about how are code works goes here
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
@@ -57,7 +60,7 @@ until finished
 
 End with an example of getting some data out of the system or using it for a little demo.
 
-# Compiling
+### Compiling
 
     gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c
 
