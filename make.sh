@@ -1,17 +1,43 @@
 #!/bin/bash
- 
-### Print total arguments and their values
- 
-echo "Total Arguments:" $#
-echo "All Arguments values:" $@
- 
-### Command arguments can be accessed as
- 
-echo "First->"  $1
-echo "Second->" $2
- 
-# You can also access all arguments in an array and use them in a script.
- 
+
+'''
+ARGS[0] Flags:
+* -C : Compile
+* -R : Run
+* -A : Compile and Run
+* -T : Compile and Run Unit Tests
+* -Mov_Ciupak : Move Dir to Ciupak Home Directory
+* -Mov_Kemmet : Move Dir to Ciupak Home Directory
+
+ARGS[1] Flags:
+* $COMPILEFLAGS
+
+ARGS[2] Flags:
+* $RUNFLAGS
+'''
+
 args=("$@")
-echo "First->"  ${args[0]} 
-echo "Second->" ${args[1]}
+
+## Flag Control
+if [ ${args[0]} = '-C' ]
+then
+    echo Lets Compile
+elif [ ${args[0]} = '-R' ]
+then
+    echo Lets Run
+elif [ ${args[0]} = '-A' ]
+then
+    echo Lets Compile and Run
+elif [ ${args[0]} = '-T' ]
+then
+    echo Lets Compile and Run Our Tests
+elif [ ${args[0]} = '-Mov_Ciupak' ]
+then
+    echo Lets Go Home
+elif [ ${args[0]} = '-Mov_Kemmet' ]
+then
+    echo Lets Go Home
+else
+    echo "Total Arguments:" $#
+    echo "All Arguments values:" $@
+fi

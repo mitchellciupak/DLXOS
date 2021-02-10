@@ -54,6 +54,10 @@ gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c #TODO-is this correct Compiling Step
 ## 🔧 Running the tests <a name = "tests"></a>
 Explain how to run the automated tests for this system.
 
+```
+chmod u+x make.sh
+```
+
 ## 🎈 Usage <a name="usage"></a>
 Add notes about how to use the system.
 
