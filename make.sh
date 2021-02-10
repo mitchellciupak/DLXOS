@@ -1,42 +1,71 @@
 #!/bin/bash
 
-'''
-ARGS[0] Flags:
-* -C : Compile
-* -R : Run
-* -A : Compile and Run
-* -T : Compile and Run Unit Tests
-* -Mov_Ciupak : Move Dir to Ciupak Home Directory
-* -Mov_Kemmet : Move Dir to Ciupak Home Directory
+<< 'Flags'
+    # ARG[0]
+    * -C : Compile
+    * -R : Run
+    * -A : Compile and Run
+    * -T : Compile and Run Unit Tests
+    * -Mov_Ciupak : Move Dir to Ciupak Home Directory
+    * -Mov_Kemmet : Move Dir to Ciupak Home Directory
 
-ARGS[1] Flags:
-* $COMPILEFLAGS
+    # ARGS[1]
+    * $COMPILEFLAGS
 
-ARGS[2] Flags:
-* $RUNFLAGS
-'''
+    # AGRS[2]
+    * $RUNFLAGS
+Flags
+
 
 args=("$@")
 
-## Flag Control
+## Helper Functions
+
+function compile() {
+    ./os/make
+    ./apps/make
+}
+
+function run() {
+    dlxsim -x ./os/work/os.dlx.obj -a -u ./apps/work/userprog.dlx.obj
+}
+
+## Main - Flag Control
 if [ ${args[0]} = '-C' ]
 then
-    echo Lets Compile
+    echo 'C*O*M*P*I*L*I*N*G'
+    compile
+
 elif [ ${args[0]} = '-R' ]
 then
-    echo Lets Run
+    echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
+    run
+
 elif [ ${args[0]} = '-A' ]
 then
-    echo Lets Compile and Run
+    echo 'Compiling and Running'
+    compile
+    run
+
 elif [ ${args[0]} = '-T' ]
 then
-    echo Lets Compile and Run Our Tests
-elif [ ${args[0]} = '-Mov_Ciupak' ]
+    echo 'Running Tests'
+    echo 'Test 1 - Hello World'
+
+elif [ ${args[0]} = '-Mov' ]
 then
-    echo Lets Go Home
-elif [ ${args[0]} = '-Mov_Kemmet' ]
-then
-    echo Lets Go Home
+    echo 'This project is currently at:' $(pwd)
+    if [ ${args[1]} = 'ciupak' ]
+    then
+        pwd
+    elif [ ${args[0]} = '-Mov' ]
+    then
+        pwd
+    fi
+# elif [ ${args[0]} = '-Mov' ]
+# then
+#     echo Lets Go Home
+
 else
     echo "Total Arguments:" $#
     echo "All Arguments values:" $@

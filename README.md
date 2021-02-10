@@ -29,7 +29,7 @@
 
 ## 🧐 About <a name = "about"></a>
 
-For answers to the questions listed in the assignment description please visit [Assignements](./ASSIGNMENT.md)
+For answers to the questions listed in the assignment description please visit the [Assignement](./ASSIGNMENT.md) file.
 
 Information about how are code works goes here
 
