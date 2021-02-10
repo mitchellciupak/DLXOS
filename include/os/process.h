@@ -6,11 +6,14 @@
 //	about the stack format for a saved process.
 //
 
-#ifndef	_process_h__
-#define	_process_h_
+#ifndef	__process_h__
+#define	__process_h__
 
 #include "dlxos.h"
 #include "queue.h"
+
+#define PROCESS_FAIL 0
+#define PROCESS_SUCCESS 1
 
 #define	PROCESS_MAX_PROCS	32	// Maximum number of active processes
 
@@ -37,7 +40,7 @@ typedef struct PCB {
   char		name[80];	// Process name
   uint32	pagetable[16];	// Statically allocated page table
   int		npages;		// Number of pages allocated to this process
-  Link		l;		// Used for keeping PCB in queues
+  Link		*l;		// Used for keeping PCB in queues
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
@@ -55,20 +58,22 @@ typedef struct PCB {
 #define	PROCESS_STACK_PTBITS	(PROCESS_STACK_IAR+6)
 #define	PROCESS_STACK_PREV_FRAME 10	// points to previous interrupt frame
 #define	PROCESS_STACK_FRAME_SIZE 85	// interrupt frame is 85 words
-
+#define SIZE_ARG_BUFF  	1024		// Max number of characters in the
+					// command-line arguments
+#define MAX_ARGS	128		// Max number of command-line
+					// arguments
 extern PCB	*currentPCB;
 
-extern int  ProcessFork (VoidFunc, unsigned int, char *, int);
-extern void ProcessSchedule ();
-extern void ContextSwitch(void *, void *, int);
-extern void ProcessSuspend (PCB *);
-extern void ProcessWakeup (PCB *);
-extern void ProcessSetResult (PCB *, uint32);
-extern void ProcessSleep ();
-extern void ProcessDestroy();
-extern void ProcessDestroy();
+extern int	ProcessFork (VoidFunc, unsigned int, char *, int);
+extern void	ProcessSchedule ();
+extern void	ContextSwitch(void *, void *, int);
+extern void	ProcessSuspend (PCB *);
+extern void	ProcessWakeup (PCB *);
+extern void	ProcessSetResult (PCB *, uint32);
+extern void	ProcessSleep ();
+extern void     ProcessDestroy(PCB *pcb);
+extern unsigned GetCurrentPid();
+void process_create(char *name, ...);
+int GetPidFromAddress(PCB *pcb);
 
-//Added by mciupak
-extern unsigned int GetCurrentPid();
-
-#endif	/* _process_h_ */
+#endif	/* __process_h__ */

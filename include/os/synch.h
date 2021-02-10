@@ -16,31 +16,64 @@
 
 #include "queue.h"
 
+#define SYNC_FAIL -1    // Used as return values from most synchronization functions.
+#define SYNC_SUCCESS 1  // Note that many functions return a handle, hence the -1 value
+                        // for failure.
+
+#define MAX_SEMS	32	//Maximum 32 semaphores allowed in the system
+#define MAX_LOCKS	64	//Maximum 64 locks allowed in the system
+				//This is because condition vars also use
+				//locks from the same pool
+#define MAX_CONDS	32	//Maximum 32 conds allowed in the system
+
+typedef int sem_t;
+typedef int lock_t;
+typedef int cond_t;
+
+#define INVALID_SEM -1
+#define INVALID_LOCK -1
+#define INVALID_PROC -1
+#define INVALID_COND -1
 typedef struct Sem {
     Queue	waiting;
     int		count;
+    uint32	inuse; 		//indicates whether the semaphore is being
+    				//used by any process
 } Sem;
 
-extern void	SemInit (Sem *, int);
-extern void	SemWait (Sem *);
-extern void	SemSignal (Sem *);
+int SemInit (Sem *, int);
+int SemWait (Sem *);
+int SemSignal (Sem *);
 
 typedef struct Lock {
-    // Your stuff goes here...
+  int pid;       // PID of process holding the lock, -1 if lock is available
+  Queue waiting; // Queue of processes waiting on the lock
+  int inuse;     // Bookkeeping variable for free vs. used structures
 } Lock;
 
+int LockInit(Lock *);
+int LockAcquire(Lock *);
+int LockRelease(Lock *);
+
 typedef struct Cond {
-    // Your stuff goes here...
+  // Your code goes here
 } Cond;
 
-extern void	LockInit (Lock *);
-extern void	LockAcquire (Lock *);
-extern void	LockRelease (Lock *);
-extern void	CondInit (Cond *, Lock *);
-extern void	CondWait (Cond *);
-extern void	CondSignal (Cond *);
-extern void	CondBroadcast (Cond *);
+int CondInit(Cond *);
+int CondWait(Cond *);
+int CondSignal(Cond *);
+
+int SynchModuleInit();
+
+sem_t SemCreate(int count);
+int SemHandleWait(sem_t sem);
+int SemHandleSignal(sem_t sem);
+lock_t LockCreate();
+int LockHandleAcquire(lock_t lock);
+int LockHandleRelease(lock_t lock);
+cond_t CondCreate(lock_t lock);
+int CondHandleWait(cond_t cond);
+int CondHandleSignal(cond_t cond);
+int CondHandleBroadcast(cond_t cond);
 
 #endif	//_synch_h_
-
-

@@ -5,10 +5,9 @@
 //	includes a routine to initialize system processes.
 
 #include "ostraps.h"
-#include "process.h"
-#include "misc.h"
-#include "synch.h"
 #include "usertraps.h"
+#include "process.h"
+#include "synch.h"
 
 //----------------------------------------------------------------------
 //
@@ -79,7 +78,7 @@ chaseTail (int me)
 //	loop could be used as the "idle" process.
 //
 //----------------------------------------------------------------------
-static
+/*static
 void
 emptyLoop (int me)
 {
@@ -94,7 +93,7 @@ emptyLoop (int me)
       printf ("%d ", me);
     }
   }
-}
+} */
 
 //----------------------------------------------------------------------
 //
@@ -103,7 +102,7 @@ emptyLoop (int me)
 //	This routine tests random number usage in DLXOS.
 //
 //----------------------------------------------------------------------
-static
+/*static
 void
 randomStuff (int seed)
 {
@@ -117,7 +116,7 @@ randomStuff (int seed)
     printf ("Random number %02i is 0x%08x.\n", i, rn);
   }
 }
-
+*/
 //----------------------------------------------------------------------
 //
 //	SysprocCreateProcesses

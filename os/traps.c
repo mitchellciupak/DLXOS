@@ -10,8 +10,10 @@
 #include "dlx.h"
 #include "dlxos.h"
 #include "traps.h"
-#include "process.h"
 #include "memory.h"
+#include "process.h"
+#include "synch.h"
+#include "share_memory.h"
 
 //----------------------------------------------------------------------
 //
@@ -39,6 +41,108 @@ void
 KbdModuleInit ()
 {
   *((uint32 *)DLX_KBD_INTR) = 1;
+}
+
+//--------------------------------------------------------------------
+// GetUintFromTrapArg(uint32 *trapArgs, int sysmode)
+//--------------------------------------------------------------------
+static uint32 GetUintFromTrapArg(uint32 *trapArgs, int sysmode)
+{
+  uint32 arg;
+  if(!sysmode)
+  {
+    MemoryCopyUserToSystem (currentPCB, trapArgs, &arg, sizeof (arg));
+  } 
+  else 
+  {
+    bcopy ((char*)trapArgs, (char*)&arg, sizeof (arg));
+  }
+
+  return arg;
+}
+
+//--------------------------------------------------------------------
+// GetIntFromTrapArg(uint32 *trapArgs, int sysmode)
+//--------------------------------------------------------------------
+static int GetIntFromTrapArg(uint32 *trapArgs, int sysmode)
+{
+  int arg;
+  if(!sysmode)
+  {
+    MemoryCopyUserToSystem (currentPCB, trapArgs, &arg, sizeof (arg));
+  } 
+  else 
+  {
+    bcopy ((char *)trapArgs, (char *)&arg, sizeof (arg));
+  }
+
+  return arg;
+}
+//--------------------------------------------------------------------
+// Here we support reading the arguments
+// Maximum 10 command-line arguments are allowed
+// Also the total length of the arguments including the terminating 
+// '\0' should be less than or equal to 100
+//--------------------------------------------------------------------
+
+static void TrapProcessCreateHandler(uint32 *trapArgs, int sysmode)
+{
+  char allargs[SIZE_ARG_BUFF];
+  char name[100];
+  int i=0, j=0, k=0;
+  uint32 args[MAX_ARGS];
+  char *destination;
+  // The first argument is the name of the executable file
+
+  i=0;
+  for(i=0;i<100; i++)
+    allargs[i] = 0;
+  i=0;
+  if(!sysmode)
+  {
+    //Get the arguments into the sytem space
+    MemoryCopyUserToSystem (currentPCB, trapArgs, args, sizeof (args));
+    do {
+      MemoryCopyUserToSystem (currentPCB,((char*)args[0])+i,name+i,1);
+      i++;
+    } while ((i < sizeof (name)) && (name[i-1] != '\0'));
+  } else {
+    bcopy ((char *)trapArgs, (char *)args, sizeof (args));
+    dstrncpy ((char *)args[0], name, sizeof (name));
+  }
+  name[sizeof(name)-1] = '\0';	// null terminate the name
+  i=0;
+  if(!sysmode)
+  {
+    //Copy the rest of the arguments to the system space
+    for(j=0; (j<11)&&(args[j]!=0); j++)
+    {
+      k=0;
+      do 
+      {
+        MemoryCopyUserToSystem (currentPCB,((char*)args[j])+k,allargs+i,1);
+        i++; k++;
+      } while ((i<sizeof(allargs)) && (allargs[i-1]!='\0'));
+    }
+  }
+  else 
+  {
+    destination = &allargs[0];
+    for(j=0; (j<11)&&(args[j]!=0); j++)
+    {
+      k = dstrlen((char *)args[j]);  //length of the argument
+      if(&destination[k]-allargs>100)
+      {
+        printf("Fatal: Cumulative length of all arguments > 100\n");
+	exitsim();
+      }
+      dstrcpy(destination, (char *)args[j]);
+      destination[k] = '\0';
+    }
+  }
+  allargs[sizeof(allargs)-1] = '\0';	// null terminate the name
+  dbprintf('p', "Process Create Trap: creating process with command-line: %s\n", allargs);
+  ProcessFork(0, (uint32)allargs, name, 1);
 }
 
 
@@ -131,6 +235,8 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
   int	i;
   uint32	args[4];
   int	intrs;
+  uint32 handle;
+  int ihandle;
 
   dbprintf ('t',"Interrupt cause=0x%x iar=0x%x isr=0x%x args=0x%08x.\n",
 	    cause, iar, isr, (int)trapArgs);
@@ -143,6 +249,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       dbprintf ('t', "Got a context switch trap!\n");
       ProcessSchedule ();
       break;
+    case TRAP_USER_EXIT:
     case TRAP_EXIT:
       dbprintf ('t', "Got an exit trap!\n");
       ProcessDestroy (currentPCB);
@@ -184,7 +291,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       // Allow Open() calls to be interruptible!
       intrs = EnableIntrs ();
       ProcessSetResult (currentPCB, args[1] + 0x10000);
-      printf ("Got an open with parameters ('%s',0x%x)\n", (char *)args[0], args[1]);
+      dbprintf('t', "Got an open with parameters ('%s',0x%x)\n", (char *)(args[0]), (int)(args[1]));
       RestoreIntrs (intrs);
       break;
     case TRAP_CLOSE:
@@ -215,10 +322,69 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       ProcessSetResult (currentPCB, -1);
       RestoreIntrs (intrs);
       break;
-    case TRAP_GET_PID: //Added by mciupak
-      intrs = EnableIntrs ();
-      ProcessSetResult (currentPCB, GetCurrentPid());
-      RestoreIntrs (intrs);
+    case TRAP_PROCESS_GETPID:
+      ProcessSetResult(currentPCB, GetCurrentPid()); 
+      break;
+    case TRAP_PROCESS_CREATE:
+      TrapProcessCreateHandler(trapArgs, isr & DLX_STATUS_SYSMODE);
+      break;
+    case TRAP_SHARE_CREATE_PAGE:
+      handle = MemoryCreateSharedPage(currentPCB);
+      ProcessSetResult(currentPCB, handle);
+      break;
+    case TRAP_SHARE_MAP_PAGE:
+      handle = GetUintFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      handle = (uint32)mmap(currentPCB, handle);
+      ProcessSetResult(currentPCB, handle);
+      break;
+    case TRAP_SEM_CREATE:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = SemCreate(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return handle
+      break;
+    case TRAP_SEM_WAIT:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      handle = SemHandleWait(ihandle);
+      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      break;
+    case TRAP_SEM_SIGNAL:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      handle = SemHandleSignal(ihandle);
+      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      break;
+    case TRAP_LOCK_CREATE:
+      ihandle = LockCreate();
+      ProcessSetResult(currentPCB, ihandle); //Return handle
+      break;
+    case TRAP_LOCK_ACQUIRE:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      handle = LockHandleAcquire(ihandle);
+      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      break;
+    case TRAP_LOCK_RELEASE:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      handle = LockHandleRelease(ihandle);
+      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      break;
+    case TRAP_COND_CREATE:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = CondCreate(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return handle
+      break;
+    case TRAP_COND_WAIT:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = CondHandleWait(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return SYNC_SUCCESS or SYNC_FAIL
+      break;
+    case TRAP_COND_SIGNAL:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = CondHandleSignal(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return SYNC_SUCCESS or SYNC_FAIL
+      break;
+    case TRAP_COND_BROADCAST:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = CondHandleBroadcast(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return SYNC_SUCCESS or SYNC_FAIL
       break;
     default:
       printf ("Got an unrecognized trap (0x%x) - exiting!\n",
@@ -271,3 +437,4 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
   // Note that this return may schedule a new process!
   intrreturn ();
 }
+
