@@ -1,4 +1,5 @@
-# Lab 2 - Procces Sync at https://engineering.purdue.edu/~ee469/labs_2021/lab2.html
+# Lab 2 - Procces Syncronization
+[Doc](https://engineering.purdue.edu/~ee469/labs_2021/lab2.html)
 
 ## Questions
 
@@ -11,31 +12,29 @@
 
 2. (10 points) Using the above shared memory APIs, implement the following producer/consumer communication through a circular buffer using only locks to prevent race conditions and deadlocks. Note that you should still use a sempahore to signal the parent process that all child processes have completed. The sample code "makeprocs" will serve as an example on how to use semaphore to signal the parent process. The solution to this problem can be expressed as follows:
 
-The producer places characters from the string "Hello world" into a shared circular buffer one character at a time. If the buffer is full, the producer will wait until there is space available. The consumer pulls one character out of the shared circular buffer and prints it to the screen. If the buffer is empty, it must wait until there is something in the buffer to print.
+   The producer places characters from the string "Hello world" into a shared circular buffer one character at a time. If the buffer is full, the producer will wait until there is space available. The consumer pulls one character out of the shared circular buffer and prints it to the screen. If the buffer is empty, it must wait until there is something in the buffer to print.
 
-To make the solution simpler, you can assume there are the same number of consumers and producers. In other words, if each producer will put strlen("Hello World") characters into the buffer, then each consumer can remove exactly strlen("Hello World") characters out of the buffer. If we did not have this restriction, then it is more difficult for the consumer to know when to exit. This way, it can simply choose to exit when it has read strlen("Hello World") characters from the buffer.
+   To make the solution simpler, you can assume there are the same number of consumers and producers. In other words, if each producer will put strlen("Hello World") characters into the buffer, then each consumer can remove exactly strlen("Hello World") characters out of the buffer. If we did not have this restriction, then it is more difficult for the consumer to know when to exit. This way, it can simply choose to exit when it has read strlen("Hello World") characters from the buffer.
 
-Your solution must follow the convention of the example code, where a "makeprocs" process creates the producers and consumers, and then waits until all producers and consumers have exited before it exits. makeprocs should have the following program invocation:
-dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj <number of producers and consumers>
-for example,
-dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 3
-will create 3 producers and 3 consumers.
+   Your solution must follow the convention of the example code, where a "makeprocs" process creates the producers and consumers, and then waits until all producers and consumers have exited before it exits. makeprocs should have the following program invocation:
+   dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj <number of producers and consumers>
+   for example,
+   dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 3
+   will create 3 producers and 3 consumers.
 
-Each time a producer puts a character into the buffer, it should print:
+   Each time a producer puts a character into the buffer, it should print:
 
-Producer X inserted: H
+   Producer X inserted: H
 
-Each time a consumer takes a character out of the buffer, it should print:
+   Each time a consumer takes a character out of the buffer, it should print:
 
-Consumer Y removed: H
+   Consumer Y removed: H
 
-where X and Y are the process id's of the producer and consumer, respectively.
+   where X and Y are the process id's of the producer and consumer, respectively.
 
-All your user code should be in apps/q2/. You should create the following subdirectories: apps/q2/include/, apps/q2/makeprocs, apps/q2/producer, and apps/q2/consumer. What goes in those directories should follow the convention of the apps/example directory.
+(All your user code should be in apps/q2/. You should create the following subdirectories: apps/q2/include/, apps/q2/makeprocs, apps/q2/producer, and apps/q2/consumer. What goes in those directories should follow the convention of the apps/example directory.)
 
-3. (30 points) Implement condition variables in os/synch.c using the existing locks and queues. The user-level interface is already provided in os/usertraps.s. Look at the code for locks and semaphores to see how to implement the process waiting queue. As a hint, recognize that a condition variable is essentially a semaphore without an internal counter, so the code is almost the same. You will find markers in include/os/synch.h and os/synch.c where your code should go.
-
-All your code for this problem (excluding any extra test code you may write) should be in os/synch.c and include/os/synch.h.
+3. (30 points) Implement condition variables in os/synch.c using the existing locks and queues. The user-level interface is already provided in os/usertraps.s. Look at the code for locks and semaphores to see how to implement the process waiting queue. As a hint, recognize that a condition variable is essentially a semaphore without an internal counter, so the code is almost the same. You will find markers in include/os/synch.h and os/synch.c where your code should go. (All your code for this problem (excluding any extra test code you may write) should be in os/synch.c and include/os/synch.h.)
 
 4. (10 points) Implement the same producer/consumer problem using locks and condition variables. All code for this problem should go in the apps/q4 directory with the same structure as the previous producer/consumer solutions.
 
