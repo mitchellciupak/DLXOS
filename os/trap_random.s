@@ -20,3 +20,4 @@ _srandom:
 	jr	r31
 	nop
 .endproc _srandom
+

@@ -62,11 +62,11 @@ typedef struct FsOpenFile {
 } FsOpenFile;
 
 extern void FsModuleInit();
-extern int FsOpen (const char *, int);
-extern int FsRead (int, char *, int);
-extern int FsWrite (int, char *, int);
-extern int FsSeek (int, int, int);
-extern int FsClose (int);
-extern int FsDelete (const char *);
+extern int	FsOpen (const char *, int);
+extern int	FsRead (int, char *, int);
+extern int	FsWrite (int, char *, int);
+extern int	FsSeek (int, int, int);
+extern int	FsClose (int);
+extern int	FsDelete (const char *);
 
 #endif	// _filesys_h_

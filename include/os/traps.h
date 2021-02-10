@@ -44,12 +44,27 @@
 // Following are user-defined traps.  Traps should be in the range
 // 0x400 - 0xfff
 #define	TRAP_CONTEXT_SWITCH	0x400
-#define	TRAP_SEM_WAIT		0x401
-#define	TRAP_SEM_SIGNAL		0x402
+//#define	TRAP_SEM_WAIT		0x401
+//#define	TRAP_SEM_SIGNAL		0x402
 #define	TRAP_PROCESS_SLEEP	0x410
 #define	TRAP_PROCESS_WAKEUP	0x420
 #define	TRAP_PROCESS_FORK	0x430
-#define TRAP_GET_PID		0x440 //Added by mciupak
+#define TRAP_PROCESS_GETPID	0x431
+#define TRAP_PROCESS_CREATE	0x432
+#define TRAP_SHARE_CREATE_PAGE	0x440
+#define TRAP_SHARE_MAP_PAGE	0x441
+#define TRAP_SEM_CREATE		0x450
+#define TRAP_SEM_WAIT		0x451
+#define TRAP_SEM_SIGNAL		0x452
+#define TRAP_LOCK_CREATE	0x453
+#define TRAP_LOCK_ACQUIRE	0x454
+#define TRAP_LOCK_RELEASE	0x455
+#define TRAP_COND_CREATE	0x456
+#define TRAP_COND_WAIT		0x457
+#define TRAP_COND_SIGNAL	0x458
+#define TRAP_COND_BROADCAST	0x459
+
+#define TRAP_USER_EXIT          0x500
 
 // The following are special I/O addresses for DLX.
 #define	DLX_TIMER_ADDRESS	0xfff00010

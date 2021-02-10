@@ -1,40 +1,24 @@
+# NOTE: $(APPROOT) MUST BE SET PROPERLY FOR THIS MAKEFILE TO WORK!
+# $(APPROOT) should be set to the location of the apps directory.
+
 ######################################################
 # Program-specific Variables
 ######################################################
 
-# Directory where any object file libraries will be copied
-OUTLIBDIR=../lib
-
 # Directory where final executable will be stored
-OUTDIR=../bin
+OUTDIR=$(APPROOT)/../bin
 
 # List of all C source files
-SRCS=filesys.c memory.c misc.c process.c queue.c synch.c traps.c sysproc.c
-
-# List of all assembly source files for the operating system
-# (Note: usertraps.s is not part of the operating system)
-ASMSRCS=osend.s trap_random.s dlxos.s
+#SRCS=userprog.c
 
 # List of os header files
-HDRS=dlx.h dlxos.h filesys.h memory.h process.h queue.h synch.h syscall.h traps.h ostraps.h
-OSHDRS=$(HDRS:%.h=os/%.h)
-
-# List of assembly libraries to expose to user programs
-BUILDLIBS=usertraps.aso misc.o
-OUTLIBS=$(BUILDLIBS:%=$(OUTLIBDIR)/%)
-
-# Any external object file libraries that should be linked with executable
-LIBS=share_memory.o
-FINALLIBS=$(LIBS:%.o=$(OUTLIBDIR)/%.o)
+#HDRS=usertraps.h
 
 # Name of final executable
-EXEC=os.dlx.obj
+#EXEC=userprog.dlx.obj
 
 # Automatically-generated list of C object files from source files
 OBJS=$(SRCS:%.c=%.o)
-
-# Automatically-generated list of ASM object files from source files
-ASMOBJS=$(ASMSRCS:%.s=%.aso)
 
 
 ######################################################
@@ -48,13 +32,17 @@ CC=gcc-dlx
 AS=dlxasm
 
 # Flags passed to all invocations of C compiler
-CFLAGS= -mtraps -Wall
+CFLAGS= -mtraps -O3 -Wall
 
 # Flags for compiler indicating search path for include files
-INCDIR= -I../include -I../include/os
+INCDIR+= -I$(APPROOT)/../include
+
+# Flags for compiler indicating which libraries should be linked
+LIBS+= usertraps.aso misc.o
+OBJLIBS=$(LIBS:%=$(APPROOT)/../lib/%)
 
 # Flags sent to the assembler
-ASFLAGS= -i _osinit
+ASFLAGS=
 
 
 ######################################################
@@ -76,11 +64,8 @@ OUTLST=$(EXEC:%.dlx.obj=$(WORKDIR)/%.lst)
 # Object files from C source with proper workdir location prepended
 WORKOBJS=$(OBJS:%.o=$(WORKDIR)/%.o)
 
-# Object files from ASM source with proper workdir location prepended
-WORKASMOBJS=$(ASMOBJS:%.aso=$(WORKDIR)/%.aso)
-
 # Headers translated to proper include directory
-FINALHDRS=$(OSHDRS:%.h=../include/%.h)
+FINALHDRS+=$(OSHDRS:%.h=$(APPROOT)/../include/%.h)
 
 
 #####################################################
@@ -88,7 +73,7 @@ FINALHDRS=$(OSHDRS:%.h=../include/%.h)
 #####################################################
 
 # Default target that is made when you type "make"
-default: Makefile.depend $(WORKDIR) $(OUTDIR) $(OUTPUT) $(OUTLIBS)
+default: Makefile.depend $(WORKDIR) $(OUTDIR) $(OUTPUT)
 
 # Builds dependencies for header files
 Makefile.depend: $(SRCS) $(ASMSRCS) $(FINALHDRS)
@@ -110,28 +95,16 @@ $(OUTPUT): $(OUTDLX)
 	cp $(WORKDIR)/$(EXEC) $(OUTPUT)
 
 # Builds DLX output file using the C compiler from all object files
-$(OUTDLX): $(WORKOBJS) $(WORKASMOBJS) $(FINALIBS)
-	$(CC) $(CFLAGS) $(INCDIR) -o $@ $(WORKOBJS) $(WORKASMOBJS) $(FINALLIBS)
+$(OUTDLX): $(WORKOBJS) $(WORKASMOBJS) $(OBJLIBS)
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ $(WORKOBJS) $(WORKASMOBJS) $(OBJLIBS)
 
 # Builds any given object file from C source files
 $(WORKDIR)/%.o:%.c
 	$(CC) $(CFLAGS) $(INCDIR) -c -o $@ $<
 
-# Builds any given object file from Assembly source files
-$(WORKDIR)/%.aso:%.s
-	$(CC) $(CFLAGS) $(INCDIR) -c -o $@ $<
-
-# Builds any ASM library as an object file
-$(OUTLIBDIR)/%o:$(WORKDIR)/%o
-	cp $< $@
-
 # Removes all intermediate files to force full rebuild
 clean:
-	-rm -rf $(WORKDIR) $(OUTPUT) $(OUTLIBS) Makefile.depend $(OUTDIR)/vm
-
-# Changes to a given application and runs it via that app's Makefile
-run:
-	-cd ../apps/example; make run
+	-rm -rf $(WORKDIR) $(OUTPUT) Makefile.depend $(OUTDIR)/vm
 
 # Includes added dependencies of source files on header files
 include Makefile.depend

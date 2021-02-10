@@ -16,111 +16,71 @@
 
 #define	QUEUE_MAX_LINKS		400
 
+#define QUEUE_FAIL 0
+#define QUEUE_SUCCESS 1
+
+// Doubly-linked list nodes for storing objects
 typedef struct Link {
-    struct Link	*next;
-    struct Link *prev;
-    struct Queue *queue;
-    void	*object;
+  struct Link *next;
+  struct Link *prev;
+  struct Queue *queue;
+  void	*object;
 } Link;
 
+// Used to store a list of links
 typedef struct Queue {
-    struct Link *first;
-    struct Link *last;
-    int		nitems;
+  struct Link *first;
+  struct Link *last;
+  int nitems;
 } Queue;
 
-inline
-void
-QueueLinkInit (Link *l, void *obj)
-{
-    l->next = NULL;
-    l->object = obj;
-}
+// Initializes a Link, and stores the address of obj inside it
+int AQueueLinkInit(Link *l, void *obj);
 
-inline
-Link *
-QueueNext (Link *l)
-{
-    return (l->next);
-}
+// Returns the next pointer of a link
+Link *  AQueueNext(Link *l );
 
-inline
-Link *
-QueuePrev (Link *l)
-{
-    return (l->prev);
-}
+// Returns the previous pointer of a link
+Link *  AQueuePrev(Link *l );
 
-inline
-Link *
-QueueFirst (Queue *q)
-{
-    return (q->first);
-}
+// Returns the first element in the queue
+Link * AQueueFirst(Queue *q);
 
-inline
-Link *
-QueueLast (Queue *q)
-{
-    return (q->last);
-}
+// Returns the last element in the queue
+Link *  AQueueLast(Queue *q);
 
+// Returns the object pointer inside a link
+void *AQueueObject(Link *l);
 
-inline
-void
-QueueInsertAfter (Queue *q, Link *after, Link *l)
-{
-    l->queue = q;
-    l->prev = after;
-    l->next = after->next;
-    after->next = l;
-    l->next->prev = l;
-    q->nitems += 1;
-}
+// Returns the number of elements in a queue
+int   AQueueLength(Queue *q);
 
-inline
-void
-QueueInsertFirst (Queue *q, Link *l)
-{
-    QueueInsertAfter (q, (Link *)q, l);
-}
+// Returns true is queue is empty, false otherwise
+int AQueueEmpty (Queue *q);
 
-inline
-void
-QueueInsertLast (Queue *q, Link *l)
-{
-    QueueInsertAfter (q, QueueLast(q), l);
-}
+// Inserts the link "l" after the link "after" in the queue "q"
+int AQueueInsertAfter (Queue *q, Link *after, Link *l);
 
-inline
-void
-QueueRemove (Link *l)
-{
-    if (l->queue->nitems > 0) {
-	l->prev->next = l->next;
-	l->next->prev = l->prev;
-	l->queue->nitems -= 1;
-    }
-    l->next = NULL;
-}
+// Inserts the link "l" as the first item in the queue
+int AQueueInsertFirst (Queue *q, Link *l);
 
-inline
-int
-QueueLength (Queue *q)
-{
-    return (q->nitems);
-}
+// Inserts the link "l" as the last link in the queue
+int AQueueInsertLast (Queue *q, Link *l);
 
-inline
-int
-QueueEmpty (Queue *q)
-{
-    return (QueueLength (q) == 0);
-}
+// Moves link "l" to the position after link "after" in queue "q"
+int AQueueMoveAfter(Queue *q, Link *after, Link *l);
 
-extern void	QueueModuleInit ();
-extern void	QueueFreeLink (Link *l);
-extern Link	*QueueAllocLink ();
-extern void	QueueInit (Queue *q);
+// Removes link "l" from the queue that it belongs to
+// and sets *l = NULL
+int AQueueRemove (Link **l);
+
+// Initializes the Queue module
+int AQueueModuleInit ();
+
+// Gets a free link from the queue of free links
+Link *AQueueAllocLink ();
+
+// Initializes a queue to have zero items
+int AQueueInit (Queue *q);
 
 #endif	// _queue_h_
