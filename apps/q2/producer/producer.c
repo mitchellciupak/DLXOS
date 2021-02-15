@@ -36,5 +36,4 @@ void main (int argc, char *argv[])
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
-  }
-}
+  }}
