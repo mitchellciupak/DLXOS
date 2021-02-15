@@ -2,13 +2,14 @@
 #include "usertraps.h"
 #include "misc.h"
 
-#include "spawn.h"
+#include "consumer.h"
+#include "producer.h"
 
 void main (int argc, char *argv[])
 {
   int numprocs = 0;               // Used to store number of processes to create
   int i;                          // Loop index variable
-  missile_code *mc;               // Used to get address of shared memory page
+  buffer_char *mc;               // Used to get address of shared memory page
   uint32 h_mem;                   // Used to hold handle to shared memory page
   sem_t s_procs_completed;        // Semaphore used to wait until all spawned processes have completed
   char h_mem_str[10];             // Used as command-line argument to pass mem_handle to new processes
@@ -24,7 +25,7 @@ void main (int argc, char *argv[])
   Printf("Creating %d processes\n", numprocs);
 
   // Allocate space for a shared memory page, which is exactly 64KB
-  // Note that it doesn't matter how much memory we actually need: we 
+  // Note that it doesn't matter how much memory we actually need: we
   // always get 64KB
   if ((h_mem = shmget()) == 0) {
     Printf("ERROR: could not allocate shared memory page in "); Printf(argv[0]); Printf(", exiting...\n");
@@ -37,14 +38,16 @@ void main (int argc, char *argv[])
     Exit();
   }
 
+
+  //TODO - Rope in the Consumer and Producer methods here
   // Put some values in the shared memory, to be read by other processes
   mc->numprocs = numprocs;
-  mc->really_important_char = 'A';
+  mc->c = 'A';
 
-  // Create semaphore to not exit this process until all other processes 
+  // Create semaphore to not exit this process until all other processes
   // have signalled that they are complete.  To do this, we will initialize
   // the semaphore to (-1) * (number of signals), where "number of signals"
-  // should be equal to the number of processes we're spawning - 1.  Once 
+  // should be equal to the number of processes we're spawning - 1.  Once
   // each of the processes has signaled, the semaphore should be back to
   // zero and the final sem_wait below will return.
   if ((s_procs_completed = sem_create(-(numprocs-1))) == SYNC_FAIL) {

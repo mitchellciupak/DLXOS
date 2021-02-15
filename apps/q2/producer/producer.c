@@ -6,14 +6,14 @@
 
 void main (int argc, char *argv[])
 {
-  missile_code *mc;        // Used to access missile codes in shared memory page
+  buffer_char *mc;        // Used to access missile codes in shared memory page
   uint32 h_mem;            // Handle to the shared memory page
   sem_t s_procs_completed; // Semaphore to signal the original process that we're done
 
-  if (argc != 3) { 
-    Printf("Usage: "); Printf(argv[0]); Printf(" <handle_to_shared_memory_page> <handle_to_page_mapped_semaphore>\n"); 
+  if (argc != 3) {
+    Printf("Usage: "); Printf(argv[0]); Printf(" <handle_to_shared_memory_page> <handle_to_page_mapped_semaphore>\n");
     Exit();
-  } 
+  }
 
   // Convert the command-line strings into integers for use as handles
   h_mem = dstrtol(argv[1], NULL, 10); // The "10" means base 10
@@ -24,7 +24,7 @@ void main (int argc, char *argv[])
     Printf("Could not map the virtual address to the memory in "); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
   }
- 
+
   // Now print a message to show that everything worked
   Printf("spawn_me: This is one of the %d instances you created.  ", mc->numprocs);
   Printf("spawn_me: Missile code is: %c\n", mc->really_important_char);

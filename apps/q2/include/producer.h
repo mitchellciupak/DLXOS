@@ -1,11 +1,11 @@
 #ifndef __USERPROG__
 #define __USERPROG__
 
-typedef struct missile_code {
+typedef struct buffer_char {
   int numprocs;
-  char really_important_char;
-} missile_code;
+  char c;
+} buffer_char;
 
-#define FILENAME_TO_RUN "spawn_me.dlx.obj"
+#define FILENAME_TO_RUN "producer.dlx.obj"
 
 #endif
