@@ -29,6 +29,15 @@ function run() {
     dlxsim -x ./os/work/os.dlx.obj -a -u ./apps/work/userprog.dlx.obj
 }
 
+function run_example(){
+    echo 'Compiling and running example program'
+    make clean -C ./os/
+    make -C ./os/
+    make -C ./apps/example/
+    ee469_fixterminal
+    make run -C ./apps/example/
+}
+
 function move() {
     if [ $(pwd) = /tmp/$USER/ee469 ]
     then
@@ -52,13 +61,7 @@ then
     echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
     if [ ${args[1]} = 'example' ]
     then
-        echo 'Compiling and running example program'
-        make clean -C ./os/
-        make -C ./os/
-        make -C ./apps/example/
-        ee469_fixterminal
-        make run -C ./apps/example/
-        
+        run_example
     fi
 
 elif [ ${args[0]} = '-A' ]
