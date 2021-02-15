@@ -50,7 +50,16 @@ then
 elif [ ${args[0]} = '-R' ]
 then
     echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
-    run
+    if [ ${args[1]} = 'example' ]
+    then
+        echo 'Compiling and running example program'
+        make clean -C ./os/
+        make -C ./os/
+        make -C ./apps/example/
+        ee469_fixterminal
+        make run -C ./apps/example/
+        
+    fi
 
 elif [ ${args[0]} = '-A' ]
 then
