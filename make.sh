@@ -30,12 +30,37 @@ function run() {
 }
 
 function run_example(){
+
+
+
     echo 'Compiling and running example program'
     make clean -C ./os/
     make -C ./os/
     make -C ./apps/example/
     ee469_fixterminal
     make run -C ./apps/example/
+}
+
+function run_program(){
+    if [ ${args[1]} ]
+    then
+      echo 'Compiling and running'
+      echo ${args[1]}
+
+      make clean -C ./os/
+      make -C ./os/
+      make -C ./apps/${args[1]}/
+      ee469_fixterminal
+      make run -C ./apps/${args[1]}/
+    else
+      echo 'Nothing was Run, No Argment was Added'
+    fi
+}
+
+function clean_all(){
+    make clean -C ./os
+    make clean -C ./apps/example/
+    make clean -C ./apps/q2/
 }
 
 function move() {
@@ -59,10 +84,7 @@ case ${args[0]} in
     ;;
   -R)
     echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
-    if [ ${args[1]} = 'example' ]
-    then
-        run_example
-    fi
+    run_program
     ;;
   -A)
     echo 'Compiling and Running'

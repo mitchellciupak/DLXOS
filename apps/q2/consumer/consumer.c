@@ -4,20 +4,24 @@
 
 #include "consumer.h"
 
-void main (int argc, char *argv[])
-{
-  buffer_char *bc;        // Used to access buffer chars in shared memory page
+void main (int argc, char *argv[]) {
+
+  // Init Vars (must be declared here)
+  buffer_char *bc;         // Used to access buffer chars in shared memory page
   uint32 h_mem;            // Handle to the shared memory page
+
+  int i;
+  char str[11] = {'\0'};   //TODO Comment
   sem_t s_procs_completed; // Semaphore to signal the original process that we're done
 
-  //TODO - Does this represent our specs?
+  // Argument Check
   if (argc != 3) {
     Printf("Usage: "); Printf(argv[0]); Printf(" <handle_to_shared_memory_page> <handle_to_page_mapped_semaphore>\n");
     Exit();
   }
 
-  // Convert the command-line strings into integers for use as handles
-  h_mem = dstrtol(argv[1], NULL, 10); // The "10" means base 10
+  // Argument Handleing
+  h_mem = dstrtol(argv[1], NULL, 10); //Convert the command-line strings into integers for use as handles in base 10
   s_procs_completed = dstrtol(argv[2], NULL, 10);
 
 
@@ -27,13 +31,35 @@ void main (int argc, char *argv[])
     Exit();
   }
 
-  // Now print a message to show that everything worked
-  Printf("Consumer %d removed\n",getpid());
+  // Do it
+  while(i < 11) {
 
-  //TODO - Not sure about this
+    sem_wait(bc->full);
+    lock_acquire(bc->lock);
+
+    if(str[bc->tail] == '\0'){
+
+      str[bc->tail] = bc->buff[bc->tail];
+      bc->tail = (bc->tail + 1) % BUFF_LEN;
+      Printf("Consumer %d removed %c\n",getpid(), str[bc->tail]);
+
+      bc->buff[bc->tail] = '\0';
+
+      i++;
+    }
+
+    lock_release(bc->lock);
+    sem_signal(bc->empty);
+  }
+
+
+
+
   // Signal the semaphore to tell the original process that we're done
-  Printf("spawn_me: PID %d is complete.\n", getpid());
+  Printf("Consumer: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
-  }}
+  }
+
+}
