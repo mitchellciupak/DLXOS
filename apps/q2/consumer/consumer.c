@@ -28,7 +28,7 @@ void main (int argc, char *argv[])
   }
 
   // Now print a message to show that everything worked
-  Printf("Consumer %d removed: %c\n",getpid(),bc->c)
+  Printf("Consumer %d removed\n",getpid());
 
   //TODO - Not sure about this
   // Signal the semaphore to tell the original process that we're done

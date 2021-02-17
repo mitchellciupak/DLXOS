@@ -9,7 +9,7 @@ void main (int argc, char *argv[])
 {
   int numprocs = 0;               // Used to store number of processes to create
   int i;                          // Loop index variable
-  buffer_char *mc;               // Used to get address of shared memory page
+  buffer_char *bc;               // Used to get address of shared memory page
   uint32 h_mem;                   // Used to hold handle to shared memory page
   sem_t s_procs_completed;        // Semaphore used to wait until all spawned processes have completed
   char h_mem_str[10];             // Used as command-line argument to pass mem_handle to new processes
@@ -33,7 +33,7 @@ void main (int argc, char *argv[])
   }
 
   // Map shared memory page into this process's memory space
-  if ((mc = (missile_code *)shmat(h_mem)) == NULL) {
+  if ((bc = (buffer_char *)shmat(h_mem)) == NULL) {
     Printf("Could not map the shared page to virtual address in "); Printf(argv[0]); Printf(", exiting..\n");
     Exit();
   }
@@ -41,8 +41,8 @@ void main (int argc, char *argv[])
 
   //TODO - Rope in the Consumer and Producer methods here
   // Put some values in the shared memory, to be read by other processes
-  mc->numprocs = numprocs;
-  mc->c = 'A';
+  bc->numprocs = numprocs;
+  bc->buff[0] = 'A';
 
   // Create semaphore to not exit this process until all other processes
   // have signalled that they are complete.  To do this, we will initialize
@@ -65,7 +65,8 @@ void main (int argc, char *argv[])
   // process_create with a NULL argument so that the operating system
   // knows how many arguments you are sending.
   for(i=0; i<numprocs; i++) {
-    process_create(FILENAME_TO_RUN, h_mem_str, s_procs_completed_str, NULL);
+    process_create(CONSUMER_FILE, h_mem_str, s_procs_completed_str, NULL);
+    process_create(PRODUCER_FILE, h_mem_str, s_procs_completed_str, NULL);
     Printf("Process %d created\n", i);
   }
 
