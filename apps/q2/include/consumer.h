@@ -1,11 +1,3 @@
-#ifndef __USERPROG__
-#define __USERPROG__
+#include "shared.h"
 
-typedef struct buffer_char {
-  int numprocs;
-  char c;
-} buffer_char;
-
-#define FILENAME_TO_RUN "consumer.dlx.obj"
-
-#endif
+#define CONSUMER_FILE "consumer.dlx.obj"
