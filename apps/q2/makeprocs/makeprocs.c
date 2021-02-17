@@ -42,7 +42,22 @@ void main (int argc, char *argv[])
   //TODO - Rope in the Consumer and Producer methods here
   // Put some values in the shared memory, to be read by other processes
   bc->numprocs = numprocs;
-  bc->buff[0] = 'A';
+  bc->lock = lock_create();
+  bc->full = sem_create(0);
+  bc->empty = sem_create(BUFF_LEN);
+
+  if (bc->lock == SYNC_FAIL) {
+    Printf("Bad sem_create in "); Printf(argv[0]); Printf("\n");
+    Exit();
+  }
+  if (bc->full == SYNC_FAIL) {
+    Printf("Bad sem_create in "); Printf(argv[0]); Printf("\n");
+    Exit();
+  }
+  if (bc->empty == SYNC_FAIL) {
+    Printf("Bad sem_create in "); Printf(argv[0]); Printf("\n");
+    Exit();
+  }
 
   // Create semaphore to not exit this process until all other processes
   // have signalled that they are complete.  To do this, we will initialize

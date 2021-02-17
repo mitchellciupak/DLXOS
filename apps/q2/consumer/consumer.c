@@ -8,6 +8,8 @@ void main (int argc, char *argv[])
 {
   buffer_char *bc;        // Used to access buffer chars in shared memory page
   uint32 h_mem;            // Handle to the shared memory page
+  int i;
+  char a;
   sem_t s_procs_completed; // Semaphore to signal the original process that we're done
 
   //TODO - Does this represent our specs?
@@ -28,7 +30,14 @@ void main (int argc, char *argv[])
   }
 
   // Now print a message to show that everything worked
-  Printf("Consumer %d removed\n",getpid());
+  sem_wait(bc->full);
+  lock_acquire(bc->lock);
+  for(i = 0; i < 11; i++) {
+    a = bc->buff[i];
+    Printf("Consumer %d removed %c\n",getpid(), a);
+  }
+  lock_release(bc->lock);
+  sem_signal(bc->empty);
 
   //TODO - Not sure about this
   // Signal the semaphore to tell the original process that we're done

@@ -8,6 +8,8 @@ void main (int argc, char *argv[])
 {
   buffer_char *bc;        // Used to access buffer chars in shared memory page
   uint32 h_mem;            // Handle to the shared memory page
+  int i;
+  char fill[11] = "Hello World";
   sem_t s_procs_completed; // Semaphore to signal the original process that we're done
 
   //TODO - Does this represent our specs?
@@ -26,13 +28,20 @@ void main (int argc, char *argv[])
     Printf("Could not map the virtual address to the memory in "); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
   }
+  sem_wait(bc->empty);
+  lock_acquire(bc->lock);
+  for(i = 0; i < 11; i++) {
+    bc->buff[i] = fill[i];
+    Printf("Producer %d inserted %c\n",getpid(), fill[i]);
+  }
+  lock_release(bc->lock);
+  sem_signal(bc->full);
 
   // Now print a message to show that everything worked
-  Printf("Producer %d removed\n",getpid());
 
   //TODO - Not sure about this
   // Signal the semaphore to tell the original process that we're done
-  Printf("spawn_me: PID %d is complete.\n", getpid());
+  Printf("Producer: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
