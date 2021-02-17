@@ -4,12 +4,10 @@
 
 #include "consumer.h"
 
-void main (int argc, char *argv[]) {
-
-  // Init Vars (must be declared here)
+void main (int argc, char *argv[]) 
+{
   buffer_char *bc;         // Used to access buffer chars in shared memory page
   uint32 h_mem;            // Handle to the shared memory page
-
   int i;
   char str[11] = {'\0'};   //TODO Comment
   sem_t s_procs_completed; // Semaphore to signal the original process that we're done
@@ -26,32 +24,31 @@ void main (int argc, char *argv[]) {
 
 
   // Map shared memory page into this process's memory space
-  if ((bc = (buffer_char *)shmget()) == NULL) {
+  if ((bc = (buffer_char *)shmat(h_mem)) == NULL) {
     Printf("Could not map the virtual address to the memory in "); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
   }
-
+  i = 0;
   // Do it
   while(i < 11) {
-
-    sem_wait(bc->full);
     lock_acquire(bc->lock);
-
-    if(str[bc->tail] == '\0'){
-
-      str[bc->tail] = bc->buff[bc->tail];
-      bc->tail = (bc->tail + 1) % BUFF_LEN;
-      Printf("Consumer %d removed %c\n",getpid(), str[bc->tail]);
-
-      bc->buff[bc->tail] = '\0';
-
-      i++;
+    // Check if it's empty
+    //Printf("Consumer lock acquired\t%d\t%d\n", bc->tail, bc->head);
+    if (bc->head != bc->tail){
+      if(str[bc->tail] == '\0'){
+        str[bc->tail] = bc->buff[bc->tail];
+        Printf("Consumer %d removed %c\n",getpid(), str[bc->tail]);
+        bc->tail = (bc->tail + 1) % BUFF_LEN;
+        i++;
+      }
     }
-
     lock_release(bc->lock);
-    sem_signal(bc->empty);
   }
-
+  Printf("\n");  
+  for(i = 0; i < BUFF_LEN; i++){
+    Printf("%c", str[i]);
+  }
+  Printf("\n");
 
 
 

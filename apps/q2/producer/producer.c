@@ -6,13 +6,10 @@
 
 void main (int argc, char *argv[]) {
 
-  // Init Vars (must be declared here)
   buffer_char *bc;          // Used to access buffer chars in shared memory page
   uint32 h_mem;             // Handle to the shared memory page
-
   char fill[11] = "Hello World"; //Char String
   int i = 0;                     // Counter for for loop
-
   sem_t s_procs_completed;  // Semaphore to signal the original process that we're done
 
   // Argument Check
@@ -30,26 +27,26 @@ void main (int argc, char *argv[]) {
     Printf("Could not map the virtual address to the memory in "); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
   }
-
+  i = 0;
   // Do it
   while(i < 11) {
-
-    sem_wait(bc->empty);
     lock_acquire(bc->lock);
+    // Check that it's not full
 
-    if(fill[bc->head] != '\0'){
+    //Printf("Producer lock acquired\t%d\t%d\n", bc->tail, bc->head);
 
-      bc->buff[bc->head] = fill[bc->head];
-      bc->head = (bc->head + 1) % BUFF_LEN;
-      Printf("Producer %d inserted %c\n",getpid(), fill[bc->head]);
+    if ((bc->head + 1) % BUFF_LEN != bc->tail){
+      if(fill[bc->head] != '\0'){
 
-      fill[bc->head] = '\0';
-
-      i++;
+        bc->buff[bc->head] = fill[bc->head];
+        Printf("Producer %d inserted %c\n",getpid(), fill[bc->head]);
+        fill[bc->head] = '\0';
+        bc->head = (bc->head + 1) % BUFF_LEN;
+        i++;
+      }
     }
 
     lock_release(bc->lock);
-    sem_signal(bc->full);
   }
 
 
