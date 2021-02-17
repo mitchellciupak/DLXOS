@@ -51,36 +51,34 @@ function move() {
 }
 
 ## Main - Flag Control
-if [ ${args[0]} = '-C' ]
-then
+case ${args[0]} in
+
+  -C)
     echo 'C*O*M*P*I*L*I*N*G'
     compile
-
-elif [ ${args[0]} = '-R' ]
-then
+    ;;
+  -R)
     echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
     if [ ${args[1]} = 'example' ]
     then
         run_example
     fi
-
-elif [ ${args[0]} = '-A' ]
-then
+    ;;
+  -A)
     echo 'Compiling and Running'
     compile
     run
-
-elif [ ${args[0]} = '-T' ]
-then
+    ;;
+  -T)
     echo 'Running Tests'
     echo 'Test 1 - Hello World'
-
-elif [ ${args[0]} = '-Mov' ]
-then
+    ;;
+  -Mov)
     echo 'This project is currently at:' $(pwd)
     move
-
-else
+    ;;
+  *)
     echo "Total Arguments:" $#
     echo "All Arguments values:" $@
-fi
+    ;;
+esac
