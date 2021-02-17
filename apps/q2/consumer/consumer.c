@@ -6,6 +6,8 @@
 
 void main (int argc, char *argv[]) {
 
+  Printf("Consumer"); //TODO - Debug
+
   // Init Vars (must be declared here)
   buffer_char *bc;         // Used to access buffer chars in shared memory page
   uint32 h_mem;            // Handle to the shared memory page

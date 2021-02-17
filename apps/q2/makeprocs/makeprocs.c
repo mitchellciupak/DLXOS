@@ -88,6 +88,7 @@ void main (int argc, char *argv[])
   // so that the operating system knows how many arguments you are sending.
 
   for(i=0; i<numprocs; i++) {
+    Printf("%d: Processes Creating...",i); //TODO - Debug
     process_create(CONSUMER_FILE, h_mem_str, s_procs_completed_str, NULL);
     process_create(PRODUCER_FILE, h_mem_str, s_procs_completed_str, NULL);
     Printf("Process %d created\n", i);

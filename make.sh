@@ -31,8 +31,6 @@ function run() {
 
 function run_example(){
 
-
-
     echo 'Compiling and running example program'
     make clean -C ./os/
     make -C ./os/
