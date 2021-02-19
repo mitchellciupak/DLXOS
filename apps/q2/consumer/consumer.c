@@ -50,8 +50,6 @@ void main (int argc, char *argv[])
   }
   Printf("\n");
 
-
-
   // Signal the semaphore to tell the original process that we're done
   Printf("Consumer: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {

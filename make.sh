@@ -7,6 +7,7 @@
     * -A : Compile and Run
     * -T : Compile and Run Unit Tests
     * -Mov : Move Dir From/To $USER and /tmp/
+    * -Clean: clean things so you can pull
 
     # ARGS[1]
     * $COMPILEFLAGS

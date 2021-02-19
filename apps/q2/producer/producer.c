@@ -6,6 +6,7 @@
 
 void main (int argc, char *argv[]) {
 
+
   buffer_char *bc;          // Used to access buffer chars in shared memory page
   uint32 h_mem;             // Handle to the shared memory page
   char fill[11] = "Hello World"; //Char String
@@ -27,6 +28,7 @@ void main (int argc, char *argv[]) {
     Printf("Could not map the virtual address to the memory in "); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
   }
+
   i = 0;
   // Do it
   while(i < 11) {
@@ -48,7 +50,6 @@ void main (int argc, char *argv[]) {
 
     lock_release(bc->lock);
   }
-
 
   // Signal the semaphore to tell the original process that we're done
   Printf("Producer: PID %d is complete.\n", getpid());
