@@ -13,7 +13,7 @@
 
 static Sem sems[MAX_SEMS]; 	// All semaphores in the system
 static Lock locks[MAX_LOCKS];   // All locks in the system
-
+static Cond conds[MAX_CONDS];
 extern struct PCB *currentPCB; 
 //----------------------------------------------------------------------
 //	SynchModuleInit
@@ -27,10 +27,10 @@ int SynchModuleInit() {
     sems[i].inuse = 0;
   }
   for(i=0; i<MAX_LOCKS; i++) {
-    // Your stuff for initializing locks goes here
+    locks[i].inuse = 0;
   }
   for(i=0; i<MAX_CONDS; i++) {
-    // Your stuff for initializing Condition variables goes here
+    conds[i].inuse = 0;
   }
   dbprintf ('p', "SynchModuleInit: Leaving SynchModuleInit\n");
   return SYNC_SUCCESS;
@@ -324,10 +324,41 @@ int LockHandleRelease(lock_t lock) {
 //	should return handle of the condition variable.
 //--------------------------------------------------------------------------
 cond_t CondCreate(lock_t lock) {
-  // Your code goes here
-  return SYNC_FAIL;
+
+  cond_t cond;
+  uint32 intrval;
+
+  // Check for valid lock
+  if (lock < 0 || lock >= MAX_LOCKS) return INVALID_COND;
+  if (!locks[lock].inuse) return INVALID_COND;
+
+  // grabbing a condition should be an atomic operation
+  intrval = DisableIntrs();
+  for(cond=0; cond<MAX_CONDS; cond++) {
+    if(conds[cond].inuse==0) {
+      conds[cond].inuse = 1;
+      break;
+    }
+  }
+
+  // Restore interrupts
+  RestoreIntrs(intrval);
+
+  if(cond==MAX_CONDS) return SYNC_FAIL;
+  if (CondInit(&conds[cond], &lock) != SYNC_SUCCESS) return INVALID_COND;
+  return cond;
 }
 
+int CondInit(Cond* c, Lock* l) {
+  if (!c) return INVALID_COND;
+  if (AQueueInit (&c->waiting) != QUEUE_SUCCESS) {
+    printf("FATAL ERROR: could not initialize lock waiting queue in LockInit!\n");
+    exitsim();
+  }
+  c->pid = -1;
+  c->lock = l;
+  return SYNC_SUCCESS;
+}
 //---------------------------------------------------------------------------
 //	CondHandleWait
 //
@@ -355,7 +386,6 @@ int CondHandleWait(cond_t c) {
   // Your code goes here
   return SYNC_SUCCESS;
 }
-
 
 
 //---------------------------------------------------------------------------
