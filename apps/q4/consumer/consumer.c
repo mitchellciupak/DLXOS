@@ -40,10 +40,10 @@ void main (int argc, char *argv[])
         Printf("Consumer %d removed %c\n",getpid(), str[bc->tail]);
         bc->tail = (bc->tail + 1) % BUFF_LEN;
         i++;
-        cond_broadcast(bc->full);
       }
-    }
-    else{
+    
+      cond_signal(bc->full);
+    }else{
       cond_wait(bc->empty);
     }
     lock_release(bc->lock);

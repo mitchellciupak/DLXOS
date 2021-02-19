@@ -1,4 +1,5 @@
 default:
+	cd ../../os; make
 	cd makeprocs; make
 	cd consumer; make
 	cd producer; make
@@ -7,6 +8,7 @@ clean:
 	cd makeprocs; make clean
 	cd consumer; make clean
 	cd producer; make clean
+	cd ../../os; make clean
 
 
 run:

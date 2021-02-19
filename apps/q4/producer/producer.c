@@ -45,8 +45,10 @@ void main (int argc, char *argv[]) {
         fill[bc->head] = '\0';
         bc->head = (bc->head + 1) % BUFF_LEN;
         i++;
-        cond_broadcast(bc->empty);
       }
+    
+      cond_signal(bc->empty);
+    }else{
       cond_wait(bc->full);
     }
 
