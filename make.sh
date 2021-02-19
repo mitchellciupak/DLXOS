@@ -31,6 +31,7 @@ function run() {
 }
 
 function run_example(){
+
     echo 'Compiling and running example program'
     make clean -C ./os/
     make -C ./os/
@@ -40,17 +41,23 @@ function run_example(){
 }
 
 function run_program(){
-    echo 'Compiling and running '
-    echo ${args[1]}
-    make clean -C ./os/
-    make -C ./os/
-    make -C ./apps/${args[1]}/
-    ee469_fixterminal
-    make run -C ./apps/${args[1]}/
+    if [ ${args[1]} ]
+    then
+      echo 'Compiling and running'
+      echo ${args[1]}
+
+      make clean -C ./os/
+      make -C ./os/
+      make -C ./apps/${args[1]}/
+      ee469_fixterminal
+      make run -C ./apps/${args[1]}/
+    else
+      echo 'Nothing was Run, No Argment was Added'
+    fi
 }
 
 function clean_all(){
-    make clean -C ./os/
+    make clean -C ./os
     make clean -C ./apps/example/
     make clean -C ./apps/q2/
 }
@@ -68,40 +75,31 @@ function move() {
 }
 
 ## Main - Flag Control
-if [ ${args[0]} = '-C' ]
-then
+case ${args[0]} in
+
+  -C)
     echo 'C*O*M*P*I*L*I*N*G'
     compile
-
-elif [ ${args[0]} = '-R' ]
-then
+    ;;
+  -R)
     echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
-    if [ ${args[1]} = 'example' | ${args[1]} = 'q2' ]
-    then
-        run_program
-    fi
-
-elif [ ${args[0]} = '-A' ]
-then
+    run_program
+    ;;
+  -A)
     echo 'Compiling and Running'
     compile
     run
-
-elif [ ${args[0]} = '-T' ]
-then
+    ;;
+  -T)
     echo 'Running Tests'
     echo 'Test 1 - Hello World'
-
-elif [ ${args[0]} = '-Mov' ]
-then
+    ;;
+  -Mov)
     echo 'This project is currently at:' $(pwd)
     move
-
-elif [ ${args[0]} = '-Clean' ]
-then
-    echo 'Nice and shiny for ya'
-    clean_all
-else
+    ;;
+  *)
     echo "Total Arguments:" $#
     echo "All Arguments values:" $@
-fi
+    ;;
+esac
