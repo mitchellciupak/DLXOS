@@ -62,7 +62,6 @@ typedef struct Cond {
   Queue waiting; // Queue of processes waiting on the lock
   Lock* lock;
   int inuse;     // Bookkeeping variable for free vs. used structures
-
 } Cond;
 
 int CondInit(Cond *, Lock *);

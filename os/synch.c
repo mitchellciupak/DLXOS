@@ -347,11 +347,10 @@ cond_t CondCreate(lock_t lock) {
   if(cond==MAX_CONDS) return SYNC_FAIL;
   if (CondInit(&conds[cond], &lock) != SYNC_SUCCESS) return INVALID_COND;
   return cond;
-  return SYNC_FAIL;
 }
 
 int CondInit(Cond* c, Lock* l) {
-  if (!c) return SYNC_FAIL;
+  if (!c) return INVALID_COND;
   if (AQueueInit (&c->waiting) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not initialize lock waiting queue in LockInit!\n");
     exitsim();
