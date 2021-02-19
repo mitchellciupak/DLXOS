@@ -49,6 +49,7 @@ void main (int argc, char *argv[])
   bc->numprocs = numprocs;
   bc->head = head;
   bc->tail = tail;
+
   bc->lock = lock_create();
   bc->full = sem_create(0);
   bc->empty = sem_create(BUFF_LEN);

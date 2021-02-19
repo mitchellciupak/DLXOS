@@ -7,6 +7,7 @@
     * -A : Compile and Run
     * -T : Compile and Run Unit Tests
     * -Mov : Move Dir From/To $USER and /tmp/
+    * -Clean: clean things so you can pull
 
     # ARGS[1]
     * $COMPILEFLAGS
@@ -59,6 +60,7 @@ function clean_all(){
     make clean -C ./os
     make clean -C ./apps/example/
     make clean -C ./apps/q2/
+    make clean -C ./apps/q3/
 }
 
 function move() {
@@ -96,6 +98,10 @@ case ${args[0]} in
   -Mov)
     echo 'This project is currently at:' $(pwd)
     move
+    ;;
+  -c)
+    echo 'cleaning all'
+    clean_all
     ;;
   *)
     echo "Total Arguments:" $#
