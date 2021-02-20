@@ -349,7 +349,7 @@ cond_t CondCreate(lock_t lock) {
   return cond;
 }
 
-int CondInit(Cond* c, Lock* l) {
+int CondInit(Cond* c, lock_t l) {
   if (!c) return INVALID_COND;
   if (AQueueInit (&c->waiting) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not initialize lock waiting queue in LockInit!\n");
@@ -409,7 +409,7 @@ int CondWait(Cond *cond){
 int CondHandleWait(cond_t c) {
   if (c < 0 || c >= MAX_CONDS) return SYNC_FAIL;
   if(!conds[c].inuse) return SYNC_FAIL;
-  if(GetCurrentPid() != conds[c].lock->pid) return 1; // Calling process hasn't acquired the lock
+  if(GetCurrentPid() != locks[conds[c].lock].pid) return 1; // Calling process hasn't acquired the lock
   return CondWait(&conds[c]);
 }
 //---------------------------------------------------------------------------
@@ -445,7 +445,7 @@ int CondSignal (Cond *cond) {
     l = AQueueFirst(&cond->waiting);
     pcb = (PCB *)AQueueObject(l);
     if (AQueueRemove(&l) != QUEUE_SUCCESS) { 
-      printf("FATAL ERROR: could not remove link from semaphore queue in SemSignal!\n");
+      printf("FATAL ERROR: could not remove link from semaphore queue in CondSignal!\n");
       exitsim();
     }
     dbprintf ('s', "CondSignal: Waking up PID %d.\n", (int)(GetPidFromAddress(pcb)));
@@ -458,7 +458,7 @@ int CondSignal (Cond *cond) {
 int CondHandleSignal(cond_t c) {
   if (c < 0 || c >= MAX_CONDS) return SYNC_FAIL;
   if(!conds[c].inuse) return SYNC_FAIL;
-  if(GetCurrentPid() != conds[c].lock->pid) return 1; // Calling process hasn't acquired the lock
+  if(GetCurrentPid() != locks[conds[c].lock].pid) return 1; // Calling process hasn't acquired the lock
   return CondSignal(&conds[c]);
 }
 //---------------------------------------------------------------------------
@@ -503,6 +503,6 @@ int CondBroadcast(Cond *cond){
 int CondHandleBroadcast(cond_t c) {
   if (c < 0 || c >= MAX_CONDS) return SYNC_FAIL;
   if(!conds[c].inuse) return SYNC_FAIL;
-  if(GetCurrentPid() != conds[c].lock->pid) return 1; // Calling process hasn't acquired the lock
+  if(GetCurrentPid() != locks[conds[c].lock].pid) return 1; // Calling process hasn't acquired the lock
   return CondBroadcast(&conds[c]);
 }
