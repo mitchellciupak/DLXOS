@@ -4,9 +4,7 @@
 # app directory
 
 HDRS=usertraps.h
-FINALHDRS+=../include/producer.h
-FINALHDRS+=../include/consumer.h
-FINALHDRS+= ../include/shared.h
+FINALHDRS=../include/shared.h
 APPROOT=../..
 INCDIR+=-I../include
 

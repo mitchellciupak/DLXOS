@@ -107,7 +107,7 @@ clean:
 
 # Runs the DLX simulator with $(EXEC) as user-space program
 run:
-	-cd $(OUTDIR); dlxsim -x $(OSEXEC) -a -u $(EXEC)
+	-cd $(OUTDIR); dlxsim -x $(OSEXEC) -a -u $(EXEC) 3 3
 
 # Includes added dependencies of source files on header files
 include Makefile.depend
