@@ -65,6 +65,7 @@ void main (int argc, char *argv[])
   // - initialize the semaphore to (-1) * (n), where "n" = number of processes - 1.
   // Note: Once each of the processes has signaled, the semaphore should be back to
   // zero and the final sem_wait below will return.
+  numprocs = h2oInjectionCount + 1;//3 + h2oInjectionCount + so4InjectionCount;
   if ((s_procs_completed = sem_create(-(numprocs-1))) == SYNC_FAIL) {
     Printf("Bad sem_create in "); Printf(argv[0]); Printf("\n");
     Exit();
@@ -80,16 +81,19 @@ void main (int argc, char *argv[])
   // Note: that you MUST end your call to process_create with a NULL argument
   // so that the operating system knows how many arguments you are sending.
   while(i < h2oInjectionCount && j < so4InjectionCount){
+    if(j < so4InjectionCount){
+      Printf("creating process so4\n");
+      //process_create(SO4_INJECTIONFILE, h_mem_str, s_procs_completed_str, NULL);
+    }
     if(i < h2oInjectionCount){
+      Printf("creating process h20\n");
       process_create(H2O_INJECTIONFILE, h_mem_str, s_procs_completed_str, NULL);
     }
-    if(j < so4InjectionCount){
-      process_create(SO4_INJECTIONFILE, h_mem_str, s_procs_completed_str, NULL);
-    }
     if(i == 0 && j == 0){
+      Printf("creating process h2x\n");
       process_create(H2x2_O2_REACTIONFILE, h_mem_str, s_procs_completed_str, NULL);
-      process_create(H2SO4_REACTIONFILE, h_mem_str, s_procs_completed_str, NULL);
-      process_create(SO2_O2_REACTIONFILE, h_mem_str, s_procs_completed_str, NULL);
+      //process_create(H2SO4_REACTIONFILE, h_mem_str, s_procs_completed_str, NULL);
+      //process_create(SO2_O2_REACTIONFILE, h_mem_str, s_procs_completed_str, NULL);
     }
     Printf("Process %d created\n", i);
     i++; j++;

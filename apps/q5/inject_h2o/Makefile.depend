@@ -1,1 +1,2 @@
-work/h2o.o: h2o.c
+work/h2o.o: h2o.c ../../../include/lab2-api.h ../../../include/usertraps.h \
+ ../../../include/misc.h ../include/shared.h

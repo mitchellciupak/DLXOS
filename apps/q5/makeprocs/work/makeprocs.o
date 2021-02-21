@@ -105,19 +105,19 @@ LC10:
 	.ascii "Bad sem_create in \000"
 	.align 2
 LC11:
-	.ascii "h2o.c\000"
+	.ascii "creating process so4\n\000"
 	.align 2
 LC12:
-	.ascii "so4.c\000"
+	.ascii "creating process h20\n\000"
 	.align 2
 LC13:
-	.ascii "h2x2_o2.c\000"
+	.ascii "h2o.dlx.obj\000"
 	.align 2
 LC14:
-	.ascii "h2so4.c\000"
+	.ascii "creating process h2x\n\000"
 	.align 2
 LC15:
-	.ascii "so2_o2.c\000"
+	.ascii "h2x2_o2.dlx.obj\000"
 	.align 2
 LC16:
 	.ascii "Process %d created\n\000"
@@ -141,8 +141,8 @@ _main:
 	lw	r9,4(r30)
 	jal	___main
 	nop	; not filled.
+	addi	r4,r0,#0
 	addi	r5,r0,#0
-	addi	r6,r0,#0
 	snei	r1,r2,#3
 	beqz	r1,L14
 	nop	; not filled.
@@ -174,11 +174,11 @@ L14:
 	sw	8(r29),r11
 	jal	_dstrtol
 	nop	; not filled.
-	add	r8,r0,r1
+	add	r6,r0,r1
 	lhi	r11,((LC2)>>16)&0xffff
 	addui	r11,r11,(LC2)&0xffff
 	sw	(r29),r11
-	sw	4(r29),r8
+	sw	4(r29),r6
 	jal	_Printf
 	nop	; not filled.
 	lw	r11,8(r9)
@@ -198,9 +198,9 @@ L14:
 	nop	; not filled.
 	jal	_shmget
 	nop	; not filled.
-	add	r4,r0,r1
+	add	r8,r0,r1
 	addi	r29,r29,#16
-	snei	r1,r4,#0
+	snei	r1,r8,#0
 	bnez	r1,L15
 	nop	; not filled.
 	addi	r29,r29,#-8
@@ -223,7 +223,7 @@ L14:
 	addi	r29,r29,#8
 L15:
 	addi	r29,r29,#-8
-	sw	(r29),r4
+	sw	(r29),r8
 	jal	_shmat
 	nop	; not filled.
 	add	r2,r0,r1
@@ -322,8 +322,7 @@ L18:
 	addi	r29,r29,#8
 L17:
 	addi	r29,r29,#-8
-	addi	r1,r0,#1
-	subi	r1,r1,#0
+	sub	r1,r0,r6
 	sw	(r29),r1
 	jal	_sem_create
 	nop	; not filled.
@@ -352,7 +351,7 @@ L17:
 	addi	r29,r29,#8
 L19:
 	addi	r29,r29,#-8
-	sw	(r29),r4
+	sw	(r29),r8
 	addi	r3,r30,#-24
 	sw	4(r29),r3
 	jal	_ditoa
@@ -362,75 +361,61 @@ L19:
 	sw	4(r29),r2
 	jal	_ditoa
 	nop	; not filled.
-	addi	r29,r29,#8
-	slt	r1,r5,r8
+	j	L29
+	nop	; not filled.
+L27:
+	slt	r1,r5,r10
 	beqz	r1,L21
 	nop	; not filled.
-	add	r4,r0,r3
-	add	r3,r0,r2
-L27:
-	slt	r2,r6,r10
-	beqz	r2,L21
-	nop	; not filled.
-	slt	r1,r5,r8
 	beqz	r1,L24
 	nop	; not filled.
-	addi	r29,r29,#-16
+	addi	r29,r29,#-8
 	lhi	r11,((LC11)>>16)&0xffff
 	addui	r11,r11,(LC11)&0xffff
 	sw	(r29),r11
-	sw	4(r29),r4
-	sw	8(r29),r3
-	addi	r11,r0,#0
-	sw	12(r29),r11
-	jal	_process_create
+	jal	_Printf
 	nop	; not filled.
-	addi	r29,r29,#16
+	addi	r29,r29,#8
 L24:
-	beqz	r2,L25
+	slt	r1,r4,r6
+	beqz	r1,L25
 	nop	; not filled.
-	addi	r29,r29,#-16
+	addi	r29,r29,#-8
 	lhi	r11,((LC12)>>16)&0xffff
 	addui	r11,r11,(LC12)&0xffff
 	sw	(r29),r11
-	sw	4(r29),r4
-	sw	8(r29),r3
+	jal	_Printf
+	nop	; not filled.
+	addi	r29,r29,#-8
+	lhi	r11,((LC13)>>16)&0xffff
+	addui	r11,r11,(LC13)&0xffff
+	sw	(r29),r11
+	sw	4(r29),r3
+	sw	8(r29),r2
 	addi	r11,r0,#0
 	sw	12(r29),r11
 	jal	_process_create
 	nop	; not filled.
 	addi	r29,r29,#16
 L25:
+	snei	r1,r4,#0
+	bnez	r1,L26
+	nop	; not filled.
 	snei	r1,r5,#0
 	bnez	r1,L26
 	nop	; not filled.
-	snei	r1,r6,#0
-	bnez	r1,L26
-	nop	; not filled.
-	addi	r29,r29,#-16
-	lhi	r11,((LC13)>>16)&0xffff
-	addui	r11,r11,(LC13)&0xffff
-	sw	(r29),r11
-	sw	4(r29),r4
-	sw	8(r29),r3
-	addi	r11,r0,#0
-	sw	12(r29),r11
-	jal	_process_create
-	nop	; not filled.
+	addi	r29,r29,#-8
 	lhi	r11,((LC14)>>16)&0xffff
 	addui	r11,r11,(LC14)&0xffff
 	sw	(r29),r11
-	sw	4(r29),r4
-	sw	8(r29),r3
-	addi	r11,r0,#0
-	sw	12(r29),r11
-	jal	_process_create
+	jal	_Printf
 	nop	; not filled.
+	addi	r29,r29,#-8
 	lhi	r11,((LC15)>>16)&0xffff
 	addui	r11,r11,(LC15)&0xffff
 	sw	(r29),r11
-	sw	4(r29),r4
-	sw	8(r29),r3
+	sw	4(r29),r3
+	sw	8(r29),r2
 	addi	r11,r0,#0
 	sw	12(r29),r11
 	jal	_process_create
@@ -441,13 +426,14 @@ L26:
 	lhi	r11,((LC16)>>16)&0xffff
 	addui	r11,r11,(LC16)&0xffff
 	sw	(r29),r11
-	sw	4(r29),r5
+	sw	4(r29),r4
 	jal	_Printf
 	nop	; not filled.
+	addi	r4,r4,#1
 	addi	r5,r5,#1
-	addi	r6,r6,#1
+L29:
 	addi	r29,r29,#8
-	slt	r1,r5,r8
+	slt	r1,r4,r6
 	bnez	r1,L27
 	nop	; not filled.
 L21:
