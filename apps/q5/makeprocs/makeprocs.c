@@ -16,17 +16,42 @@ void main (int argc, char *argv[])
 
   char h_mem_str[10];            // Used as command-line argument to pass mem_handle to new processes
   char s_procs_completed_str[10];// Used as command-line argument to pass page_mapped handle to new processes
+  char count_str[10];
 
+  int h2o_inj_ct = 0;
+  int so4_inj_ct = 0;
+  int h2o_rea_ct = 0;
+  int so4_rea_ct = 0;
+  int hos_rea_ct = 0;
+  int h2_ct = 0;
+  int o2_ct = 0;
+  int so_ct = 0;
 
   // Usage Checking
-  if (argc != 2) {
-    Printf("Usage: "); Printf(argv[0]); Printf(" <number of processes to create>\n");
+  if (argc != 3) {
+    Printf("Usage: "); Printf(argv[0]); Printf(" <number of h2o injections> <number of so4 injections>\n");
     Exit();
   }
 
-  // Argument Handleing
-  numprocs = dstrtol(argv[1], NULL, 10); // Convert string from ascii command line argument to integer number base 10
-  Printf("Creating %d processes\n", numprocs);
+  // Argument Handling
+  // H2O reaction
+  h2o_inj_ct = dstrtol(argv[1], NULL, 10); // Convert string from ascii command line argument to integer number base 10 
+  h2o_rea_ct = (int)(h2o_inj_ct / 2);
+  h2_ct = h2o_rea_ct * 2;
+  o2_ct = h2o_rea_ct;
+
+  // SO4 Reaction
+  so4_inj_ct = dstrtol(argv[1], NULL, 10);
+  so4_rea_ct = so4_inj_ct;
+  so_ct =  so4_inj_ct;
+  o2_ct += so4_inj_ct;
+
+  // H2SO4 Reaction
+  while( h2_ct > 0 && o2_ct > 0 && so_ct > 0 ){
+    hos_rea_ct++;
+    h2_ct--; so_ct--; o2_ct--;
+  }
+  //Printf("Creating %d processes\n", h2o_rea_ct);
 
 
   // Print 'Hello World' for 'n' producers and 'n' consumers (printers)
@@ -45,6 +70,12 @@ void main (int argc, char *argv[])
 
   // Populate buffer with init vals
   // Initialize all semaphores in structure to zero
+  mc->so2_sem   = sem_create(0);
+  mc->h2_sem    = sem_create(0);
+  mc->h2o_sem   = sem_create(0);
+  mc->h2so4_sem = sem_create(0);
+  mc->so4_sem   = sem_create(0);
+  mc->o2_sem    = sem_create(0);
 
   // Error Handleing for Sems Created
 
@@ -68,12 +99,16 @@ void main (int argc, char *argv[])
   //Create the processes.
   // Note: that you MUST end your call to process_create with a NULL argument
   // so that the operating system knows how many arguments you are sending.
-
-  process_create(INJECTOR_FILE, h_mem_str, s_procs_completed_str, "H2O",  NULL);
-  process_create(INJECTOR_FILE, h_mem_str, s_procs_completed_str, "SO4",  NULL);
-  process_create(REACTOR_FILE, h_mem_str, s_procs_completed_str, "H2x2", "O2", NULL);
-  process_create(REACTOR_FILE, h_mem_str, s_procs_completed_str, "SO2", "O2", NULL);
-  process_create(REACTOR_FILE, h_mem_str, s_procs_completed_str, "H2SO4",  NULL);
+  ditoa(so4_inj_ct, count_str);
+  process_create(INJECTOR_FILE, h_mem_str, s_procs_completed_str, "0", count_str, NULL);
+  ditoa(h2o_inj_ct, count_str);
+  process_create(INJECTOR_FILE, h_mem_str, s_procs_completed_str, "1", count_str, NULL);
+  ditoa(so4_rea_ct, count_str);
+  process_create(REACTOR_FILE,  h_mem_str, s_procs_completed_str, "0", count_str, NULL);
+  ditoa(h2o_rea_ct, count_str);
+  process_create(REACTOR_FILE,  h_mem_str, s_procs_completed_str, "1", count_str, NULL);
+  ditoa(hos_rea_ct, count_str);
+  process_create(REACTOR_FILE,  h_mem_str, s_procs_completed_str, "2", count_str, NULL);
 
   // Wait until all spawned processes have finished.
   if (sem_wait(s_procs_completed) != SYNC_SUCCESS) {
@@ -81,6 +116,9 @@ void main (int argc, char *argv[])
     Exit();
   }
 
+  Printf("%d H2O's left over. ", (h2o_inj_ct % 2));
+  Printf("%d H2's left over. ", h2_ct);
+  Printf("%d O2's left over. %d SO2's left over. %d H2SO4's created.\n", o2_ct, so_ct, hos_rea_ct);
   //Done
   Printf("All processes completed sucessfully, exiting main process.\n");
 }
