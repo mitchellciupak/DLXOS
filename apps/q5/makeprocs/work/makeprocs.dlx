@@ -1,7 +1,7 @@
 ; Linked by DLX-LD.
 ; MemSize 24576
-; Data size: 404
-; Text size: 4796
+; Data size: 492
+; Text size: 5212
 ; Stack size: 8192
 .text 0x1000
 .data 0x3000
@@ -82,88 +82,92 @@ LC0_LF0:
 .ascii "Usage: \000"
 .align 2
 LC1_LF0:
-.ascii " <number of processes to create>\n\000"
+.ascii " <number of h2o injections> <number of so4 injections>\n\000"
 .align 2
 LC2_LF0:
-.ascii "Creating %d processes\n\000"
-.align 2
-LC3_LF0:
 .ascii "ERROR: could not allocate shared memory page in \000"
 .align 2
-LC4_LF0:
+LC3_LF0:
 .ascii ", exiting...\n\000"
 .align 2
-LC5_LF0:
+LC4_LF0:
 .ascii "Could not map the shared page to virtual address in \000"
 .align 2
-LC6_LF0:
+LC5_LF0:
 .ascii ", exiting..\n\000"
 .align 2
-LC7_LF0:
+LC6_LF0:
 .ascii "Bad sem_create in \000"
 .align 2
-LC8_LF0:
+LC7_LF0:
 .ascii "\n\000"
 .align 2
-LC9_LF0:
+LC8_LF0:
 .ascii "injector.dlx.obj\000"
 .align 2
+LC9_LF0:
+.ascii "0\000"
+.align 2
 LC10_LF0:
-.ascii "H2O\000"
+.ascii "1\000"
 .align 2
 LC11_LF0:
-.ascii "SO4\000"
-.align 2
-LC12_LF0:
 .ascii "reactor.dlx.obj\000"
 .align 2
+LC12_LF0:
+.ascii "2\000"
+.align 2
 LC13_LF0:
-.ascii "H2x2\000"
-.align 2
-LC14_LF0:
-.ascii "O2\000"
-.align 2
-LC15_LF0:
-.ascii "SO2\000"
-.align 2
-LC16_LF0:
-.ascii "H2SO4\000"
-.align 2
-LC17_LF0:
 .ascii "Bad semaphore s_procs_completed (%d) in \000"
 .align 2
+LC14_LF0:
+.ascii "%d H2O\'s left over. \000"
+.align 2
+LC15_LF0:
+.ascii "%d H2\'s left over. \000"
+.align 2
+LC16_LF0:
+.ascii "%d O2\'s left over. \000"
+.align 2
+LC17_LF0:
+.ascii "%d SO2\'s left over. \000"
+.align 2
 LC18_LF0:
+.ascii "%d H2SO4\'s created.\n\000"
+.align 2
+LC19_LF0:
 .ascii "All processes completed sucessfully, exiting main process.\n\000"
 .text
 .align 2
 .proc _main
 .global _main
 _main:
-;  Function 'main'; 32 bytes of locals, 0 regs to save.
+;  Function 'main'; 48 bytes of locals, 0 regs to save.
 	sw	-4(r29),r30; push fp
 	add	r30,r0,r29; fp = sp
 	sw	-8(r29),r31; push ret addr
-	subui	r29,r29,#40; alloc local storage
+	subui	r29,r29,#56; alloc local storage
 	lw	r2,(r30)
-	lw	r7,4(r30)
+	lw	r15,4(r30)
 	jal	___main
 	nop; not filled.
-	snei	r1,r2,#2
+	addi	r14,r0,#0
+	snei	r1,r2,#3
 	beqz	r1,L14_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r8,((LC0_LF0)>>16)&0xffff
-	addui	r8,r8,(LC0_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC0_LF0)>>16)&0xffff
+	addui	r17,r17,(LC0_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lw	r8,(r7)
-	sw	(r29),r8
+	lw	r17,(r15)
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lhi	r8,((LC1_LF0)>>16)&0xffff
-	addui	r8,r8,(LC1_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC1_LF0)>>16)&0xffff
+	addui	r17,r17,(LC1_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
@@ -171,203 +175,309 @@ _main:
 	addi	r29,r29,#8
 L14_LF0:
 	addi	r29,r29,#-16
-	lw	r8,4(r7)
-	sw	(r29),r8
-	addi	r8,r0,#0
-	sw	4(r29),r8
-	addi	r8,r0,#10
-	sw	8(r29),r8
+	lw	r17,4(r15)
+	sw	(r29),r17
+	addi	r17,r0,#0
+	sw	4(r29),r17
+	addi	r17,r0,#10
+	sw	8(r29),r17
 	jal	_dstrtol
 	nop; not filled.
-	lhi	r8,((LC2_LF0)>>16)&0xffff
-	addui	r8,r8,(LC2_LF0)&0xffff
-	sw	(r29),r8
-	sw	4(r29),r1
-	jal	_Printf
+	add	r12,r0,r1
+	srli	r1,r12,#0x1f
+	add	r1,r12,r1
+	srai	r16,r1,#0x1
+	slli	r10,r16,#0x1
+	add	r8,r0,r16
+	lw	r17,4(r15)
+	sw	(r29),r17
+	addi	r17,r0,#0
+	sw	4(r29),r17
+	addi	r17,r0,#10
+	sw	8(r29),r17
+	jal	_dstrtol
 	nop; not filled.
+	add	r13,r0,r1
+	add	r6,r0,r13
+	add	r9,r0,r13
+	add	r8,r8,r9
+	addi	r29,r29,#16
+	j	L24_LF0
+	nop; not filled.
+L19_LF0:
+	sgti	r1,r9,#0
+	beqz	r1,L16_LF0
+	nop; not filled.
+	addi	r14,r14,#1
+	addi	r10,r10,#-1
+	addi	r9,r9,#-1
+	addi	r8,r8,#-1
+L24_LF0:
+	sgti	r1,r10,#0
+	beqz	r1,L16_LF0
+	nop; not filled.
+	sgti	r1,r8,#0
+	bnez	r1,L19_LF0
+	nop; not filled.
+L16_LF0:
 	jal	_shmget
 	nop; not filled.
-	add	r2,r0,r1
-	addi	r29,r29,#16
-	snei	r1,r2,#0
-	bnez	r1,L15_LF0
+	add	r3,r0,r1
+	snei	r1,r3,#0
+	bnez	r1,L20_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r8,((LC3_LF0)>>16)&0xffff
-	addui	r8,r8,(LC3_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC2_LF0)>>16)&0xffff
+	addui	r17,r17,(LC2_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lw	r8,(r7)
-	sw	(r29),r8
+	lw	r17,(r15)
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lhi	r8,((LC4_LF0)>>16)&0xffff
-	addui	r8,r8,(LC4_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC3_LF0)>>16)&0xffff
+	addui	r17,r17,(LC3_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
 	nop; not filled.
 	addi	r29,r29,#8
-L15_LF0:
+L20_LF0:
 	addi	r29,r29,#-8
-	sw	(r29),r2
+	sw	(r29),r3
 	jal	_shmat
 	nop; not filled.
+	add	r2,r0,r1
 	addi	r29,r29,#8
-	snei	r1,r1,#0
-	bnez	r1,L16_LF0
+	snei	r1,r2,#0
+	bnez	r1,L21_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r8,((LC5_LF0)>>16)&0xffff
-	addui	r8,r8,(LC5_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC4_LF0)>>16)&0xffff
+	addui	r17,r17,(LC4_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lw	r8,(r7)
-	sw	(r29),r8
+	lw	r17,(r15)
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lhi	r8,((LC6_LF0)>>16)&0xffff
-	addui	r8,r8,(LC6_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC5_LF0)>>16)&0xffff
+	addui	r17,r17,(LC5_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
 	nop; not filled.
 	addi	r29,r29,#8
-L16_LF0:
+L21_LF0:
 	addi	r29,r29,#-8
-	addi	r8,r0,#-4
-	sw	(r29),r8
+	addi	r17,r0,#0
+	sw	(r29),r17
 	jal	_sem_create
 	nop; not filled.
-	add	r6,r0,r1
+	sw	16(r2),r1
+	sw	(r29),r17
+	jal	_sem_create
+	nop; not filled.
+	sw	8(r2),r1
+	sw	(r29),r17
+	jal	_sem_create
+	nop; not filled.
+	sw	(r2),r1
+	sw	(r29),r17
+	jal	_sem_create
+	nop; not filled.
+	sw	20(r2),r1
+	sw	(r29),r17
+	jal	_sem_create
+	nop; not filled.
+	sw	4(r2),r1
+	sw	(r29),r17
+	jal	_sem_create
+	nop; not filled.
+	sw	12(r2),r1
+	addi	r17,r0,#-4
+	sw	(r29),r17
+	jal	_sem_create
+	nop; not filled.
+	add	r11,r0,r1
 	addi	r29,r29,#8
-	seqi	r1,r6,#-1
-	beqz	r1,L17_LF0
+	seqi	r1,r11,#-1
+	beqz	r1,L22_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r8,((LC7_LF0)>>16)&0xffff
-	addui	r8,r8,(LC7_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC6_LF0)>>16)&0xffff
+	addui	r17,r17,(LC6_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lw	r8,(r7)
-	sw	(r29),r8
+	lw	r17,(r15)
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
-	lhi	r8,((LC8_LF0)>>16)&0xffff
-	addui	r8,r8,(LC8_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC7_LF0)>>16)&0xffff
+	addui	r17,r17,(LC7_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
 	nop; not filled.
 	addi	r29,r29,#8
-L17_LF0:
+L22_LF0:
 	addi	r29,r29,#-8
-	sw	(r29),r2
+	sw	(r29),r3
 	addi	r5,r30,#-24
 	sw	4(r29),r5
 	jal	_ditoa
 	nop; not filled.
+	sw	(r29),r11
+	addi	r4,r30,#-40
+	sw	4(r29),r4
+	jal	_ditoa
+	nop; not filled.
 	sw	(r29),r6
-	addi	r3,r30,#-40
-	sw	4(r29),r3
+	addi	r2,r30,#-56
+	sw	4(r29),r2
 	jal	_ditoa
 	nop; not filled.
 	addi	r29,r29,#-16
-	lhi	r2,((LC9_LF0)>>16)&0xffff
-	addui	r2,r2,(LC9_LF0)&0xffff
-	sw	(r29),r2
+	lhi	r3,((LC8_LF0)>>16)&0xffff
+	addui	r3,r3,(LC8_LF0)&0xffff
+	sw	(r29),r3
 	sw	4(r29),r5
-	sw	8(r29),r3
-	lhi	r8,((LC10_LF0)>>16)&0xffff
-	addui	r8,r8,(LC10_LF0)&0xffff
-	sw	12(r29),r8
-	addi	r8,r0,#0
-	sw	16(r29),r8
+	sw	8(r29),r4
+	lhi	r7,((LC9_LF0)>>16)&0xffff
+	addui	r7,r7,(LC9_LF0)&0xffff
+	sw	12(r29),r7
+	sw	16(r29),r2
+	addi	r17,r0,#0
+	sw	20(r29),r17
 	jal	_process_create
 	nop; not filled.
-	sw	(r29),r2
+	sw	(r29),r12
+	sw	4(r29),r2
+	jal	_ditoa
+	nop; not filled.
+	sw	(r29),r3
 	sw	4(r29),r5
-	sw	8(r29),r3
-	lhi	r8,((LC11_LF0)>>16)&0xffff
-	addui	r8,r8,(LC11_LF0)&0xffff
-	sw	12(r29),r8
-	addi	r8,r0,#0
-	sw	16(r29),r8
+	sw	8(r29),r4
+	lhi	r6,((LC10_LF0)>>16)&0xffff
+	addui	r6,r6,(LC10_LF0)&0xffff
+	sw	12(r29),r6
+	sw	16(r29),r2
+	sw	20(r29),r17
 	jal	_process_create
 	nop; not filled.
-	lhi	r2,((LC12_LF0)>>16)&0xffff
-	addui	r2,r2,(LC12_LF0)&0xffff
-	sw	(r29),r2
+	sw	(r29),r13
+	sw	4(r29),r2
+	jal	_ditoa
+	nop; not filled.
+	lhi	r3,((LC11_LF0)>>16)&0xffff
+	addui	r3,r3,(LC11_LF0)&0xffff
+	sw	(r29),r3
 	sw	4(r29),r5
-	sw	8(r29),r3
-	lhi	r8,((LC13_LF0)>>16)&0xffff
-	addui	r8,r8,(LC13_LF0)&0xffff
-	sw	12(r29),r8
-	lhi	r4,((LC14_LF0)>>16)&0xffff
-	addui	r4,r4,(LC14_LF0)&0xffff
-	sw	16(r29),r4
-	addi	r8,r0,#0
-	sw	20(r29),r8
+	sw	8(r29),r4
+	sw	12(r29),r7
+	sw	16(r29),r2
+	sw	20(r29),r17
 	jal	_process_create
 	nop; not filled.
-	sw	(r29),r2
+	sw	(r29),r16
+	sw	4(r29),r2
+	jal	_ditoa
+	nop; not filled.
+	sw	(r29),r3
 	sw	4(r29),r5
-	sw	8(r29),r3
-	lhi	r8,((LC15_LF0)>>16)&0xffff
-	addui	r8,r8,(LC15_LF0)&0xffff
-	sw	12(r29),r8
-	sw	16(r29),r4
-	addi	r8,r0,#0
-	sw	20(r29),r8
+	sw	8(r29),r4
+	sw	12(r29),r6
+	sw	16(r29),r2
+	sw	20(r29),r17
 	jal	_process_create
 	nop; not filled.
-	sw	(r29),r2
+	sw	(r29),r14
+	sw	4(r29),r2
+	jal	_ditoa
+	nop; not filled.
+	sw	(r29),r3
 	sw	4(r29),r5
-	sw	8(r29),r3
-	lhi	r8,((LC16_LF0)>>16)&0xffff
-	addui	r8,r8,(LC16_LF0)&0xffff
-	sw	12(r29),r8
-	addi	r8,r0,#0
-	sw	16(r29),r8
+	sw	8(r29),r4
+	lhi	r17,((LC12_LF0)>>16)&0xffff
+	addui	r17,r17,(LC12_LF0)&0xffff
+	sw	12(r29),r17
+	sw	16(r29),r2
+	addi	r17,r0,#0
+	sw	20(r29),r17
 	jal	_process_create
 	nop; not filled.
-	sw	(r29),r6
+	sw	(r29),r11
 	jal	_sem_wait
 	nop; not filled.
 	addi	r29,r29,#24
 	snei	r1,r1,#1
-	beqz	r1,L18_LF0
+	beqz	r1,L23_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r8,((LC17_LF0)>>16)&0xffff
-	addui	r8,r8,(LC17_LF0)&0xffff
-	sw	(r29),r8
-	sw	4(r29),r6
+	lhi	r17,((LC13_LF0)>>16)&0xffff
+	addui	r17,r17,(LC13_LF0)&0xffff
+	sw	(r29),r17
+	sw	4(r29),r11
 	jal	_Printf
 	nop; not filled.
-	lw	r7,(r7)
-	sw	(r29),r7
+	lw	r15,(r15)
+	sw	(r29),r15
 	jal	_Printf
 	nop; not filled.
-	lhi	r8,((LC8_LF0)>>16)&0xffff
-	addui	r8,r8,(LC8_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC7_LF0)>>16)&0xffff
+	addui	r17,r17,(LC7_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
 	nop; not filled.
 	addi	r29,r29,#8
-L18_LF0:
+L23_LF0:
 	addi	r29,r29,#-8
-	lhi	r8,((LC18_LF0)>>16)&0xffff
-	addui	r8,r8,(LC18_LF0)&0xffff
-	sw	(r29),r8
+	lhi	r17,((LC14_LF0)>>16)&0xffff
+	addui	r17,r17,(LC14_LF0)&0xffff
+	sw	(r29),r17
+	srli	r1,r12,#0x1f
+	add	r1,r12,r1
+	addi	r17,r0,#-2
+	and	r1,r1,r17
+	sub	r1,r12,r1
+	sw	4(r29),r1
+	jal	_Printf
+	nop; not filled.
+	lhi	r17,((LC15_LF0)>>16)&0xffff
+	addui	r17,r17,(LC15_LF0)&0xffff
+	sw	(r29),r17
+	sw	4(r29),r10
+	jal	_Printf
+	nop; not filled.
+	lhi	r17,((LC16_LF0)>>16)&0xffff
+	addui	r17,r17,(LC16_LF0)&0xffff
+	sw	(r29),r17
+	sw	4(r29),r8
+	jal	_Printf
+	nop; not filled.
+	lhi	r17,((LC17_LF0)>>16)&0xffff
+	addui	r17,r17,(LC17_LF0)&0xffff
+	sw	(r29),r17
+	sw	4(r29),r9
+	jal	_Printf
+	nop; not filled.
+	lhi	r17,((LC18_LF0)>>16)&0xffff
+	addui	r17,r17,(LC18_LF0)&0xffff
+	sw	(r29),r17
+	sw	4(r29),r14
+	jal	_Printf
+	nop; not filled.
+	lhi	r17,((LC19_LF0)>>16)&0xffff
+	addui	r17,r17,(LC19_LF0)&0xffff
+	sw	(r29),r17
 	jal	_Printf
 	nop; not filled.
 	addi	r29,r29,#8

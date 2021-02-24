@@ -37,10 +37,10 @@ void main (int argc, char *argv[])
     if (bc->head != bc->tail){
       if(str[bc->tail] == '\0'){
         str[bc->tail] = bc->buff[bc->tail];
-        Printf("Consumer %d removed %c\n",getpid(), str[bc->tail]);
+        Printf("Consumer %d removed: %c\n",getpid(), str[bc->tail]);
         bc->tail = (bc->tail + 1) % BUFF_LEN;
         i++;
-      }
+     }
     
       cond_signal(bc->full);
     }else{
@@ -48,14 +48,8 @@ void main (int argc, char *argv[])
     }
     lock_release(bc->lock);
   }
-  Printf("\n");  
-  for(i = 0; i < BUFF_LEN; i++){
-    Printf("%c", str[i]);
-  }
-  Printf("\n");
 
   // Signal the semaphore to tell the original process that we're done
-  Printf("Consumer: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
