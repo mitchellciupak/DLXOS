@@ -62,10 +62,11 @@ make.sh -R q5
 ```
 Run each process (q2, q3, and q5) with the commands above from the DLXOS folder. Alternatively, you could cd into the project's respective directory under the DLXOS/apps folder and run 
 
-'''
+```
 make
 make run
-'''
+```
+
 To clean, run "make clean" from any project folder, or simply run "make.sh -c" from the DLXOS folder.
 
 ## 🎈 Usage <a name="usage"></a>
