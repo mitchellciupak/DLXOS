@@ -53,9 +53,6 @@ void main (int argc, char *argv[])
   }
   //Printf("Creating %d processes\n", h2o_rea_ct);
 
-
-  // Print 'Hello World' for 'n' producers and 'n' consumers (printers)
-
   // Allocate space for a shared memory page, which is exactly 64KB (Always returns 64KB)
   if ((h_mem = shmget()) == 0) {
     Printf("ERROR: could not allocate shared memory page in "); Printf(argv[0]); Printf(", exiting...\n");
@@ -118,7 +115,9 @@ void main (int argc, char *argv[])
 
   Printf("%d H2O's left over. ", (h2o_inj_ct % 2));
   Printf("%d H2's left over. ", h2_ct);
-  Printf("%d O2's left over. %d SO2's left over. %d H2SO4's created.\n", o2_ct, so_ct, hos_rea_ct);
+  Printf("%d O2's left over. ", o2_ct);
+  Printf("%d SO2's left over. ", so_ct);
+  Printf("%d H2SO4's created.\n", hos_rea_ct);
   //Done
   Printf("All processes completed sucessfully, exiting main process.\n");
 }

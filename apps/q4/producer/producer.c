@@ -41,7 +41,7 @@ void main (int argc, char *argv[]) {
       if(fill[bc->head] != '\0'){
 
         bc->buff[bc->head] = fill[bc->head];
-        Printf("Producer %d inserted %c\n",getpid(), fill[bc->head]);
+        Printf("Producer %d inserted: %c\n",getpid(), fill[bc->head]);
         fill[bc->head] = '\0';
         bc->head = (bc->head + 1) % BUFF_LEN;
         i++;
@@ -56,7 +56,6 @@ void main (int argc, char *argv[]) {
   }
 
   // Signal the semaphore to tell the original process that we're done
-  Printf("Producer: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();

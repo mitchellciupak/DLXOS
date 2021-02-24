@@ -43,11 +43,10 @@ void main (int argc, char *argv[]) {
 		  }
 
       if(injectionID == 0){Printf("SO4 injected into Radeon atmosphere, PID: %d\n",getpid());}
-      else if(injectionID == 1){   Printf("H20 injected into Radeon atmosphere, PID: %d\n",getpid());}
+      else if(injectionID == 1){   Printf("H2O injected into Radeon atmosphere, PID: %d\n",getpid());}
   }
 
   // Signal the semaphore to tell the original process that we're done
-  Printf("Injector: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();

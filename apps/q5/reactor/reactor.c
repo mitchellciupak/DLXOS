@@ -14,8 +14,7 @@ void main (int argc, char *argv[])
   sem_t mol_2;
   int reaction_id; // 0 is so4, 1 is h20, 2 is h2so4
   int num_reactions = 0;
-
-  Printf("%d\n", argc);
+  int i = 0;
 
   // Argument Check
   if (argc != 5) {
@@ -37,7 +36,7 @@ void main (int argc, char *argv[])
   }
 
   // Do it
-  while(num_reactions > 0){
+  for(i=0;i<num_reactions;i++){
     if(reaction_id == 0){
       sem_wait(mc->so4_sem);  // SO4
       sem_signal(mc->so2_sem);
@@ -57,13 +56,11 @@ void main (int argc, char *argv[])
       sem_wait(mc->o2_sem);
       sem_wait(mc->so2_sem);
       sem_signal(mc->h2so4_sem);
-      Printf("H2 + O2 + SO2 -> H2SO4 reacted, PID: %d\n", getpid());
+      Printf("(%d) H2 + O2 + SO2 -> H2SO4 reacted, PID: %d\n", i+1, getpid());
     }
-    num_reactions--;
   }
 
   // Signal the semaphore to tell the original process that we're done
-  Printf("Reactor: PID %d is complete.\n", getpid());
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");
     Exit();
