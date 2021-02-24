@@ -55,7 +55,11 @@ gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c #TODO-is this correct Compiling Step
 Explain how to run the automated tests for this system.
 
 ```
-chmod u+x make.sh
+chmod u+x
+make.sh -R q1
+make.sh -R q2
+make.sh -R q4
+make.sh -R q5
 ```
 
 ## 🎈 Usage <a name="usage"></a>
