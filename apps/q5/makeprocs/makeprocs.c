@@ -41,7 +41,7 @@ void main (int argc, char *argv[])
   o2_ct = h2o_rea_ct;
 
   // SO4 Reaction
-  so4_inj_ct = dstrtol(argv[1], NULL, 10);
+  so4_inj_ct = dstrtol(argv[2], NULL, 10);
   so4_rea_ct = so4_inj_ct;
   so_ct =  so4_inj_ct;
   o2_ct += so4_inj_ct;
