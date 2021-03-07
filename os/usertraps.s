@@ -181,10 +181,67 @@ _cond_signal:
 .proc _cond_broadcast
 .global _cond_broadcast
 _cond_broadcast:
-	trap	#0x455
+	trap	#0x459
 	jr	r31
 	nop
 .endproc _cond_broadcast
+
+.proc _mbox_create
+.global _mbox_create
+_mbox_create:
+	trap	#0x460
+	jr	r31
+	nop
+.endproc _mbox_create
+
+.proc _mbox_open
+.global _mbox_open
+_mbox_open:
+	trap	#0x461
+	jr	r31
+	nop
+.endproc _mbox_open
+
+.proc _mbox_close
+.global _mbox_close
+_mbox_close:
+	trap	#0x462
+	jr	r31
+	nop
+.endproc _mbox_close
+
+.proc _mbox_send
+.global _mbox_send
+_mbox_send:
+	trap	#0x463
+	jr	r31
+	nop
+.endproc _mbox_send
+
+.proc _mbox_recv
+.global _mbox_recv
+_mbox_recv:
+	trap	#0x464
+	jr	r31
+	nop
+.endproc _mbox_recv
+
+.proc _sleep
+.global _sleep
+_sleep:
+	trap	#0x465
+	jr	r31
+	nop
+.endproc _sleep
+
+.proc _yield
+.global _yield
+_yield:
+	trap	#0x466
+	jr	r31
+	nop
+.endproc _yield
+
 
 .proc _Exit
 .global _Exit

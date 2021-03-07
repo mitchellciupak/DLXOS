@@ -55,16 +55,13 @@ int LockInit(Lock *);
 int LockAcquire(Lock *);
 int LockRelease(Lock *);
 
-// Copied from lock for now!
-// User code
 typedef struct Cond {
-  int pid;       // PID of process holding the lock, -1 if lock is available
-  Queue waiting; // Queue of processes waiting on the lock
-  lock_t lock;
+  Lock *lock;    // Lock associated with this conditional variable
+  Queue waiting; // Queue of processes waiting on the conditional variable 
   int inuse;     // Bookkeeping variable for free vs. used structures
 } Cond;
 
-int CondInit(Cond *, lock_t);
+int CondInit(Cond *);
 int CondWait(Cond *);
 int CondSignal(Cond *);
 

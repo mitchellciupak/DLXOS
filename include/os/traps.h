@@ -13,6 +13,19 @@
 #ifndef	_dlxtraps_h_
 #define	_dlxtraps_h_
 
+// Non-trap #defines:
+#define PRINTF_MAX_FORMAT_LENGTH 256       // Maximum length of any Printf format string
+#define PRINTF_MAX_ARGS 8                  // Maximum number of "%"'s in a Printf format string 
+                                           //    (note that one %f is actually 2 args worth of space)
+                                           //    Also, you cannot make this greater than 8.  It seems that the
+                                           //    the compiler will only pass up to 8 parameters on the stack
+                                           //    (9 including the format string).  So, you'll get random values
+                                           //    for any more than 8 args.
+#define PRINTF_MAX_STRING_ARGS 5           // Maximum number of "%s"'s allowed in a format string
+#define PRINTF_MAX_STRING_ARG_LENGTH 100   // Maximum length of any string printed with a "%s"
+
+// Traps:
+
 #define	TRAP_ILLEGALINST	0x1	// Illegal instruction
 #define	TRAP_ADDRESS		0x2	// Bad address
 #define	TRAP_ACCESS		0x3	// Attempted to access illegal memory
@@ -44,8 +57,6 @@
 // Following are user-defined traps.  Traps should be in the range
 // 0x400 - 0xfff
 #define	TRAP_CONTEXT_SWITCH	0x400
-//#define	TRAP_SEM_WAIT		0x401
-//#define	TRAP_SEM_SIGNAL		0x402
 #define	TRAP_PROCESS_SLEEP	0x410
 #define	TRAP_PROCESS_WAKEUP	0x420
 #define	TRAP_PROCESS_FORK	0x430
@@ -63,6 +74,13 @@
 #define TRAP_COND_WAIT		0x457
 #define TRAP_COND_SIGNAL	0x458
 #define TRAP_COND_BROADCAST	0x459
+#define TRAP_MBOX_CREATE        0x460
+#define TRAP_MBOX_OPEN          0x461
+#define TRAP_MBOX_CLOSE         0x462
+#define TRAP_MBOX_SEND          0x463
+#define TRAP_MBOX_RECV          0x464
+#define TRAP_USER_SLEEP         0x465
+#define TRAP_YIELD              0x466
 
 #define TRAP_USER_EXIT          0x500
 
