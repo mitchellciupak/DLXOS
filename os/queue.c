@@ -85,9 +85,16 @@ Link *AQueueAllocLink (void *obj_to_store) {
   extern Queue	freeLinks;
   Link	*l=NULL;
 
-  if (AQueueEmpty(&freeLinks)) return NULL;
+  dbprintf('q', "AQueueAllocLink: allocating link\n");
+  if (AQueueEmpty(&freeLinks)) {
+    dbprintf('q', "AQueueAllocLink: no free links!\n");
+    return NULL;
+  }
   l = AQueueFirst(&freeLinks);
-  if (!l) return NULL;
+  if (!l) {
+    dbprintf('q', "AQueueAllocLink: first link in freeLinks is NULL!\n");
+    return NULL;
+  }
 
   // Can't use QueueRemove because it puts the link back onto
   // the list of free links.  Therefore, we must remove it
@@ -118,6 +125,8 @@ Link *AQueueAllocLink (void *obj_to_store) {
 int AQueueRemove (Link **pl) {
   extern Queue freeLinks;
   Link *l = NULL;
+
+  dbprintf('q', "AQueueRemove: removing link\n");
 
   if (!pl) return QUEUE_FAIL;
   if (!(*pl)) return QUEUE_FAIL;

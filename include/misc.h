@@ -16,6 +16,7 @@ extern const char*	dmindex(const char*, const char *);
 extern void ditoa (int n, char *buf);
 char *dstrcat (char *onto, const char *addn);
 int min(int a, int b);
+int max(int a, int b);
 
 inline
 int

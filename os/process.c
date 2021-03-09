@@ -15,6 +15,8 @@
 #include "memory.h"
 #include "filesys.h"
 #include "share_memory.h"
+#include "mbox.h"
+#include "clock.h"
 
 // Pointer to the current PCB.  This is used by the assembly language
 // routines for context switches.
@@ -40,11 +42,6 @@ static Queue	zombieQueue;
 // we can't use malloc() inside the OS.
 static PCB	pcbs[PROCESS_MAX_PROCS];
 
-// Default value for scheduler quantum.  This could be set to any value.
-// In fact, it could even be dynamic, though that would require modifying
-// the timer trap handler....
-static processQuantum = DLX_PROCESS_QUANTUM;
-
 // String listing debugging options to print out.
 char	debugstr[200];
 
@@ -67,9 +64,9 @@ uint32 get_argument(char *string);
 void ProcessModuleInit () {
   int		i;
 
-  dbprintf ('p', "Entering ProcessModuleInit\n");
+  dbprintf ('p', "ProcessModuleInit: function started\n");
   AQueueInit (&freepcbs);
-  AQueueInit (&runQueue);
+  AQueueInit(&runQueue);
   AQueueInit (&waitQueue);
   AQueueInit (&zombieQueue);
   // For each PCB slot in the global pcbs array:
@@ -90,7 +87,7 @@ void ProcessModuleInit () {
   }
   // There are no processes running at this point, so currentPCB=NULL
   currentPCB = NULL;
-  dbprintf ('p', "Leaving ProcessModuleInit\n");
+  dbprintf ('p', "ProcessModuleInit: function complete\n");
 }
 
 //----------------------------------------------------------------------
@@ -116,6 +113,15 @@ void ProcessSetStatus (PCB *pcb, int status) {
 void ProcessFreeResources (PCB *pcb) {
   int i = 0;
   int npages = 0;
+
+  dbprintf ('p', "ProcessFreeResources: function started\n");
+
+
+  //-----------------------------------------------------
+  // Your code for closing any open mailbox connections
+  // that a dying process might have goes here.
+  //-----------------------------------------------------
+
 
   // Allocate a new link for this pcb on the freepcbs queue
   if ((pcb->l = AQueueAllocLink(pcb)) == NULL) {
@@ -146,6 +152,7 @@ void ProcessFreeResources (PCB *pcb) {
   // Free the page allocated for the system stack
   MemoryFreePage (pcb->sysStackArea / MEMORY_PAGE_SIZE);
   ProcessSetStatus (pcb, PROCESS_STATUS_FREE);
+  dbprintf ('p', "ProcessFreeResources: function complete\n");
 }
 
 //----------------------------------------------------------------------
@@ -231,8 +238,6 @@ void ProcessSchedule () {
     }
     ProcessFreeResources(pcb);
   }
-  // Set the timer so this process gets at most a fixed quantum of time.
-  TimerSet (processQuantum);
   dbprintf ('p', "Leaving ProcessSchedule (cur=0x%x)\n", (int)currentPCB);
 }
 
@@ -249,9 +254,10 @@ void ProcessSchedule () {
 //----------------------------------------------------------------------
 void ProcessSuspend (PCB *suspend) {
   // Make sure it's already a runnable process.
-  dbprintf ('p', "Suspending PCB 0x%x (%s).\n", (int)suspend, suspend->name);
+  dbprintf ('p', "ProcessSuspend (%d): function started\n", GetCurrentPid());
   ASSERT (suspend->flags & PROCESS_STATUS_RUNNABLE, "Trying to suspend a non-running process!\n");
   ProcessSetStatus (suspend, PROCESS_STATUS_WAITING);
+
   if (AQueueRemove(&(suspend->l)) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not remove process from run Queue in ProcessSuspend!\n");
     exitsim();
@@ -264,6 +270,7 @@ void ProcessSuspend (PCB *suspend) {
     printf("FATAL ERROR: could not insert suspend PCB into waitQueue!\n");
     exitsim();
   }
+  dbprintf ('p', "ProcessSuspend (%d): function complete\n", GetCurrentPid());
 }
 
 //----------------------------------------------------------------------
@@ -314,7 +321,7 @@ void ProcessWakeup (PCB *wakeup) {
 //
 //----------------------------------------------------------------------
 void ProcessDestroy (PCB *pcb) {
-  dbprintf('p', "Entering ProcessDestroy for 0x%x.\n", (int)pcb);
+  dbprintf ('p', "ProcessDestroy (%d): function started\n", GetCurrentPid());
   ProcessSetStatus (pcb, PROCESS_STATUS_ZOMBIE);
   if (AQueueRemove(&(pcb->l)) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not remove link from queue in ProcessDestroy!\n");
@@ -328,7 +335,7 @@ void ProcessDestroy (PCB *pcb) {
     printf("FATAL ERROR: could not insert link into runQueue in ProcessWakeup!\n");
     exitsim();
   }
-  dbprintf('p', "Leaving ProcessDestroy for 0x%x.\n", (int)pcb);
+  dbprintf ('p', "ProcessDestroy (%d): function complete\n", GetCurrentPid());
 }
 
 //----------------------------------------------------------------------
@@ -358,7 +365,7 @@ static void ProcessExit () {
 //	for user processes.
 //
 //----------------------------------------------------------------------
-int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
+int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo,char *name, int isUser) {
   int		fd, n;
   int		start, codeS, codeL, dataS, dataL;
   uint32	*stackframe;
@@ -370,6 +377,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   uint32 dum[MAX_ARGS+8], count, offset;
   char *str;
 
+  dbprintf ('p', "ProcessFork (%d): function started\n", GetCurrentPid());
   intrs = DisableIntrs ();
   dbprintf ('I', "Old interrupt value was 0x%x.\n", intrs);
   dbprintf ('p', "Entering ProcessFork args=0x%x 0x%x %s %d\n", (int)func,
@@ -396,6 +404,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   dbprintf ('I', "New interrupt value is 0x%x.\n", (int)CurrentIntrs());
 
   // Copy the process name into the PCB.
+  dbprintf('p', "ProcessFork: Copying process name (%s) to pcb\n", name);
   dstrcpy(pcb->name, name);
 
   //----------------------------------------------------------------------
@@ -539,7 +548,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     pcb->flags |= PROCESS_TYPE_SYSTEM;
   }
 
-  // Place the PCB onto the run queue.
+  // Place PCB onto run queue
   intrs = DisableIntrs ();
   if ((pcb->l = AQueueAllocLink(pcb)) == NULL) {
     printf("FATAL ERROR: could not get link for forked PCB in ProcessFork!\n");
@@ -553,13 +562,15 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
 
   // If this is the first process, make it the current one
   if (currentPCB == NULL) {
-    dbprintf ('p', "Setting currentPCB=0x%x, stackframe=0x%x\n",
-	      (int)pcb, (int)(pcb->currentSavedFrame));
+    dbprintf ('p', "Setting currentPCB=0x%x, stackframe=0x%x\n", (int)pcb, (int)(pcb->currentSavedFrame));
     currentPCB = pcb;
   }
+
   dbprintf ('p', "Leaving ProcessFork (%s)\n", name);
   // Return the process number (found by subtracting the PCB number
   // from the base of the PCB array).
+  dbprintf ('p', "ProcessFork (%d): function complete\n", GetCurrentPid());
+
   return (pcb - pcbs);
 }
 
@@ -758,7 +769,6 @@ void main (int argc, char *argv[])
   int		n;
   char	buf[120];
   char		*userprog = (char *)0;
-  extern void	SysprocCreateProcesses ();
   int base=0;
   int numargs=0;
   char *params[10]; // Maximum number of command-line parameters is 10
@@ -836,6 +846,7 @@ void main (int argc, char *argv[])
   dbprintf ('i', "After initializing synchronization tools.\n");
   KbdModuleInit ();
   dbprintf ('i', "After initializing keyboard.\n");
+  ClkModuleInit();
   for (i = 0; i < 100; i++) {
     buf[i] = 'a';
   }
@@ -850,10 +861,10 @@ void main (int argc, char *argv[])
       params[i] = argv[i+base];
       numargs++;
     }
+    dbprintf('i', "main: Calling process_create with %d parameters\n", numargs);
     switch(numargs) {
       case  1: process_create(params[0], NULL); break;
-      case  2: printf("calling process_create with two parameters\n");
-               process_create(params[0], params[1], NULL); break;
+      case  2: process_create(params[0], params[1], NULL); break;
       case  3: process_create(params[0], params[1], params[2], NULL); break;
       case  4: process_create(params[0], params[1], params[2], params[3], NULL); break;
       case  5: process_create(params[0], params[1], params[2], params[3], params[4], NULL); 
@@ -873,11 +884,10 @@ void main (int argc, char *argv[])
   } else {
     dbprintf('i', "No user program passed!\n");
   }
-  SysprocCreateProcesses ();
-  dbprintf ('i', "Created processes - about to set timer quantum.\n");
-  TimerSet (processQuantum);
-  dbprintf ('i', "Set timer quantum to %d, about to run first process.\n",
-	    processQuantum);
+
+  // Start the clock which will in turn trigger periodic ProcessSchedule's
+  ClkStart();
+
   intrreturn ();
   // Should never be called because the scheduler exits when there
   // are no runnable processes left.
@@ -939,9 +949,26 @@ void process_create(char *name, ...)
     } while(args[i][j-1]!='\0');
   }
   allargs[k] = allargs[k+1] = 0;
-  ProcessFork(0, (uint32)allargs, name, 1);
+  ProcessFork(0, (uint32)allargs, 0, 0, name, 1);
 }
 
 int GetPidFromAddress(PCB *pcb) {
   return (int)(pcb - pcbs);
+}
+
+//--------------------------------------------------------
+// ProcessSleep assumes that it will be immediately 
+// followed by a call to ProcessSchedule (in traps.c).
+//--------------------------------------------------------
+void ProcessUserSleep(int seconds) {
+  // Your code here
+}
+
+//-----------------------------------------------------
+// ProcessYield simply marks the currentPCB as yielding.
+// This should immediately be followed by a call to
+// ProcessSchedule (in traps.c).
+//-----------------------------------------------------
+void ProcessYield() {
+  // Your code here
 }

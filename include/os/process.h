@@ -11,6 +11,7 @@
 
 #include "dlxos.h"
 #include "queue.h"
+#include "clock.h"
 
 #define PROCESS_FAIL 0
 #define PROCESS_SUCCESS 1
@@ -41,6 +42,9 @@ typedef struct PCB {
   uint32	pagetable[16];	// Statically allocated page table
   int		npages;		// Number of pages allocated to this process
   Link		*l;		// Used for keeping PCB in queues
+
+  int           pinfo;          // Turns on printing of runtime stats
+  int           pnice;          // Used in priority calculation
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
@@ -58,13 +62,21 @@ typedef struct PCB {
 #define	PROCESS_STACK_PTBITS	(PROCESS_STACK_IAR+6)
 #define	PROCESS_STACK_PREV_FRAME 10	// points to previous interrupt frame
 #define	PROCESS_STACK_FRAME_SIZE 85	// interrupt frame is 85 words
+#define PROCESS_MAX_NAME_LENGTH  100    // Maximum length of an executable's filename
 #define SIZE_ARG_BUFF  	1024		// Max number of characters in the
 					// command-line arguments
 #define MAX_ARGS	128		// Max number of command-line
 					// arguments
+
+// Number of jiffies in a single process quantum (i.e. how often ProcessSchedule is called)
+#define PROCESS_QUANTUM_JIFFIES  CLOCK_PROCESS_JIFFIES
+
+// Use this format string for printing CPU stats
+#define PROCESS_CPUSTATS_FORMAT "CPUStats: Process %d has run for %d jiffies, prio = %d\n"
+
 extern PCB	*currentPCB;
 
-extern int	ProcessFork (VoidFunc, unsigned int, char *, int);
+int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo,char *name, int isUser);
 extern void	ProcessSchedule ();
 extern void	ContextSwitch(void *, void *, int);
 extern void	ProcessSuspend (PCB *);
@@ -75,5 +87,8 @@ extern void     ProcessDestroy(PCB *pcb);
 extern unsigned GetCurrentPid();
 void process_create(char *name, ...);
 int GetPidFromAddress(PCB *pcb);
+
+void ProcessUserSleep(int seconds);
+void ProcessYield();
 
 #endif	/* __process_h__ */

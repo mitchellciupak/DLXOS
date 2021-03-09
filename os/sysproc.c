@@ -4,11 +4,8 @@
 //	This file defines system processes run by the OS.  It also
 //	includes a routine to initialize system processes.
 
-#include "ostraps.h"
 #include "usertraps.h"
-#include "process.h"
-#include "synch.h"
-
+/*
 //----------------------------------------------------------------------
 //
 //	doSomething
@@ -34,7 +31,7 @@ doSomething (int me)
       dstrcpy (buf, "Process #");
       ditoa (i, buf2);
       dstrcat (buf, buf2);
-      ProcessFork (&doSomething, i * me * 1000 + me, buf, 0);
+      ProcessFork (&doSomething, i * me * 1000 + me, 0, 0, buf, 0);
     }
   }
   SemWait (&mysems[mygrp]);
@@ -66,7 +63,7 @@ chaseTail (int me)
   printf ("Open of (%s,0x%x) returns 0x%x.\n", str, me+0x2000,
 	  Open (str, me + 0x2000));
   if (me < 40) {
-    ProcessFork (&chaseTail, me + 1, "ChaseTail", 0);
+    ProcessFork (&chaseTail, me + 1, 0, 0, "ChaseTail", 0);
   }
 }
 
@@ -78,7 +75,7 @@ chaseTail (int me)
 //	loop could be used as the "idle" process.
 //
 //----------------------------------------------------------------------
-/*static
+static
 void
 emptyLoop (int me)
 {
@@ -93,7 +90,7 @@ emptyLoop (int me)
       printf ("%d ", me);
     }
   }
-} */
+}
 
 //----------------------------------------------------------------------
 //
@@ -102,7 +99,7 @@ emptyLoop (int me)
 //	This routine tests random number usage in DLXOS.
 //
 //----------------------------------------------------------------------
-/*static
+static
 void
 randomStuff (int seed)
 {
@@ -116,7 +113,7 @@ randomStuff (int seed)
     printf ("Random number %02i is 0x%08x.\n", i, rn);
   }
 }
-*/
+
 //----------------------------------------------------------------------
 //
 //	SysprocCreateProcesses
@@ -144,3 +141,4 @@ SysprocCreateProcesses ()
 //  ProcessFork (&randomStuff, 1234, "randomStuff", 0);
 //  ProcessFork (&chaseTail, 10, "ChaseTail", 0);
 }
+*/

@@ -34,9 +34,6 @@ typedef struct Queue {
   int nitems;
 } Queue;
 
-// Initializes a Link, and stores the address of obj inside it
-int AQueueLinkInit(Link *l, void *obj);
-
 // Returns the next pointer of a link
 Link *  AQueueNext(Link *l );
 
@@ -53,7 +50,7 @@ Link *  AQueueLast(Queue *q);
 void *AQueueObject(Link *l);
 
 // Returns the number of elements in a queue
-int   AQueueLength(Queue *q);
+int AQueueLength(Queue *q);
 
 // Returns true is queue is empty, false otherwise
 int AQueueEmpty (Queue *q);
@@ -78,7 +75,7 @@ int AQueueRemove (Link **l);
 int AQueueModuleInit ();
 
 // Gets a free link from the queue of free links
-Link *AQueueAllocLink ();
+Link *AQueueAllocLink (void *pointer_to_store_in_queue);
 
 // Initializes a queue to have zero items
 int AQueueInit (Queue *q);

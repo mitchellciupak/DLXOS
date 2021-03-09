@@ -9,7 +9,7 @@ OUTLIBDIR=../lib
 OUTDIR=../bin
 
 # List of all C source files
-SRCS=filesys.c memory.c misc.c process.c queue.c synch.c traps.c sysproc.c
+SRCS=filesys.c memory.c misc.c process.c queue.c traps.c sysproc.c mbox.c clock.c
 
 # List of all assembly source files for the operating system
 # (Note: usertraps.s is not part of the operating system)
@@ -24,7 +24,7 @@ BUILDLIBS=usertraps.aso misc.o
 OUTLIBS=$(BUILDLIBS:%=$(OUTLIBDIR)/%)
 
 # Any external object file libraries that should be linked with executable
-LIBS=share_memory.o
+LIBS=share_memory.o synch.o
 FINALLIBS=$(LIBS:%.o=$(OUTLIBDIR)/%.o)
 
 # Name of final executable
@@ -131,7 +131,7 @@ clean:
 
 # Changes to a given application and runs it via that app's Makefile
 run:
-	-cd ../apps/example; make run
+	-cd ../apps/prio_test; make && make run
 
 # Includes added dependencies of source files on header files
 include Makefile.depend

@@ -4,30 +4,17 @@
 //	This file handles the low-level trap stuff for an operating system
 //	running under DLX.
 
-//static char rcsid[] = "$Id: traps.c,v 1.1 2000/09/20 01:50:19 elm Exp elm $";
-
-#include "ostraps.h"
 #include "dlx.h"
 #include "dlxos.h"
+#include "ostraps.h"
 #include "traps.h"
-#include "memory.h"
 #include "process.h"
+#include "memory.h"
 #include "synch.h"
+#include "mbox.h"
 #include "share_memory.h"
+#include "clock.h"
 
-//----------------------------------------------------------------------
-//
-//	TimerSet
-//
-//	Set the timer to go off after a particular number of microseconds.
-//	The number of microseconds is passed to the routine.
-//
-//----------------------------------------------------------------------
-void
-TimerSet (int us)
-{
-  *((int *)DLX_TIMER_ADDRESS) = us;
-}
 
 //----------------------------------------------------------------------
 //
@@ -55,7 +42,7 @@ static uint32 GetUintFromTrapArg(uint32 *trapArgs, int sysmode)
   } 
   else 
   {
-    bcopy ((char*)trapArgs, (char*)&arg, sizeof (arg));
+    bcopy ((void *)trapArgs, (void *)&arg, sizeof (arg));
   }
 
   return arg;
@@ -73,76 +60,134 @@ static int GetIntFromTrapArg(uint32 *trapArgs, int sysmode)
   } 
   else 
   {
-    bcopy ((char *)trapArgs, (char *)&arg, sizeof (arg));
+    bcopy ((void *)trapArgs, (void *)&arg, sizeof (arg));
   }
 
   return arg;
 }
 //--------------------------------------------------------------------
-// Here we support reading the arguments
-// Maximum 10 command-line arguments are allowed
-// Also the total length of the arguments including the terminating 
-// '\0' should be less than or equal to 100
+//
+// int process_create(char *exec_name, int pnice, int pinfo, ...);
+//
+// Here we support reading command-line arguments.  Maximum MAX_ARGS 
+// command-line arguments are allowed.  Also the total length of the 
+// arguments including the terminating '\0' should be less than or 
+// equal to SIZE_ARG_BUFF.
+//
 //--------------------------------------------------------------------
+static void TrapProcessCreateHandler(uint32 *trapArgs, int sysmode) {
+  int pnice;                    // Holds pnice command-line argument
+  int pinfo;                    // Holds pinfo command-line argument
+  char allargs[SIZE_ARG_BUFF];  // Stores full string of arguments (unparsed)
+  char name[PROCESS_MAX_NAME_LENGTH]; // Local copy of name of executable (100 chars or less)
+  char *username=NULL;          // Pointer to user-space address of exec_name string
+  int i=0, j=0;                 // Loop index variables
+  char *args[MAX_ARGS];         // All parsed arguments (char *'s)
+  int allargs_position = 0;     // Index into current "position" in allargs
+  char *userarg = NULL;         // Current pointer to user argument string
+  int numargs = 0;              // Number of arguments passed on command line
 
-static void TrapProcessCreateHandler(uint32 *trapArgs, int sysmode)
-{
-  char allargs[SIZE_ARG_BUFF];
-  char name[100];
-  int i=0, j=0, k=0;
-  uint32 args[MAX_ARGS];
-  char *destination;
-  // The first argument is the name of the executable file
-
-  i=0;
-  for(i=0;i<100; i++)
-    allargs[i] = 0;
-  i=0;
-  if(!sysmode)
-  {
-    //Get the arguments into the sytem space
-    MemoryCopyUserToSystem (currentPCB, trapArgs, args, sizeof (args));
-    do {
-      MemoryCopyUserToSystem (currentPCB,((char*)args[0])+i,name+i,1);
-      i++;
-    } while ((i < sizeof (name)) && (name[i-1] != '\0'));
-  } else {
-    bcopy ((char *)trapArgs, (char *)args, sizeof (args));
-    dstrncpy ((char *)args[0], name, sizeof (name));
+  dbprintf('p', "TrapProcessCreateHandler: function started\n");
+  // Initialize allargs string to all NULL's for safety
+  for(i=0;i<SIZE_ARG_BUFF; i++) {
+    allargs[i] = '\0';
   }
-  name[sizeof(name)-1] = '\0';	// null terminate the name
-  i=0;
-  if(!sysmode)
-  {
-    //Copy the rest of the arguments to the system space
-    for(j=0; (j<11)&&(args[j]!=0); j++)
-    {
-      k=0;
-      do 
-      {
-        MemoryCopyUserToSystem (currentPCB,((char*)args[j])+k,allargs+i,1);
-        i++; k++;
-      } while ((i<sizeof(allargs)) && (allargs[i-1]!='\0'));
+
+  // First deal with user-space addresses
+  if(!sysmode) {
+    dbprintf('p', "TrapProcessCreateHandler: creating user process\n");
+    // Get the known arguments into the kernel space.
+    // Argument 0: user-space pointer to name of executable
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+0), &username, sizeof(char *));
+
+    // Copy the user-space string at user-address "username" into kernel space
+    for(i=0; i<PROCESS_MAX_NAME_LENGTH; i++) {
+      MemoryCopyUserToSystem(currentPCB, (username+i), &(name[i]), sizeof(char));
+      // Check for end of user-space string
+      if (name[i] == '\0') break;
     }
-  }
-  else 
-  {
-    destination = &allargs[0];
-    for(j=0; (j<11)&&(args[j]!=0); j++)
-    {
-      k = dstrlen((char *)args[j]);  //length of the argument
-      if(&destination[k]-allargs>100)
-      {
-        printf("Fatal: Cumulative length of all arguments > 100\n");
-	exitsim();
+    dbprintf('p', "TrapProcessCreateHandler: just parsed executable name (%s) from trapArgs\n", name);
+    if (i == PROCESS_MAX_NAME_LENGTH) {
+      printf("TrapProcessCreateHandler: length of executable filename longer than allowed!\n");
+      exitsim();
+    }
+
+    // Copy the program name into "allargs", since it has to be the first argument (i.e. argv[0])
+    allargs_position = 0;
+    dstrcpy(&(allargs[allargs_position]), name);
+    allargs_position += dstrlen(name) + 1; // The "+1" is so we're pointing just beyond the NULL
+
+    // Argument 1: pnice
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+1), &pnice, sizeof(int));
+    // Argument 2: pinfo
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+2), &pinfo, sizeof(int));
+    // Rest of arguments: a series of char *'s until we hit NULL or MAX_ARGS
+    for(i=0; i<MAX_ARGS; i++) {
+      // First, must copy the char * itself into kernel space in order to read its value
+      MemoryCopyUserToSystem(currentPCB, (trapArgs+3+i), &userarg, sizeof(char *));
+      // If this is a NULL in the set of char *'s, this is the end of the list
+      if (userarg == NULL) break;
+      // Store a pointer to the kernel-space location where we're copying the string
+      args[i] = &(allargs[allargs_position]);
+      // Copy the string into the allargs, starting where we left off last time through this loop
+      for (j=0; j<SIZE_ARG_BUFF; j++) {
+        MemoryCopyUserToSystem(currentPCB, (userarg+j), &(allargs[allargs_position]), sizeof(char));
+        // Move current character in allargs to next spot
+        allargs_position++;
+        // Check that total length of arguments is still ok
+        if (allargs_position == SIZE_ARG_BUFF) {
+          printf("TrapProcessCreateHandler: strlen(all arguments) > maximum length allowed!\n");
+          exitsim();
+        }
+        // Check for end of user-space string
+        if (allargs[allargs_position-1] == '\0') break;
       }
-      dstrcpy(destination, (char *)args[j]);
-      destination[k] = '\0';
     }
+    if (i == MAX_ARGS) {
+      printf("TrapProcessCreateHandler: too many arguments on command line (did you forget to pass a NULL?)\n");
+      exitsim();
+    }
+    numargs = i+1;
+    // Arguments are now setup
+  } else {
+    // Addresses are already in kernel space, so just copy into our local variables 
+    // for simplicity
+    // Argument 0: (char *) name of program
+    dstrncpy(name, (char *)(trapArgs[0]), PROCESS_MAX_NAME_LENGTH);
+    // Copy the program name into "allargs", since it has to be the first argument (i.e. argv[0])
+    allargs_position = 0;
+    dstrcpy(&(allargs[allargs_position]), name);
+    allargs_position += dstrlen(name) + 1;  // The "+1" is so that we are now pointing just beyond the "null" in the name
+    // Argument 1: (int) pnice
+    pnice = trapArgs[1];
+    // Argument 2: (int) pinfo
+    pinfo = trapArgs[2];
+    allargs_position = 0;
+    for (i=0; i<MAX_ARGS; i++) {
+      userarg = (char *)(trapArgs[i+3]);
+      if (userarg == NULL) break; // found last argument
+      // Store the address of where we're copying the string
+      args[i] = &(allargs[allargs_position]);
+      // Copy string into allargs
+      for(j=0; j<SIZE_ARG_BUFF; j++) {
+        allargs[allargs_position] = userarg[j];
+        allargs_position++;
+        if (allargs_position == SIZE_ARG_BUFF) {
+          printf("TrapProcessCreateHandler: strlen(all arguments) > maximum length allowed!\n");
+          exitsim();
+        }
+        // Check for end of user-space string
+        if (allargs[allargs_position-1] == '\0') break;
+      }
+    }
+    if (i == MAX_ARGS) {
+      printf("TrapProcessCreateHandler: too many arguments on command line (did you forget to pass a NULL?)\n");
+      exitsim();
+    }
+    numargs = i+1;
   }
-  allargs[sizeof(allargs)-1] = '\0';	// null terminate the name
-  dbprintf('p', "Process Create Trap: creating process with command-line: %s\n", allargs);
-  ProcessFork(0, (uint32)allargs, name, 1);
+
+  ProcessFork(0, (uint32)allargs, pnice, pinfo, name, 1);
 }
 
 
@@ -150,75 +195,219 @@ static void TrapProcessCreateHandler(uint32 *trapArgs, int sysmode)
 //
 //	TrapPrintfHandler
 //
-//	Handle a printf trap.here.  This printf code will correctly
-//	handle integers but will not correctly handle strings (yet).
-//	Also, note that the maximum format string length is 79 characters.
-//	Exceeding this length will cause the format to be truncated.
+//	Handle a printf trap.here.
+//	Note that the maximum format string length is PRINTF_MAX_FORMAT_LENGTH 
+//      characters.  Exceeding this length could have unexpected results.
 //
 //----------------------------------------------------------------------
-static
-void
-TrapPrintfHandler (uint32 *trapArgs, int sysMode)
-{
-  char	formatstr[80];
-  int	i = 0;
-  uint32 printfArgs[10];
-  uint32 args[10];
-  int	nargs = 0;
-  char	*c;
+static void TrapPrintfHandler(uint32 *trapArgs, int sysMode) {
+  char formatstr[PRINTF_MAX_FORMAT_LENGTH];  // Copy user format string here
+  char *userformatstr=NULL;                  // Holds user-space address of format string
+  int i,j;                                   // Loop index variables
+  int numargs=0;                             // Keeps track of number of %'s (i.e. number of arguments)
+  uint32 args[PRINTF_MAX_ARGS];              // Keeps track of all our args
+  char *userstr;                             // Holds user-space address of the string that goes with any "%s"'s
+  char strings_storage[PRINTF_MAX_STRING_ARGS][PRINTF_MAX_STRING_ARG_LENGTH]; // Places to copy strings for "%s" into
+  int string_argnum=0;                       // Keeps track of how many "%s"'s we have received (index into strings_storage)
 
-  // The first argument is the print format string.  Copy it to system
-  // space, truncating if necessary.
-  i = 0;
   if (!sysMode) {
-    // Get the arguments themselves into system space
-    MemoryCopyUserToSystem (currentPCB, trapArgs, args, sizeof (args));
-    do {
-      MemoryCopyUserToSystem (currentPCB,((char*)args[0])+i,formatstr+i,1);
-      i++;
-    } while ((i < sizeof (formatstr)) && (formatstr[i-1] != '\0'));
+    // Copy user-space format string into kernel space
+    // Argument 0: format string
+    MemoryCopyUserToSystem(currentPCB, (trapArgs+0), &userformatstr, sizeof(char *));
+    // Copy format string itself from user space to kernel space
+    for(i=0; i<PRINTF_MAX_FORMAT_LENGTH; i++) {
+      MemoryCopyUserToSystem(currentPCB, (userformatstr + i), &(formatstr[i]), sizeof(char));
+      // Check for end of string
+      if (formatstr[i] == '\0') break;
+    }
+    if (i == PRINTF_MAX_FORMAT_LENGTH) { // format string too long
+      printf("TrapPrintfHandler: format string too long!\n");
+      return;
+    }
   } else {
-    bcopy ((char *)trapArgs, (char *)args, sizeof (args));
-    dstrncpy ((char *)args[0], formatstr, sizeof (formatstr));
+    // Not in system mode, can just copy string directly
+    dstrncpy(formatstr, (char *)(trapArgs+0), PRINTF_MAX_FORMAT_LENGTH);
   }
-  formatstr[sizeof(formatstr)-1] = '\0';	// null terminate the fmt str
 
-  for (c = formatstr; *c != '\0'; c++) {
-    if (*c == '%') {
-      // if this is a %%, skip past second %
-      if (*(c+1) == '%') {
-	c++;
-	continue;
+  // Now read format string to find all the %'s
+  numargs = 0;
+  string_argnum = 0;
+  for(i=0; i<dstrlen(formatstr); i++) {
+    if (formatstr[i] == '%') {
+      // Check for "%%"
+      i++; // Skip over % symbol to look at the next character
+      switch(formatstr[i]) {
+        case '%': continue; // Skip over "%%"
+          break;
+        case 'c': // chars
+                  // This argument is a single char value, but I think it's stored as a full int value.
+                  // If it isn't, then I'm not sure how to call the *real* printf below with some non-4-byte arguments.
+                  // The "+1" is because trapArgs[0] is the format string
+                  if (!sysMode) {
+                    MemoryCopyUserToSystem(currentPCB, (trapArgs+numargs+1), &(args[numargs]), sizeof(int));
+                  } else {
+                    args[numargs] = trapArgs[numargs+1];
+                  }
+                  numargs++;
+          break;
+        case 'l': if (formatstr[i+1] != 'f') {
+                    printf("TrapPrintfHandler: unrecognized format character (l%c)\n", formatstr[i+1]);
+                    return;
+                  }
+                  i++;
+          // There is intentionally no "break" here so that the %lf and %f cases do the same thing.
+          // This is what the previous Printf did, but I'm not sure yet that it is right.
+        case 'f': // double floating points (64 bits)
+        case 'g':
+        case 'e': if (!sysMode) {
+                    MemoryCopyUserToSystem(currentPCB, (trapArgs+numargs+1), &(args[numargs]), sizeof(double));
+                  } else {
+                    args[numargs] = trapArgs[numargs+1];
+                    args[numargs+1] = trapArgs[numargs+2];
+                  }
+                  numargs += 2; // numargs is incremented by 2 since a double is the size of 2 ints
+          break;
+        case 'd': // integers
+                  if (!sysMode) {
+                    MemoryCopyUserToSystem(currentPCB, (trapArgs+numargs+1), &(args[numargs]), sizeof(int));
+                  } else {
+                    args[numargs] = trapArgs[numargs+1];
+                  }
+                  numargs++;
+          break;
+        case 's': // string
+                  if (!sysMode) {
+                    // First make sure we still have local string storage space available
+                    if (string_argnum == PRINTF_MAX_STRING_ARGS) {
+                      printf("TrapPrintfHandler: too many %%s arguments passed!\n");
+                      return;
+                    }
+                    // Now copy the user-space address of the string into kernel space
+                    MemoryCopyUserToSystem(currentPCB, (trapArgs+numargs+1), &userstr, sizeof(char *));
+                    // Now copy each individual character from that string into kernel space
+                    for(j=0; j<PRINTF_MAX_STRING_ARG_LENGTH; j++) {
+                      MemoryCopyUserToSystem(currentPCB, (userstr+j), &(strings_storage[string_argnum][j]), sizeof(char));
+                      // Check for end of user-space string
+                      if (strings_storage[string_argnum][j] == '\0') break;
+                    }
+                    if (j == PRINTF_MAX_STRING_ARG_LENGTH) { // String was too long!
+                      printf("TrapPrintfHandler: argument #%d (a string) was too long to print!\n", numargs);
+                      return;
+                    }
+                    // Put the address of this kernel-space string as the argument for printf
+                    args[numargs] = (int)(strings_storage[string_argnum]);
+                    string_argnum++;
+                  } else { // kernel space already, just copy address out of trapArgs
+                    args[numargs] = trapArgs[numargs+1];
+                  }
+                  numargs++;
+          break;
+        default: printf("TrapPrintfHandler: unrecognized format character (%c)!\n", formatstr[i+1]);
+                 return;
       }
-      // Get the current argument off the stack
-      printfArgs[nargs] = args[nargs+1];
-//      dbprintf ('t', "Argument %d at 0x%x is %d (0x%x).\n", nargs,
-//		args[nargs], args[nargs]);
-      while (1) {
-	c++;
-	if (*c == 's') {
-	  // Handle strings here.  They don't work for user programs (yet...)
-	  break;
-	} else if (*c == 'l') {
-	  continue;
-	} else if ((*c == 'f') || (*c == 'g') || (*c == 'e')) {
-	  // If it's a floating point number, it'll be passed as
-	  // a double, so grab the second word also.
-	  nargs += 1;
-	  printfArgs[nargs] = args[nargs+1];
-	  break;
-	} else if ((*c >= 'a') && (*c <= 'z')) {
-	  // If it's another formatting character, it's not
-	  // a string, but we can leave the loop anyway.
-	  break;
-	}
-      }
-      nargs += 1;
     }
   }
-  printf (formatstr,printfArgs[0],printfArgs[1],printfArgs[2], printfArgs[3],
-	  printfArgs[4], printfArgs[5], printfArgs[6], printfArgs[7]);
+
+  // Now we can print them all out
+  switch(numargs) {
+    case  0: printf(formatstr); break;
+    case  1: printf(formatstr, args[0]); break;
+    case  2: printf(formatstr, args[0], args[1]); break;
+    case  3: printf(formatstr, args[0], args[1], args[2]); break;
+    case  4: printf(formatstr, args[0], args[1], args[2], args[3]); break;
+    case  5: printf(formatstr, args[0], args[1], args[2], args[3], args[4]); break;
+    case  6: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5]); break;
+    case  7: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5], args[6]); break;
+    case  8: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]); break;
+    case  9: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]); break;
+    case 10: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]); break;
+    case 11: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]); break;
+    case 12: printf(formatstr, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]); break;
+    default: printf("TrapPrintfHandler: too many arguments (%d) passed!\n", numargs);
+  }
+
+  // Done!
 }
+
+
+//---------------------------------------------------------------------
+//   Mbox send handler
+//
+//   handle mbox send trap
+//   mbox_send(mbox_t handle, int num_bytes, void *data)
+//----------------------------------------------------------------------
+static int TrapMboxSendHandler (uint32 *trapArgs, int sysMode)
+{
+  mbox_t handle;                      // Holds handle to mailbox
+  char msg[MBOX_MAX_MESSAGE_LENGTH];  // Holds message in kernel space
+  char *usermessage = NULL;           // Pointer to user-space message
+  int length=-1;                      // Holds length of message (in bytes)
+
+  // If we're not in system mode, we need to copy everything from the
+  // user-space virtual address to the kernel space address
+  if (!sysMode) {
+    // Get the arguments themselves into system space
+    // Argument 0: handle to mailbox
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+0), &handle, sizeof(mbox_t));
+    // Argument 1: length of message (in bytes)
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+1), &length, sizeof(int));
+    // Argument 2: pointer to message data
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+2), &usermessage, sizeof(char *));
+    // Now copy message data from user space to kernel space
+    MemoryCopyUserToSystem (currentPCB, usermessage, msg, length);
+  } else {
+    // Already in kernel space, no address translation necessary
+    handle = (mbox_t)trapArgs[0];
+    length = (int)trapArgs[1];
+    bcopy ((void *)(trapArgs[2]), (void *)msg, length); // Copy message into local variable for simplicity
+  }
+  return MboxSend(handle, length, msg);
+}
+
+//---------------------------------------------------------------------
+// Mbox receive handler
+//
+// handle mbox receive trap
+// int mbox_recv(mbox_t handle, int maxlength, void* message);
+//----------------------------------------------------------------------
+static int TrapMboxRecvHandler (uint32 *trapArgs, int sysMode) {
+  mbox_t handle;                      // Holds handle to mailbox
+  char msg[MBOX_MAX_MESSAGE_LENGTH];  // Holds message in kernel space
+  char *usermessage = NULL;           // Pointer to user-space message
+  int maxlength=-1;                   // Holds max length of message (in bytes)
+  int retval;                         // Return value of MBoxReceive call
+
+  // If we're not in system mode, we need to copy everything from the
+  // user-space virtual address to the kernel space address
+  if (!sysMode) {
+    // Get the arguments themselves into system space
+    // Argument 0: handle to mailbox
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+0), &handle, sizeof(mbox_t));
+    // Argument 1: max length of message (in bytes)
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+1), &maxlength, sizeof(int));
+    // Argument 2: pointer to message data (user space)
+    MemoryCopyUserToSystem (currentPCB, (trapArgs+2), &usermessage, sizeof(char *));
+  } else {
+    // Already in kernel space, no address translation necessary
+    handle = (mbox_t)trapArgs[0];
+    maxlength = (int)trapArgs[1];
+    usermessage = (char *)trapArgs[2];
+  }
+  retval = MboxRecv(handle, maxlength, msg);
+  if (retval == MBOX_FAIL) {
+    // No copying necessary, user should assume msg is not filled in
+    return retval;
+  } else {
+    // Copy message from msg to user space.  Number of bytes is returned by MboxRecv
+    if (!sysMode) {
+      MemoryCopySystemToUser(currentPCB, msg, usermessage, retval);
+    } else {
+      bcopy(msg, usermessage, retval);
+    }
+  }
+  return retval;
+}
+
 
 //----------------------------------------------------------------------
 //
@@ -248,12 +437,14 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
     case TRAP_CONTEXT_SWITCH:
       dbprintf ('t', "Got a context switch trap!\n");
       ProcessSchedule ();
+      ClkResetProcess();
       break;
-    case TRAP_USER_EXIT:
     case TRAP_EXIT:
+    case TRAP_USER_EXIT:
       dbprintf ('t', "Got an exit trap!\n");
       ProcessDestroy (currentPCB);
       ProcessSchedule ();
+      ClkResetProcess();
       break;
     case TRAP_PROCESS_FORK:
       dbprintf ('t', "Got a fork trap!\n");
@@ -262,6 +453,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       dbprintf ('t', "Got a process sleep trap!\n");
       ProcessSuspend (currentPCB);
       ProcessSchedule ();
+      ClkResetProcess();
       break;
     case TRAP_PRINTF:
       // Call the trap printf handler and pass the arguments and a flag
@@ -291,7 +483,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       // Allow Open() calls to be interruptible!
       intrs = EnableIntrs ();
       ProcessSetResult (currentPCB, args[1] + 0x10000);
-      dbprintf('t', "Got an open with parameters ('%s',0x%x)\n", (char *)(args[0]), (int)(args[1]));
+      printf ("Got an open with parameters ('%s',0x%x)\n", (char *)(args[0]), args[1]);
       RestoreIntrs (intrs);
       break;
     case TRAP_CLOSE:
@@ -345,12 +537,12 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
     case TRAP_SEM_WAIT:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       handle = SemHandleWait(ihandle);
-      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, handle); //Return 1 or 0
       break;
     case TRAP_SEM_SIGNAL:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       handle = SemHandleSignal(ihandle);
-      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, handle); //Return 1 or 0
       break;
     case TRAP_LOCK_CREATE:
       ihandle = LockCreate();
@@ -359,12 +551,12 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
     case TRAP_LOCK_ACQUIRE:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       handle = LockHandleAcquire(ihandle);
-      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, handle); //Return 1 or 0
       break;
     case TRAP_LOCK_RELEASE:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       handle = LockHandleRelease(ihandle);
-      ProcessSetResult(currentPCB, handle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, handle); //Return 1 or 0
       break;
     case TRAP_COND_CREATE:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
@@ -374,18 +566,52 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
     case TRAP_COND_WAIT:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       ihandle = CondHandleWait(ihandle);
-      ProcessSetResult(currentPCB, ihandle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
       break;
     case TRAP_COND_SIGNAL:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       ihandle = CondHandleSignal(ihandle);
-      ProcessSetResult(currentPCB, ihandle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
       break;
     case TRAP_COND_BROADCAST:
       ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
       ihandle = CondHandleBroadcast(ihandle);
-      ProcessSetResult(currentPCB, ihandle); //Return SYNC_SUCCESS or SYNC_FAIL
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
       break;
+    case TRAP_MBOX_CREATE:
+      ihandle = MboxCreate();
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
+      break;
+    case TRAP_MBOX_OPEN:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = MboxOpen(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
+      break;
+    case TRAP_MBOX_CLOSE:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ihandle = MboxClose(ihandle);
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
+      break;
+    case TRAP_MBOX_SEND:
+      ihandle = TrapMboxSendHandler (trapArgs, isr & DLX_STATUS_SYSMODE);
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
+      break;
+    case TRAP_MBOX_RECV:
+      ihandle = TrapMboxRecvHandler (trapArgs, isr & DLX_STATUS_SYSMODE);
+      ProcessSetResult(currentPCB, ihandle); //Return 1 or 0
+      break;
+    case TRAP_USER_SLEEP:
+      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+      ProcessUserSleep(ihandle);
+      ProcessSchedule();
+      ClkResetProcess();
+      break;
+    case TRAP_YIELD:
+      ProcessYield();
+      ProcessSchedule(); // this just moves the item on front of the queue to the back
+      ClkResetProcess();
+      break;
+
     default:
       printf ("Got an unrecognized trap (0x%x) - exiting!\n",
 	      cause);
@@ -396,7 +622,11 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
     switch (cause) {
     case TRAP_TIMER:
       dbprintf ('t', "Got a timer interrupt!\n");
-      ProcessSchedule ();
+      // ClkInterrupt returns 1 when 1 "process quantum" has passed, meaning
+      // that it's time to call ProcessSchedule again.
+      if (ClkInterrupt()) {
+        ProcessSchedule ();
+      }
       break;
     case TRAP_KBD:
       do {
