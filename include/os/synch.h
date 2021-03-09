@@ -73,6 +73,7 @@ int SemHandleSignal(sem_t sem);
 lock_t LockCreate();
 int LockHandleAcquire(lock_t lock);
 int LockHandleRelease(lock_t lock);
+int GetLockCurrentPid(lock_t lock);
 cond_t CondCreate(lock_t lock);
 int CondHandleWait(cond_t cond);
 int CondHandleSignal(cond_t cond);

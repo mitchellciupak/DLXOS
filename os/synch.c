@@ -309,6 +309,9 @@ int LockHandleRelease(lock_t lock) {
   return LockRelease(&locks[lock]);
 }
 
+int GetLockCurrentPid(lock_t lock){
+  return locks[lock].pid;
+}
 //--------------------------------------------------------------------------
 //	CondCreate
 //

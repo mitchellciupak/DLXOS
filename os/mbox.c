@@ -62,6 +62,9 @@ mbox_t MboxCreate() {
   if(mbox==MBOX_NUM_MBOXES) return MBOX_FAIL;
 
   mboxes[mbox].lock = LockCreate();
+  mboxes[mbox].empty = CondCreate(mboxes[mbox].lock);
+  CondHandleSignal(mboxes[mbox].empty);
+  mboxes[mbox].full = CondCreate(mboxes[mbox].lock);
   if(mboxes[mbox].lock == SYNC_FAIL){
     printf("FATAL ERROR: could not lock in MboxInit!\n");
     exitsim();
@@ -71,10 +74,11 @@ mbox_t MboxCreate() {
     mboxes[mbox].track_procs[i] = 0;
   }
   
-  if (AQueueInit (&mboxes[mbox].messages) != QUEUE_SUCCESS) {
+  if (AQueueInit (&mboxes[mbox].q) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not initialize queue in MboxINIT!\n");
     exitsim();
   }
+  printf("a queue is initialized\n");
   return mbox;
 }
 
@@ -98,7 +102,7 @@ int MboxOpen(mbox_t handle) {
 
   if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
   mboxes[handle].track_procs[GetCurrentPid()] = 1;
-
+  if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
   return MBOX_SUCCESS;
 }
 
@@ -136,9 +140,57 @@ int MboxClose(mbox_t handle) {
 //
 //-------------------------------------------------------
 int MboxSend(mbox_t handle, int length, void* message) {
-  return MBOX_FAIL;
+  mes_t mes;
+  Link* l;
+
+  if(length > MBOX_MAX_MESSAGE_LENGTH) return MBOX_FAIL;
+  if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
+  if(mboxes[handle].inuse== 0 || mboxes[handle].track_procs[GetCurrentPid()] == 0) return MBOX_FAIL;
+  
+  // Check that the mailbox has lock on the thread
+  //if(GetCurrentPid() != GetLockCurrentPid(mboxes[handle].lock)) return MBOX_FAIL;
+  if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+  // Wait on empty
+  //CondHandleWait(mboxes[handle].empty);
+
+  // Copy the message to a message buffer and add that to the queue
+  mes = MessageInit(length, message);
+  printf("Message buffer #%d is in use\n", mes);
+  if ((l = AQueueAllocLink ((void *)mes)) == NULL) {
+    printf("FATAL ERROR: could not allocate link for condition queue in SemWait!\n");
+    exitsim();
+  }
+  if (AQueueInsertLast(&mboxes[handle].q, l) != QUEUE_SUCCESS) {
+    printf("FATAL ERROR: could not insert new link into message queue in MboxSend!\n");
+    exitsim();
+  }
+
+  // Signal full
+  CondHandleSignal(mboxes[handle].full);
+  if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+  return MBOX_SUCCESS;
 }
 
+mes_t MessageInit(int length, void* message){
+  int i;
+  mes_t mes;
+  char * src;
+
+  for(i=0;i<length;i++){
+    if(messages[i].inuse == 0){
+      mes = i;
+      break;
+    }
+  }
+  if(i == length) return MBOX_FAIL;
+
+  //memcpy(message, messages[mes], length;)
+  src = (char *) message;
+  for(i=0;i<length;i++){
+    messages[mes].buffer[i] = src[i];
+  }
+  return mes;
+}
 //-------------------------------------------------------
 //
 // int MboxRecv(mbox_t handle, int maxlength, void* message);

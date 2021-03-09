@@ -23,13 +23,14 @@ typedef struct Mbox {
     char track_procs[PROCESS_MAX_PROCS]; // initialize all to zero
     char inuse;
     lock_t lock;
-    Queue messages;
+    Queue q;
     cond_t full;
     cond_t empty;
     int num_messages;
 } Mbox;
 
 typedef int mbox_t; // This is the "type" of mailbox handles
+typedef int mes_t;
 
 //-------------------------------------------
 // Prototypes for Mbox functions you have to write
@@ -40,6 +41,7 @@ mbox_t MboxCreate();
 int MboxOpen(mbox_t m);
 int MboxClose(mbox_t m);
 int MboxSend(mbox_t m, int length, void *message);
+mes_t MessageInit(int length, void* message);
 int MboxRecv(mbox_t m, int maxlength, void *message);
 int MboxCloseAllByPid(int pid);
 
