@@ -844,6 +844,8 @@ void main (int argc, char *argv[])
   dbprintf ('i', "After initializing shared memory.\n");
   SynchModuleInit ();
   dbprintf ('i', "After initializing synchronization tools.\n");
+  MboxModuleInit ();
+  dbprintf ('i', "After initializing mbox tools.\n");
   KbdModuleInit ();
   dbprintf ('i', "After initializing keyboard.\n");
   ClkModuleInit();

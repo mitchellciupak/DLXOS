@@ -5,6 +5,8 @@
 #include "queue.h"
 #include "mbox.h"
 
+static Mbox mboxes[MBOX_NUM_MBOXES];
+static MboxMessage messages[MBOX_NUM_BUFFERS];
 //-------------------------------------------------------
 //
 // void MboxModuleInit();
@@ -19,6 +21,16 @@
 //-------------------------------------------------------
 
 void MboxModuleInit() {
+  int i; // Loop Index variable
+  dbprintf ('p', "Mbox Module Init: Entering MboxModuleInit\n");
+  for(i=0; i<MBOX_NUM_MBOXES; i++) {
+    mboxes[i].inuse = 0;
+  }
+  for(i=0; i<MBOX_NUM_BUFFERS; i++) {
+    messages[i].inuse = 0;
+  }
+  
+  dbprintf ('p', "MboxModuleInit: Leaving MboxModuleInit\n");
 }
 
 //-------------------------------------------------------
@@ -26,13 +38,44 @@ void MboxModuleInit() {
 // mbox_t MboxCreate();
 //
 // Allocate an available mailbox structure for use. 
-//
+//    Will initialize process bit array to zero
+//    Will reserve a lock for the process
 // Returns the mailbox handle on success
 // Returns MBOX_FAIL on error.
 //
 //-------------------------------------------------------
 mbox_t MboxCreate() {
-  return MBOX_FAIL;
+  int i;
+  mbox_t mbox;
+  uint32 intrval;
+
+  intrval = DisableIntrs();
+  for(i = 0; i < MBOX_NUM_MBOXES; i++){
+    if(mboxes[i].inuse == 0){
+      mboxes[i].inuse = 1;
+      printf("MBOX #%d is in use\n", i);
+      mbox = i;
+      break;
+    }
+  }
+  RestoreIntrs(intrval);
+  if(mbox==MBOX_NUM_MBOXES) return MBOX_FAIL;
+
+  mboxes[mbox].lock = LockCreate();
+  if(mboxes[mbox].lock == SYNC_FAIL){
+    printf("FATAL ERROR: could not lock in MboxInit!\n");
+    exitsim();
+  }
+
+  for(i=0;i<PROCESS_MAX_PROCS;i++){
+    mboxes[mbox].track_procs[i] = 0;
+  }
+  
+  if (AQueueInit (&mboxes[mbox].messages) != QUEUE_SUCCESS) {
+    printf("FATAL ERROR: could not initialize queue in MboxINIT!\n");
+    exitsim();
+  }
+  return mbox;
 }
 
 //-------------------------------------------------------
@@ -50,7 +93,13 @@ mbox_t MboxCreate() {
 //
 //-------------------------------------------------------
 int MboxOpen(mbox_t handle) {
-  return MBOX_FAIL;
+  if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
+  if(mboxes[handle].inuse == 0) return MBOX_FAIL;
+
+  if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+  mboxes[handle].track_procs[GetCurrentPid()] = 1;
+
+  return MBOX_SUCCESS;
 }
 
 //-------------------------------------------------------
