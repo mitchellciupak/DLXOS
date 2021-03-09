@@ -59,10 +59,8 @@ function run_program(){
 function clean_all(){
     make clean -C ./os
     make clean -C ./apps/example/
-    make clean -C ./apps/q2/
-    make clean -C ./apps/q3/
-    make clean -C ./apps/
-    make clean -C ./apps/q4
+    make clean -C ./apps/prio_test/
+
 }
 
 function move() {
