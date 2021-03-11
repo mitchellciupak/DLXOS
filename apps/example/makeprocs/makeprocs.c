@@ -19,7 +19,7 @@ void main (int argc, char *argv[])
   }
 
   // Convert string from ascii command line argument to integer number
-  numprocs = dstrtol(argv[1], NULL, 10); // the "10" means base 10
+  numprocs = 8;//dstrtol(argv[1], NULL, 10); // the "10" means base 10
   Printf("makeprocs (%d): Creating %d processes\n", getpid(), numprocs);
 
   // Allocate space for a mailbox
@@ -37,7 +37,10 @@ void main (int argc, char *argv[])
   // Put some values in the mc structure to send as a message
   mc.numprocs = numprocs;
   mc.really_important_char = 'A';
-
+  mc.abc[0] = 'A';
+  mc.abc[1] = 'b';
+  mc.abc[2] = 'C';
+  Printf("makeprocs: Made a code: %c%c%c\n", mc.abc[0], mc.abc[1], mc.abc[2]);
   // Create semaphore to not exit this process until all other processes 
   // have signalled that they are complete.  To do this, we will initialize
   // the semaphore to (-1) * (number of signals), where "number of signals"

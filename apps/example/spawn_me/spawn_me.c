@@ -32,7 +32,7 @@ void main (int argc, char *argv[])
  
   // Now print a message to show that everything worked
   Printf("spawn_me (%d): Received missile code: %c\n", getpid(), mc.really_important_char);
-
+  Printf("spawn_me (%d): Received another code: %c%c%c\n", getpid(), mc.abc[0], mc.abc[1], mc.abc[2]);
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("spawn_me (%d): Bad semaphore s_procs_completed (%d)!\n", getpid(), s_procs_completed);
