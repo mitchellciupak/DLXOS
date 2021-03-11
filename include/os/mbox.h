@@ -17,16 +17,17 @@ typedef struct MboxMessage {
     char buffer[MBOX_MAX_MESSAGE_LENGTH];
     unsigned int length;
     char inuse;
+    Link* l;
 } MboxMessage;
 
 typedef struct Mbox {
     char track_procs[PROCESS_MAX_PROCS]; // initialize all to zero
+    Link* links[MBOX_MAX_BUFFERS_PER_MBOX];
     char inuse;
     lock_t lock;
     Queue q;
     cond_t full;
     cond_t empty;
-    int num_messages;
 } Mbox;
 
 typedef int mbox_t; // This is the "type" of mailbox handles
@@ -42,6 +43,8 @@ int MboxOpen(mbox_t m);
 int MboxClose(mbox_t m);
 int MboxSend(mbox_t m, int length, void *message);
 mes_t MessageInit(int length, void* message);
+void InsertMessageLink(mes_t mes, mbox_t handle);
+MboxMessage*  RemoveMessageLink( mbox_t handle);
 int MboxRecv(mbox_t m, int maxlength, void *message);
 int MboxCloseAllByPid(int pid);
 
