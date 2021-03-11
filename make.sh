@@ -48,6 +48,7 @@ function run_program(){
 
       make clean -C ./os/
       make -C ./os/
+      make clean -C ./apps/${args[1]}/
       make -C ./apps/${args[1]}/
       ee469_fixterminal
       make run -C ./apps/${args[1]}/

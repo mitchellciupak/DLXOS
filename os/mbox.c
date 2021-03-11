@@ -145,9 +145,12 @@ int MboxSend(mbox_t handle, int length, void* message) {
   if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
   if(mboxes[handle].inuse== 0 || mboxes[handle].track_procs[GetCurrentPid()] == 0) return MBOX_FAIL;
   // Get Lock on thread
+  printf("Sending\n");
   if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) {return MBOX_FAIL;}
   // Wait on empty
-  if(AQueueLength(&mboxes[handle].q) > 9) CondHandleWait(mboxes[handle].empty);
+  if(AQueueLength(&mboxes[handle].q) > 9){
+    printf("q 2 full\n");
+    CondHandleWait(mboxes[handle].empty);}
 
   // The goods
   // Copy the message to a message buffer
@@ -161,6 +164,7 @@ int MboxSend(mbox_t handle, int length, void* message) {
   // End the goods
 
   // Signal full
+  printf("PID %d: Signaling full.\n", GetCurrentPid());
   CondHandleSignal(mboxes[handle].full);
   if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
   return MBOX_SUCCESS;
@@ -239,8 +243,13 @@ int MboxRecv(mbox_t handle, int maxlength, void* message) {
   if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
   // Wait on empty
   if(AQueueEmpty(&mboxes[handle].q)){
-    CondHandleWait(mboxes[handle].full);
+    //printf("queue is empty\n");
+    //CondHandleWait(mboxes[handle].full);
+    //printf("empty no longer\n");
   }
+  CondHandleWait(mboxes[handle].full);
+  printf("waiting done\n");
+  //CondHandleWait(mboxes[handle].full);
   
   // Get link from q
   mmes = RemoveMessageLink(handle);
@@ -263,12 +272,15 @@ MboxMessage* RemoveMessageLink(mbox_t handle){
   int i;
   Link *l;
   MboxMessage *mmes;
-
+  printf("the num: %d\n", AQueueLength(&mboxes[handle].q));
+  printf("%d\n", AQueueEmpty(&mboxes[handle].q));
   mmes = (MboxMessage *)AQueueObject(AQueueFirst(&mboxes[handle].q));
+  printf("before removal %d\n", mmes->length);
   if (AQueueRemove(&(mmes->l)) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not remove message from message in ProcessSchedule!\n");
     exitsim();
   }
+  printf("now num: %d\n", AQueueLength(&mboxes[handle].q));
   return mmes;
 }
 //--------------------------------------------------------------------------------
