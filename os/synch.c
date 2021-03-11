@@ -492,6 +492,7 @@ int CondBroadcast(Cond *cond){
   while (!AQueueEmpty(&cond->waiting)) { // there is a process to wake up
     l = AQueueFirst(&cond->waiting);
     pcb = (PCB *)AQueueObject(l);
+    printf("releasing process\n");
     if (AQueueRemove(&l) != QUEUE_SUCCESS) { 
       printf("FATAL ERROR: could not remove link from semaphore queue in SemSignal!\n");
       exitsim();
@@ -504,8 +505,10 @@ int CondBroadcast(Cond *cond){
 }
 
 int CondHandleBroadcast(cond_t c) {
+  printf("broadcast call\n");
   if (c < 0 || c >= MAX_CONDS) return SYNC_FAIL;
   if(!conds[c].inuse) return SYNC_FAIL;
   if(GetCurrentPid() != locks[conds[c].lock].pid) return 1; // Calling process hasn't acquired the lock
+  printf("broadcast call\n");
   return CondBroadcast(&conds[c]);
 }

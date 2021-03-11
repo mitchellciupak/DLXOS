@@ -61,9 +61,9 @@ mbox_t MboxCreate() {
   if(mbox==MBOX_NUM_MBOXES) return MBOX_FAIL;
 
   mboxes[mbox].lock = LockCreate();
-  mboxes[mbox].empty = CondCreate(mboxes[mbox].lock);
-  CondHandleSignal(mboxes[mbox].empty);
-  mboxes[mbox].full = CondCreate(mboxes[mbox].lock);
+  mboxes[mbox].empty = SemCreate(MBOX_NUM_BUFFERS);
+  mboxes[mbox].full = SemCreate(0); // dont need this! also, make a semaphore
+  //CondHandleSignal(mboxes[mbox].empty);
   if(mboxes[mbox].lock == SYNC_FAIL){
     printf("FATAL ERROR: could not lock in MboxInit!\n");
     exitsim();
@@ -118,6 +118,25 @@ int MboxOpen(mbox_t handle) {
 //
 //-------------------------------------------------------
 int MboxClose(mbox_t handle) {
+  int i;
+
+  if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
+  if(mboxes[handle].inuse== 0 || mboxes[handle].track_procs[GetCurrentPid()] == 0) return MBOX_FAIL;
+
+  if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) {return MBOX_FAIL;}
+  mboxes[handle].track_procs[GetCurrentPid()] = 0;
+
+  for(i=0;i<PROCESS_MAX_PROCS;i++){
+    if(mboxes[handle].track_procs[i]){
+      break;
+    }
+  }
+  if(i == PROCESS_MAX_PROCS){
+    AQueueInit(&mboxes[handle].q); // Reset queue
+    mboxes[handle].inuse = 0;
+  }
+
+  if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
   return MBOX_FAIL;
 }
 
@@ -139,20 +158,14 @@ int MboxClose(mbox_t handle) {
 //-------------------------------------------------------
 int MboxSend(mbox_t handle, int length, void* message) {
   mes_t mes;
-  Link* l;
-
+  
   if(length > MBOX_MAX_MESSAGE_LENGTH) return MBOX_FAIL;
   if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
   if(mboxes[handle].inuse== 0 || mboxes[handle].track_procs[GetCurrentPid()] == 0) return MBOX_FAIL;
-  // Get Lock on thread
-  printf("Sending\n");
-  if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) {return MBOX_FAIL;}
-  // Wait on empty
-  if(AQueueLength(&mboxes[handle].q) > 9){
-    printf("q 2 full\n");
-    CondHandleWait(mboxes[handle].empty);}
 
-  // The goods
+  SemHandleWait(mboxes[handle].empty);
+  if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) {return MBOX_FAIL;}
+
   // Copy the message to a message buffer
   if((mes = MessageInit(length, message)) == MBOX_FAIL){
     printf("FATAL ERROR: could not allocate message!\n");
@@ -161,20 +174,16 @@ int MboxSend(mbox_t handle, int length, void* message) {
 
   // Insert the message into the mailbox buffer queue
   InsertMessageLink(mes, handle);
-  // End the goods
 
   // Signal full
-  printf("PID %d: Signaling full.\n", GetCurrentPid());
-  CondHandleSignal(mboxes[handle].full);
   if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+  SemHandleSignal(mboxes[handle].full);
   return MBOX_SUCCESS;
 }
 
 void InsertMessageLink(mes_t mes, mbox_t handle){
   Link* l;
-  int i;
 
-  printf("Intermediate check %d\n", messages[mes].length);
   if ((l = AQueueAllocLink ((void *)&(messages[mes]))) == NULL) {
     printf("FATAL ERROR: could not allocate link for message queue in MboxSend!\n");
     exitsim();
@@ -201,17 +210,15 @@ mes_t MessageInit(int length, void* message){
   }
   if(i == length) return MBOX_FAIL;
 
-  /* START Confusion here */
   src = message;
   for(i=0;i<length;i++){
     messages[mes].buffer[i] = src[i];
   }
-  /* END Confusion */
 
   messages[mes].length = length;
-  printf("Length send %d\n", length);
   return mes;
 }
+
 //-------------------------------------------------------
 //
 // int MboxRecv(mbox_t handle, int maxlength, void* message);
@@ -229,7 +236,6 @@ mes_t MessageInit(int length, void* message){
 //
 //-------------------------------------------------------
 int MboxRecv(mbox_t handle, int maxlength, void* message) {
-  mes_t mes;
   MboxMessage * mmes;
   char * dest;
   int i;
@@ -239,50 +245,38 @@ int MboxRecv(mbox_t handle, int maxlength, void* message) {
   if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
   if(mboxes[handle].inuse== 0 || mboxes[handle].track_procs[GetCurrentPid()] == 0) return MBOX_FAIL;
 
-  // Get Lock on thread
+  SemHandleWait(mboxes[handle].full);
   if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
-  // Wait on empty
-  if(AQueueEmpty(&mboxes[handle].q)){
-    //printf("queue is empty\n");
-    //CondHandleWait(mboxes[handle].full);
-    //printf("empty no longer\n");
-  }
-  CondHandleWait(mboxes[handle].full);
-  printf("waiting done\n");
-  //CondHandleWait(mboxes[handle].full);
-  
+
   // Get link from q
   mmes = RemoveMessageLink(handle);
   length = mmes->length;
-  printf("Length %d\n", mmes->length);
 
-  /* START Confusion here */
   dest = (char*)message;
   for(i=0;i<mmes->length;i++){
     dest[i] = mmes->buffer[i];
   }
   mmes->inuse = 0;
-  /* END Confusion */
-  CondHandleSignal(mboxes[handle].empty);
+  if(AQueueLength(&mboxes[handle].q) == 9){
+    CondHandleBroadcast(mboxes[handle].full);
+  }
+
   if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+  SemHandleSignal(mboxes[handle].empty);
   return length;
 }
 
 MboxMessage* RemoveMessageLink(mbox_t handle){
-  int i;
-  Link *l;
   MboxMessage *mmes;
-  printf("the num: %d\n", AQueueLength(&mboxes[handle].q));
-  printf("%d\n", AQueueEmpty(&mboxes[handle].q));
+
   mmes = (MboxMessage *)AQueueObject(AQueueFirst(&mboxes[handle].q));
-  printf("before removal %d\n", mmes->length);
   if (AQueueRemove(&(mmes->l)) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not remove message from message in ProcessSchedule!\n");
     exitsim();
   }
-  printf("now num: %d\n", AQueueLength(&mboxes[handle].q));
   return mmes;
 }
+
 //--------------------------------------------------------------------------------
 // 
 // int MboxCloseAllByPid(int pid);

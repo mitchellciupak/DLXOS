@@ -9,7 +9,7 @@ OUTLIBDIR=../lib
 OUTDIR=../bin
 
 # List of all C source files
-SRCS=filesys.c memory.c misc.c process.c queue.c traps.c sysproc.c mbox.c clock.c
+SRCS=filesys.c memory.c misc.c process.c queue.c traps.c sysproc.c mbox.c clock.c# synch.c
 
 # List of all assembly source files for the operating system
 # (Note: usertraps.s is not part of the operating system)

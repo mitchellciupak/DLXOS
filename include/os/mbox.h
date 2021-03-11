@@ -26,8 +26,8 @@ typedef struct Mbox {
     char inuse;
     lock_t lock;
     Queue q;
-    cond_t full;
-    cond_t empty;
+    sem_t full;
+    sem_t empty;
 } Mbox;
 
 typedef int mbox_t; // This is the "type" of mailbox handles

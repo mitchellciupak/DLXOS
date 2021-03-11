@@ -19,7 +19,7 @@ void main (int argc, char *argv[])
   }
 
   // Convert string from ascii command line argument to integer number
-  numprocs = 9;//dstrtol(argv[1], NULL, 10); // the "10" means base 10
+  numprocs = 12;//dstrtol(argv[1], NULL, 10); // the "10" means base 10
   Printf("makeprocs (%d): Creating %d processes\n", getpid(), numprocs);
 
   // Allocate space for a mailbox
