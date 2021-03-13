@@ -3,8 +3,10 @@
 
 #include "co_inj.h"
 #include "s2_inj.h"
+#include "shared.h"
 
 #define NUM_MOLS 6
+
 void main (int argc, char *argv[])
 {
   int numprocs = 0;               // Used to store number of processes to create
@@ -14,16 +16,14 @@ void main (int argc, char *argv[])
   sem_t s_procs_completed;        // Semaphore used to wait until all spawned processes have completed
   char h_mbox_str[10];            // Used as command-line argument to pass mem_handle to new processes
   char s_procs_completed_str[10]; // Used as command-line argument to pass page_mapped handle to new processes
+  Molecule s2;
+  Molecule co;
+  Molecule s;
+  Molecule o2;
+  Molecule c2;
+  Molecule so4;
 
-
-  Molecule* s2;
-  Molecule* co;
-  Molecule* s;
-  Molecule* o2;
-  Molecule* c2;
-  Molecule* so4;
-
-  Molecule* MoleList[NUM_MOLS] = {s2, co, s, o2, c2, so4};
+  Molecule MoleList[NUM_MOLS] = {s2, co, s, o2, c2, so4};
 
   // Usage Checking
   if (argc != 3) {
@@ -34,22 +34,22 @@ void main (int argc, char *argv[])
   }
 
   // Argument Handling
-  s2->ct = dstrtol(argv[1], NULL, 10); // Convert string from ascii command line argument to integer number base 10 
-  co->ct = dstrtol(argv[2], NULL, 10);
+  s2.ct = dstrtol(argv[1], NULL, 10); // Convert string from ascii command line argument to integer number base 10 
+  co.ct = dstrtol(argv[2], NULL, 10);
 
   // Initialize counts
-  s->ct  = 2 * s2->ct;
-  o2->ct = 2 * (int)(co->ct / 4);
-  c2->ct = 2 * (int)(co->ct / 4);
-  if(s->ct > 2 * o2->ct){
-    so4->ct = 2 * o2->ct;
+  s.ct  = 2 * s2.ct;
+  o2.ct = 2 * (int)(co.ct / 4);
+  c2.ct = 2 * (int)(co.ct / 4);
+  if(s.ct > 2 * o2.ct){
+    so4.ct = 2 * o2.ct;
   }
   else{
-    so4->ct = s->ct;
+    so4.ct = s.ct;
   }
-
+  Printf("%d, %d, %d\n", s2.ct, co.ct, so4.ct);
   // Convert string from ascii command line argument to integer number
-  numprocs = s2->ct + (int)(co->ct / 4) + so4->ct;
+  numprocs = s2.ct + (int)(co.ct / 4) + so4.ct;
 
   for(i=0;i<NUM_MOLS;i++){
     // Allocate space for a mailbox
@@ -63,7 +63,7 @@ void main (int argc, char *argv[])
       Printf("makeprocs (%d) molecule (%d): Could not open mailbox %d!\n", getpid(), i, h_mbox);
       Exit();
     }
-    MoleList[i]->box = h_mbox;
+    MoleList[i].box = h_mbox;
   }
 
   // Create semaphore to not exit this process until all other processes 
@@ -76,10 +76,24 @@ void main (int argc, char *argv[])
     Printf("makeprocs (%d): Bad sem_create\n", getpid());
     Exit();
   }
-  /*
+
   // Setup the command-line arguments for the new process.  We're going to
   // pass the handles to the shared memory page and the semaphore as strings
   // on the command line, so we must first convert them from ints to strings.
+  ditoa(s_procs_completed, s_procs_completed_str);
+
+  ditoa(s2.box, h_mbox_str);
+  for(i=0;i<(s2.ct);i++){
+    process_create(S2_INJ_FILE, h_mbox_str, s_procs_completed_str, NULL);
+  }
+
+  ditoa(co.box, h_mbox_str);
+  for(i=0;i<(c2.ct);i++){
+    process_create(CO_INJ_FILE, h_mbox_str, s_procs_completed_str, NULL);
+    Printf("CO inj proc %d created\n",i);
+  }
+
+  /*
   ditoa(h_mbox, h_mbox_str);
   ditoa(s_procs_completed, s_procs_completed_str);
 

@@ -10,7 +10,7 @@ void main (int argc, char *argv[]) {
   sem_t s_procs_completed;  // Semaphore to signal the original process that we're done
 
   // Argument Check
-  if (argc != 3) {
+  if (argc != 4) {
     Printf("Usage: "); Printf(argv[0]); Printf(" <handle_to_shared_memory_page> <handle_to_page_mapped_semaphore> <injectionID> <numberofinjections>\n");
     Exit();
   }
@@ -25,7 +25,7 @@ void main (int argc, char *argv[]) {
     Exit();
   }
 
-  // Just inject s2 once into mailbox
+  // Just inject co once into mailbox
   */
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {

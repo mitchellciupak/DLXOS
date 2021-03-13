@@ -1,14 +1,16 @@
 #ifndef __USERPROG__
 #define __USERPROG__
 
-//#include "usertraps.h"
+#include "usertraps.h"
 
-typedef struct Molecule{
-
-  char program[14];
-  unsigned int ct;
-  int box;
-
+typedef struct Molecule {
+  int ct;
+  mbox_t box;
 } Molecule;
+
+#ifndef NULL
+#define NULL (void *)0x0
+#endif
+
 
 #endif
