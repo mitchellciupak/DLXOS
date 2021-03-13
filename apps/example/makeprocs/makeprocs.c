@@ -7,6 +7,7 @@ void main (int argc, char *argv[])
 {
   int numprocs = 0;               // Used to store number of processes to create
   int i;                          // Loop index variable
+  int j;
   missile_code mc;                // Used as message for mailbox
   mbox_t h_mbox;                  // Used to hold handle to mailbox
   sem_t s_procs_completed;        // Semaphore used to wait until all spawned processes have completed
@@ -21,12 +22,14 @@ void main (int argc, char *argv[])
   // Convert string from ascii command line argument to integer number
   numprocs = 12;//dstrtol(argv[1], NULL, 10); // the "10" means base 10
   Printf("makeprocs (%d): Creating %d processes\n", getpid(), numprocs);
-
+  for(j=0;j<3;j++){
+    
   // Allocate space for a mailbox
   if ((h_mbox = mbox_create()) == MBOX_FAIL) {
     Printf("makeprocs (%d): ERROR: could not allocate mailbox!", getpid());
     Exit();
   }
+  Printf("heyo spaghettio this is mbox %d\n\n", h_mbox);
 
   // Open mailbox to prevent deallocation
   if (mbox_open(h_mbox) == MBOX_FAIL) {
@@ -80,5 +83,7 @@ void main (int argc, char *argv[])
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf("\n");
     Exit();
   }
+  }
+
   Printf("makeprocs (%d): All other processes completed, exiting main process.\n", getpid());
 }

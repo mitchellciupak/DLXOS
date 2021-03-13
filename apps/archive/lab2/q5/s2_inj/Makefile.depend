@@ -1,0 +1,3 @@
+work/injector.o: injector.c ../../../include/lab2-api.h \
+ ../../../include/usertraps.h ../../../include/misc.h \
+ ../include/injector.h ../include/shared.h

@@ -9,6 +9,8 @@ typedef int lock_t;
 typedef int cond_t;
 typedef int mbox_t;
 
+typedef unsigned int uint32;
+
 //---------------------------------------------------------------------
 // Any #defines from operating system for return values
 //---------------------------------------------------------------------

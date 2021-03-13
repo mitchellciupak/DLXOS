@@ -23,7 +23,7 @@ void main (int argc, char *argv[])
   Molecule c2;
   Molecule so4;
 
-  Molecule MoleList[NUM_MOLS] = {s2, co, s, o2, c2, so4};
+  Molecule *MoleList[NUM_MOLS] = {&s2, &co, &s, &o2, &c2, &so4};
 
   // Usage Checking
   if (argc != 3) {
@@ -47,23 +47,23 @@ void main (int argc, char *argv[])
   else{
     so4.ct = s.ct;
   }
-  Printf("%d, %d, %d\n", s2.ct, co.ct, so4.ct);
   // Convert string from ascii command line argument to integer number
   numprocs = s2.ct + (int)(co.ct / 4) + so4.ct;
 
   for(i=0;i<NUM_MOLS;i++){
     // Allocate space for a mailbox
-    if ((h_mbox = mbox_create()) == MBOX_FAIL) {
+    h_mbox = mbox_create();
+    if (h_mbox == MBOX_FAIL) {
       Printf("makeprocs (%d) molecule (%d): ERROR: could not allocate mailbox!", getpid(), i);
       Exit();
     }
-
     // Open mailbox to prevent deallocation
     if (mbox_open(h_mbox) == MBOX_FAIL) {
       Printf("makeprocs (%d) molecule (%d): Could not open mailbox %d!\n", getpid(), i, h_mbox);
       Exit();
     }
-    MoleList[i].box = h_mbox;
+    MoleList[i]->box = h_mbox;
+    
   }
 
   // Create semaphore to not exit this process until all other processes 
@@ -84,12 +84,12 @@ void main (int argc, char *argv[])
 
   ditoa(s2.box, h_mbox_str);
   for(i=0;i<(s2.ct);i++){
-    process_create(S2_INJ_FILE, h_mbox_str, s_procs_completed_str, NULL);
+    process_create(S2_INJ_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
   }
-
+  Printf("co box = %d\n", co.box);
   ditoa(co.box, h_mbox_str);
   for(i=0;i<(c2.ct);i++){
-    process_create(CO_INJ_FILE, h_mbox_str, s_procs_completed_str, NULL);
+    process_create(CO_INJ_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
     Printf("CO inj proc %d created\n",i);
   }
 

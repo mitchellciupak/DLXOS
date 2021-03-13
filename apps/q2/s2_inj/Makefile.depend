@@ -1,0 +1,2 @@
+work/s2_inj.o: s2_inj.c ../../../include/usertraps.h \
+ ../../../include/misc.h ../include/s2_inj.h ../include/shared.h
