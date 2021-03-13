@@ -1,3 +1,0 @@
-work/makeprocs.o: makeprocs.c ../../../include/usertraps.h \
- ../../../include/misc.h ../include/co_inj.h ../include/shared.h \
- ../include/s2_inj.h
