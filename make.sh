@@ -61,6 +61,7 @@ function clean_all(){
     make clean -C ./os
     make clean -C ./apps/example/
     make clean -C ./apps/prio_test/
+    make clean -C ./apps/q2/
 
 }
 
