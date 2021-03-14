@@ -29,8 +29,13 @@ void main (int argc, char *argv[]) {
     Printf("Could not send message to mailbox %d in %s (%d)\n", h_mbox, argv[0], getpid());
     Exit();
   }
-  Printf("co_inj (%d): Sent message\n", getpid());
+  Printf("CO Injected into Radeon atmosphere, PID: %d\n", getpid());
   
+  if (mbox_close(h_mbox) == MBOX_FAIL) {
+    Printf("makeprocs (%d): Could not close mailbox %d!\n", getpid(), h_mbox);
+    Exit();
+  }
+
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf(", exiting...\n");

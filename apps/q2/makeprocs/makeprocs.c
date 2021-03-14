@@ -17,6 +17,8 @@ void main (int argc, char *argv[])
   int i;                          // Loop index variable
   int j;
   mbox_t h_mbox;                  // Used to hold handle to mailbox
+  char h_mbox_str1[10];
+  char h_mbox_str2[10];
   sem_t s_procs_completed;        // Semaphore used to wait until all spawned processes have completed
   char h_mbox_str[10];            // Used as command-line argument to pass mem_handle to new processes
   char s_procs_completed_str[10]; // Used as command-line argument to pass page_mapped handle to new processes
@@ -45,12 +47,13 @@ void main (int argc, char *argv[])
   s.ct  = 2 * s2.ct;
   o2.ct = 2 * (int)(co.ct / 4);
   c2.ct = 2 * (int)(co.ct / 4);
-  if(s.ct > 2 * o2.ct){
-    so4.ct = 2 * o2.ct;
+  if(s.ct > (int) (o2.ct / 2)){
+    so4.ct = (int)(o2.ct / 2);
   }
   else{
     so4.ct = s.ct;
   }
+  Printf("%d\t%d\t%d\t%d\t%d\t%d\n", s2.ct, co.ct, s.ct, o2.ct, c2.ct, so4.ct);
   // Convert string from ascii command line argument to integer number
   numprocs = s2.ct + co.ct + s2.ct + (int)(co.ct / 4) + so4.ct;
 
@@ -90,35 +93,35 @@ void main (int argc, char *argv[])
   ditoa(s2.box, h_mbox_str);
   for(i=0;i<s2.ct;i++){
     process_create(S2_INJ_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
-    Printf("S2 inj proc %d created\n",i);
   }
 
   // CO Injection
   ditoa(co.box, h_mbox_str);
   for(i=0;i<co.ct;i++){
     process_create(CO_INJ_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
-    Printf("CO inj proc %d created\n",i);
   }
 
   // 4CO -> 2C2 + 2O2 reaction
-  ditoa(c2.box, h_mbox_str);
+  ditoa(co.box, h_mbox_str);
+  ditoa(c2.box, h_mbox_str1);
+  ditoa(o2.box, h_mbox_str2);
   for(i=0;i<(int)(co.ct / 4);i++){
-    process_create(CO_REA_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
-    Printf("CO rea proc %d created\n",i);
+    process_create(CO_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
   }
 
   // S2 -> S + S reaction
-  ditoa(s.box, h_mbox_str);
+  ditoa(s2.box, h_mbox_str);
+  ditoa(s.box, h_mbox_str1);
   for(i=0;i<s2.ct;i++){
-    process_create(S_REA_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
-    Printf("S rea proc %d created\n",i);
+    process_create(S_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, s_procs_completed_str, NULL);
   }
 
   // SO4 reaction
-  ditoa(so4.box, h_mbox_str);
+  ditoa(s.box, h_mbox_str);
+  ditoa(o2.box, h_mbox_str1);
+  ditoa(so4.box, h_mbox_str2);
   for(i=0;i<so4.ct;i++){
-    process_create(SO4_REA_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
-    Printf("SO4 rea proc %d created\n",i);
+    process_create(SO4_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
   }
 
   // And finally, wait until all spawned processes have finished.
@@ -126,6 +129,13 @@ void main (int argc, char *argv[])
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf("\n");
     Exit();
   }
-  
+
+  for(i=0;i<NUM_MOLS;i++){
+    // Close mailbox to deallocate
+    if (mbox_close(MoleList[i]->box) == MBOX_FAIL) {
+      Printf("makeprocs (%d) molecule (%d): Could not open mailbox %d!\n", getpid(), i, h_mbox);
+      Exit();
+    }    
+  }
   Printf("makeprocs (%d): All other processes completed, exiting main process.\n", getpid());
 }
