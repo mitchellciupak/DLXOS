@@ -1,7 +1,7 @@
 #include "usertraps.h"
 #include "misc.h"
 
-#include "co_inj.h"
+#include "s_rea.h"
 
 void main (int argc, char *argv[]) {
 
@@ -25,11 +25,6 @@ void main (int argc, char *argv[]) {
     Printf("makeprocs (%d): Could not open mailbox %d!\n", getpid(), h_mbox);
     Exit();
   }
-  if (mbox_send(h_mbox, sizeof(mol), (void *)&mol) == MBOX_FAIL) {
-    Printf("Could not send message to mailbox %d in %s (%d)\n", h_mbox, argv[0], getpid());
-    Exit();
-  }
-  Printf("co_inj (%d): Sent message\n", getpid());
   
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {

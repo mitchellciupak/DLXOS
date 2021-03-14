@@ -3,6 +3,10 @@
 
 #include "co_inj.h"
 #include "s2_inj.h"
+#include "s_rea.h"
+#include "co_rea.h"
+#include "so4_rea.h"
+
 #include "shared.h"
 
 #define NUM_MOLS 6
@@ -48,7 +52,7 @@ void main (int argc, char *argv[])
     so4.ct = s.ct;
   }
   // Convert string from ascii command line argument to integer number
-  numprocs = s2.ct + (int)(co.ct / 4) + so4.ct;
+  numprocs = s2.ct + co.ct + s2.ct + (int)(co.ct / 4) + so4.ct;
 
   for(i=0;i<NUM_MOLS;i++){
     // Allocate space for a mailbox
@@ -82,36 +86,39 @@ void main (int argc, char *argv[])
   // on the command line, so we must first convert them from ints to strings.
   ditoa(s_procs_completed, s_procs_completed_str);
 
+  // S2 injection
   ditoa(s2.box, h_mbox_str);
-  for(i=0;i<(s2.ct);i++){
+  for(i=0;i<s2.ct;i++){
     process_create(S2_INJ_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
+    Printf("S2 inj proc %d created\n",i);
   }
-  Printf("co box = %d\n", co.box);
+
+  // CO Injection
   ditoa(co.box, h_mbox_str);
-  for(i=0;i<(c2.ct);i++){
+  for(i=0;i<co.ct;i++){
     process_create(CO_INJ_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
     Printf("CO inj proc %d created\n",i);
   }
 
-  /*
-  ditoa(h_mbox, h_mbox_str);
-  ditoa(s_procs_completed, s_procs_completed_str);
-
-  // Now we can create the processes.  Note that you MUST end your call to
-  // process_create with a NULL argument so that the operating system
-  // knows how many arguments you are sending.
-  for(i=0; i<numprocs; i++) {
-    process_create(FILENAME_TO_RUN, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
-    Printf("makeprocs (%d): Process %d created\n", getpid(), i);
+  // 4CO -> 2C2 + 2O2 reaction
+  ditoa(c2.box, h_mbox_str);
+  for(i=0;i<(int)(co.ct / 4);i++){
+    process_create(CO_REA_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
+    Printf("CO rea proc %d created\n",i);
   }
 
-  // Send the missile code messages
-  for (i=0; i<numprocs; i++) {
-    if (mbox_send(h_mbox, sizeof(missile_code), (void *)&mc) == MBOX_FAIL) {
-      Printf("Could not send message to mailbox %d in %s (%d)\n", h_mbox, argv[0], getpid());
-      Exit();
-    }
-    Printf("makeprocs (%d): Sent message %d\n", getpid(), i);
+  // S2 -> S + S reaction
+  ditoa(s.box, h_mbox_str);
+  for(i=0;i<s2.ct;i++){
+    process_create(S_REA_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
+    Printf("S rea proc %d created\n",i);
+  }
+
+  // SO4 reaction
+  ditoa(so4.box, h_mbox_str);
+  for(i=0;i<so4.ct;i++){
+    process_create(SO4_REA_FILE, 0, 0, h_mbox_str, s_procs_completed_str, NULL);
+    Printf("SO4 rea proc %d created\n",i);
   }
 
   // And finally, wait until all spawned processes have finished.
@@ -119,7 +126,6 @@ void main (int argc, char *argv[])
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf("\n");
     Exit();
   }
-  mbox_close(h_mbox);
-  }*/
+  
   Printf("makeprocs (%d): All other processes completed, exiting main process.\n", getpid());
 }
