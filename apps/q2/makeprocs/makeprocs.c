@@ -108,14 +108,14 @@ void main (int argc, char *argv[])
   for(i=0;i<(int)(co.ct / 4);i++){
     process_create(CO_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
   }
-
+  Printf("");
   // S2 -> S + S reaction
   ditoa(s2.box, h_mbox_str);
   ditoa(s.box, h_mbox_str1);
   for(i=0;i<s2.ct;i++){
     process_create(S_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, s_procs_completed_str, NULL);
   }
-
+  Printf("");
   // SO4 reaction
   ditoa(s.box, h_mbox_str);
   ditoa(o2.box, h_mbox_str1);

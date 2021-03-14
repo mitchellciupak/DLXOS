@@ -61,7 +61,7 @@ mbox_t MboxCreate() {
   if(mbox==MBOX_NUM_MBOXES) return MBOX_FAIL;
 
   mboxes[mbox].lock = LockCreate();
-  mboxes[mbox].empty = SemCreate(MBOX_NUM_BUFFERS);
+  mboxes[mbox].empty = SemCreate(MBOX_MAX_BUFFERS_PER_MBOX);
   mboxes[mbox].full = SemCreate(0); // dont need this! also, make a semaphore
   //CondHandleSignal(mboxes[mbox].empty);
   if(mboxes[mbox].lock == SYNC_FAIL){
@@ -118,6 +118,11 @@ int MboxOpen(mbox_t handle) {
 //
 //-------------------------------------------------------
 int MboxClose(mbox_t handle) {
+  if(MboxCloseByPID(handle, GetCurrentPid()) == MBOX_FAIL) return MBOX_FAIL;
+  return MBOX_SUCCESS;
+}
+
+int MboxCloseByPID(mbox_t handle, int pid){
   int i;
 
   if(handle > MBOX_NUM_MBOXES || handle < 0) return MBOX_FAIL;
@@ -126,6 +131,7 @@ int MboxClose(mbox_t handle) {
   if(LockHandleAcquire(mboxes[handle].lock) == SYNC_FAIL) {return MBOX_FAIL;}
   mboxes[handle].track_procs[GetCurrentPid()] = 0;
 
+  // Check to see if any other processes have this mailbox open
   for(i=0;i<PROCESS_MAX_PROCS;i++){
     if(mboxes[handle].track_procs[i]){
       break;
@@ -137,7 +143,7 @@ int MboxClose(mbox_t handle) {
   }
 
   if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
-  return MBOX_FAIL;
+  return 0;
 }
 
 //-------------------------------------------------------
@@ -201,14 +207,14 @@ mes_t MessageInit(int length, void* message){
   mes_t mes;
   char * src;
 
-  for(i=0;i<length;i++){
+  for(i=0;i<MBOX_NUM_BUFFERS;i++){
     if(messages[i].inuse == 0){
       messages[i].inuse = 1;
       mes = i;
       break;
     }
   }
-  if(i == length) return MBOX_FAIL;
+  if(i == MBOX_NUM_BUFFERS) return MBOX_FAIL;
 
   src = message;
   for(i=0;i<length;i++){
@@ -290,5 +296,15 @@ MboxMessage* RemoveMessageLink(mbox_t handle){
 //
 //--------------------------------------------------------------------------------
 int MboxCloseAllByPid(int pid) {
-  return MBOX_FAIL;
+  int i;
+  
+  for(i=0;i<MBOX_NUM_MBOXES;i++){
+    if(mboxes[i].track_procs[pid] == 1){
+      if(MboxCloseByPID(i, pid) == MBOX_FAIL){
+        printf("Couldn't close Mbox number %d Pid %d\n", i, pid);
+        exitsim();
+      }
+    }
+  }
+  return MBOX_SUCCESS;
 }

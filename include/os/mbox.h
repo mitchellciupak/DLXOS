@@ -45,6 +45,7 @@ int MboxSend(mbox_t m, int length, void *message);
 mes_t MessageInit(int length, void* message);
 void InsertMessageLink(mes_t mes, mbox_t handle);
 MboxMessage*  RemoveMessageLink( mbox_t handle);
+int MboxCloseByPID(mbox_t handle, int pid);
 int MboxRecv(mbox_t m, int maxlength, void *message);
 int MboxCloseAllByPid(int pid);
 
