@@ -113,7 +113,7 @@ void main (int argc, char *argv[])
   ditoa(s2.box, h_mbox_str);
   ditoa(s.box, h_mbox_str1);
   for(i=0;i<s2.ct;i++){
-    process_create(S_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, s_procs_completed_str, NULL);
+    process_create(S_REA_FILE, 0, 1, h_mbox_str, h_mbox_str1, s_procs_completed_str, NULL);
   }
   Printf("");
   // SO4 reaction
