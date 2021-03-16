@@ -45,6 +45,9 @@ typedef struct PCB {
 
   int           pinfo;          // Turns on printing of runtime stats
   int           pnice;          // Used in priority calculation
+
+  int start_jiffie; //
+  int cumul_jiffie; //
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
@@ -76,14 +79,14 @@ typedef struct PCB {
 
 extern PCB	*currentPCB;
 
-int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo,char *name, int isUser);
-extern void	ProcessSchedule ();
+int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo,char *name, int isUser);  // Create a new process and make it runnable
+extern void	ProcessSchedule (); // Schedules next process to run, idle loops if nothing, doesn't actually start next process
 extern void	ContextSwitch(void *, void *, int);
-extern void	ProcessSuspend (PCB *);
-extern void	ProcessWakeup (PCB *);
-extern void	ProcessSetResult (PCB *, uint32);
+extern void	ProcessSuspend (PCB *); // Suspend process until it's awakened. Follow with processSchedule
+extern void	ProcessWakeup (PCB *); // ?
+extern void	ProcessSetResult (PCB *, uint32);  // set the result returned to a process
 extern void	ProcessSleep ();
-extern void     ProcessDestroy(PCB *pcb);
+extern void     ProcessDestroy(PCB *pcb); // Put process on zombie queue. Doesn't end any processes
 extern unsigned GetCurrentPid();
 void process_create(char *name, ...);
 int GetPidFromAddress(PCB *pcb);

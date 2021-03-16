@@ -238,6 +238,8 @@ void ProcessSchedule () {
     }
     ProcessFreeResources(pcb);
   }
+  pcb->start_jiffie = ClkGetCurJiffies();
+
   dbprintf ('p', "Leaving ProcessSchedule (cur=0x%x)\n", (int)currentPCB);
 }
 
@@ -250,7 +252,7 @@ void ProcessSchedule () {
 //
 //	NOTE: This must only be called from an interrupt or trap.  It
 //	should be immediately followed by ProcessSchedule().
-//
+//  *** Jiffie
 //----------------------------------------------------------------------
 void ProcessSuspend (PCB *suspend) {
   // Make sure it's already a runnable process.
@@ -270,6 +272,8 @@ void ProcessSuspend (PCB *suspend) {
     printf("FATAL ERROR: could not insert suspend PCB into waitQueue!\n");
     exitsim();
   }
+  suspend->cumul_jiffie += ClkGetCurJiffies() - suspend->start_jiffie;
+  if(suspend->pinfo) printf(PROCESS_CPUSTATS_FORMAT, GetCurrentPid(), suspend->cumul_jiffie, 0);
   dbprintf ('p', "ProcessSuspend (%d): function complete\n", GetCurrentPid());
 }
 
@@ -344,7 +348,7 @@ void ProcessDestroy (PCB *pcb) {
 //
 //	This routine is called to exit from a system process.  It simply
 //	calls an exit trap, which will be caught to exit the process.
-//
+//  *** Jiffie
 //----------------------------------------------------------------------
 static void ProcessExit () {
   exit ();
@@ -365,7 +369,7 @@ static void ProcessExit () {
 //	for user processes.
 //
 //----------------------------------------------------------------------
-int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo,char *name, int isUser) {
+int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo, char *name, int isUser) {
   int		fd, n;
   int		start, codeS, codeL, dataS, dataL;
   uint32	*stackframe;
@@ -570,7 +574,9 @@ int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo,char *name, i
   // Return the process number (found by subtracting the PCB number
   // from the base of the PCB array).
   dbprintf ('p', "ProcessFork (%d): function complete\n", GetCurrentPid());
-
+  pcb->cumul_jiffie = 0;
+  pcb->pinfo = pinfo;
+  pcb->pnice = pnice;
   return (pcb - pcbs);
 }
 
