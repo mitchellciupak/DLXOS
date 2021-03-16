@@ -6,6 +6,9 @@
 HDRS=usertraps.h
 FINALHDRS+=../include/s2_inj.h
 FINALHDRS+=../include/co_inj.h
+FINALHDRS+=../include/s_rea.h
+FINALHDRS+=../include/co_rea.h
+FINALHDRS+=../include/so4_rea.h
 FINALHDRS+= ../include/shared.h
 APPROOT=../..
 INCDIR+=-I../include
