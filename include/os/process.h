@@ -57,7 +57,7 @@ typedef struct PCB {
   int start_jiffie; //
   int cumul_jiffie; //
   int priority;
-  double estcpu;
+  float estcpu;
   int window_jiffies;
 } PCB;
 

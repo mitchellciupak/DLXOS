@@ -19,7 +19,7 @@ void main (int argc, char *argv[])
   s_procs_completed = dstrtol(argv[2], NULL, 10);
 
   // Now print messages to see if priority scheduling is working
-  for(i=0; i<30; i++) {
+  for(i=0; i<10; i++) {
     Printf("spawn_me (%d): %c%d\n", getpid(), 'A'+program_index, i);
     for(j=0; j<50000; j++);  // just busy-wait awhile
   }

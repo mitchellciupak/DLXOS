@@ -427,8 +427,8 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
   uint32 handle;
   int ihandle;
 
-  dbprintf ('t',"Interrupt cause=0x%x iar=0x%x isr=0x%x args=0x%08x.\n",
-	    cause, iar, isr, (int)trapArgs);
+  //dbprintf ('t',"Interrupt cause=0x%x iar=0x%x isr=0x%x args=0x%08x.\n",
+	//    cause, iar, isr, (int)trapArgs);
   // If the TRAP_INSTR bit is set, this was from a trap instruction.
   // If the bit isn't set, this was a system interrupt.
   if (cause & TRAP_TRAP_INSTR) {
@@ -621,7 +621,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
   } else {
     switch (cause) {
     case TRAP_TIMER:
-      dbprintf ('t', "Got a timer interrupt!\n");
+      //dbprintf ('t', "Got a timer interrupt!\n");
       // ClkInterrupt returns 1 when 1 "process quantum" has passed, meaning
       // that it's time to call ProcessSchedule again.
       if (ClkInterrupt()) {
@@ -663,7 +663,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       break;
     }
   }
-  dbprintf ('t',"About to return from dointerrupt.\n");
+  //dbprintf ('t',"About to return from dointerrupt.\n");
   // Note that this return may schedule a new process!
   intrreturn ();
 }
