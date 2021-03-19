@@ -1,0 +1,2 @@
+work/co_rea.o: co_rea.c ../../../include/usertraps.h \
+ ../../../include/misc.h ../include/co_rea.h ../include/shared.h

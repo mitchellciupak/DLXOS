@@ -106,7 +106,7 @@ void main (int argc, char *argv[])
   ditoa(c2.box, h_mbox_str1);
   ditoa(o2.box, h_mbox_str2);
   for(i=0;i<(int)(co.ct / 4);i++){
-    process_create(CO_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
+    process_create(CO_REA_FILE, 0, 1, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
   }
   Printf("");
   // S2 -> S + S reaction
@@ -121,7 +121,7 @@ void main (int argc, char *argv[])
   ditoa(o2.box, h_mbox_str1);
   ditoa(so4.box, h_mbox_str2);
   for(i=0;i<so4.ct;i++){
-    process_create(SO4_REA_FILE, 0, 0, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
+    process_create(SO4_REA_FILE, 0, 1, h_mbox_str, h_mbox_str1, h_mbox_str2, s_procs_completed_str, NULL);
   }
 
   // And finally, wait until all spawned processes have finished.

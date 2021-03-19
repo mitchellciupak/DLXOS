@@ -13,6 +13,7 @@
 #include "queue.h"
 #include "clock.h"
 
+
 #define PROCESS_FAIL 0
 #define PROCESS_SUCCESS 1
 
@@ -30,6 +31,12 @@
 #define	PROCESS_TYPE_SYSTEM	0x100
 #define	PROCESS_TYPE_USER	0x200
 
+#define NUM_RUN_QUEUES 32
+#define PRIORITIES_PER_QUEUE  4
+#define BASE_PRIORITY 50
+#define TIME_PER_CPU_WINDOW 0.01
+#define CPU_WINDOWS_BETWEEN_DECAYS 10
+
 typedef	void (*VoidFunc)();
 
 // Process control block
@@ -37,6 +44,7 @@ typedef struct PCB {
   uint32	*currentSavedFrame; // -> current saved frame.  MUST BE 1ST!
   uint32	*sysStackPtr;	// Current system stack pointer.  MUST BE 2ND!
   uint32	sysStackArea;	// System stack area for this process
+  
   unsigned int	flags;
   char		name[80];	// Process name
   uint32	pagetable[16];	// Statically allocated page table
@@ -48,6 +56,9 @@ typedef struct PCB {
 
   int start_jiffie; //
   int cumul_jiffie; //
+  int priority;
+  double estcpu;
+  int window_jiffies;
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
@@ -90,6 +101,17 @@ extern void     ProcessDestroy(PCB *pcb); // Put process on zombie queue. Doesn'
 extern unsigned GetCurrentPid();
 void process_create(char *name, ...);
 int GetPidFromAddress(PCB *pcb);
+
+void ProcessRecalcPriority(PCB *pcb);
+inline int WhichQueue(PCB *pcb);
+int ProcessInsertRunning(PCB *pcb);
+void ProcessDecayEstcpu(PCB *pcb);
+void ProcessDecayEstcpuSleep(PCB *pcb, int time_asleep_jiffies);
+PCB *ProcessFindHighestPriorityPCB();
+void ProcessDecayAllEstcpus();
+void ProcessFixRunQueues();
+int ProcessCountAutowake();
+void ProcessPrintRunQueues();
 
 void ProcessUserSleep(int seconds);
 void ProcessYield();
