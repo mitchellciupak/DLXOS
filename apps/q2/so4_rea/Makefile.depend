@@ -1,2 +1,0 @@
-work/so4_rea.o: so4_rea.c ../../../include/usertraps.h \
- ../../../include/misc.h ../include/so4_rea.h ../include/shared.h

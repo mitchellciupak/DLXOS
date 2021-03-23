@@ -47,6 +47,8 @@ static Queue	zombieQueue;
 // we can't use malloc() inside the OS.
 static PCB	pcbs[PROCESS_MAX_PROCS];
 
+static processQuantum = DLX_PROCESS_QUANTUM;
+
 // String listing debugging options to print out.
 char	debugstr[200];
 
@@ -143,6 +145,7 @@ void ProcessFreeResources (PCB *pcb) {
     printf("FATAL ERROR: could not insert PCB link into freepcbs queue in ProcessFreeResources!\n");
     exitsim();
   }
+  MboxCloseAllByPid(GetCurrentPid());
 
   // Free the process's memory.  This is easy with a one-level page
   // table, but could get more complex with two-level page tables.
@@ -199,7 +202,7 @@ void ProcessSetResult (PCB * pcb, uint32 result) {
 //	It only changes the currentPCB and other variables so the next
 //	return from interrupt will restore a different context from that
 //	which was saved.
-//
+// aaa
 //----------------------------------------------------------------------
 void ProcessSchedule () {
   int queue_number;
@@ -207,7 +210,7 @@ void ProcessSchedule () {
   int i;
   int empty = 1;
   Link *l;
-
+  printf("Entering ProcessSchedule:\n");
   quanta++;
   dbprintf ('p', "Now entering ProcessSchedule (cur=0x%x)\n",(int)currentPCB);
   for(i=0;i<NUM_RUN_QUEUES;i++){
@@ -233,6 +236,10 @@ void ProcessSchedule () {
     exitsim ();	// NEVER RETURNS
   }
 
+  currentPCB->window_jiffies = ClkGetCurJiffies() - currentPCB->start_jiffie;
+  currentPCB->cumul_jiffie += currentPCB->window_jiffies;
+  if(currentPCB->pinfo) printf(PROCESS_CPUSTATS_FORMAT, GetCurrentPid(), currentPCB->cumul_jiffie, 0);
+
   // Move the process to the back of its own queue
   queue_number = WhichQueue(currentPCB);
   AQueueMoveAfter(&(runQueues[queue_number]), AQueueLast(&(runQueues[queue_number])), AQueueFirst(&(runQueues[queue_number])));
@@ -245,6 +252,7 @@ void ProcessSchedule () {
   }
 
   ProcessFixRunQueues();
+  ProcessPrintRunQueues();
   //ProcessPrintRunQueues();
   currentPCB = ProcessFindHighestPriorityPCB();
 
@@ -262,6 +270,9 @@ void ProcessSchedule () {
   currentPCB->start_jiffie = ClkGetCurJiffies();
 
   dbprintf ('p', "Leaving ProcessSchedule (cur=0x%x)\n", (int)currentPCB);
+  // Set the timer so this process gets at most a fixed quantum of time.
+  //TimerSet (processQuantum);
+  printf("Switching to Process %d\n", currentPCB->pid);
 }
 
 //----------------------------------------------------------------------
@@ -293,10 +304,11 @@ void ProcessSuspend (PCB *suspend) {
     printf("FATAL ERROR: could not insert suspend PCB into waitQueue!\n");
     exitsim();
   }
-  suspend->window_jiffies = ClkGetCurJiffies() - suspend->start_jiffie;
+  /*suspend->window_jiffies = ClkGetCurJiffies() - suspend->start_jiffie;
   suspend->cumul_jiffie += suspend->window_jiffies;
   if(suspend->pinfo);
-  printf(PROCESS_CPUSTATS_FORMAT, GetCurrentPid(), suspend->cumul_jiffie, 0);
+  printf(PROCESS_CPUSTATS_FORMAT, GetCurrentPid(), suspend->cumul_jiffie, 0);*/
+  
   dbprintf ('p', "ProcessSuspend (%d): function complete\n", GetCurrentPid());
 }
 
@@ -587,10 +599,11 @@ int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo, char *name, 
   pcb->cumul_jiffie = 0;
   pcb->pinfo = pinfo;
   pcb->pnice = pnice;
+  pcb->pid = (int)(pcb - pcbs);
 
   pcb->estcpu = 0;
-  pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
-  ProcessInsertRunning(pcb);
+  pcb->priority = BASE_PRIORITY;//BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
+  
   /*
   if (AQueueInsertLast(&runQueue, pcb->l) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not insert link into runQueue in ProcessFork!\n");
@@ -603,9 +616,9 @@ int ProcessFork (VoidFunc func, uint32 param, int pnice, int pinfo, char *name, 
     dbprintf ('p', "Setting currentPCB=0x%x, stackframe=0x%x\n", (int)pcb, (int)(pcb->currentSavedFrame));
     currentPCB = pcb;
     pcb->pnice = 20;
-    pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
+    pcb->priority = 127;// BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
   }
-
+  ProcessInsertRunning(pcb);    
   dbprintf ('p', "Leaving ProcessFork (%s)\n", name);
   // Return the process number (found by subtracting the PCB number
   // from the base of the PCB array).
@@ -928,6 +941,10 @@ void main (int argc, char *argv[])
 
   // Start the clock which will in turn trigger periodic ProcessSchedule's
   ClkStart();
+  //SysprocCreateProcesses ();
+  //TimerSet (processQuantum);
+  //dbprintf ('i', "Set timer quantum to %d, about to run first process.\n",
+	//    processQuantum);
 
   intrreturn ();
   // Should never be called because the scheduler exits when there
@@ -1019,7 +1036,6 @@ void ProcessYield() {
 void ProcessRecalcPriority(PCB *pcb){
     if (pcb->window_jiffies >= 10){
       pcb->estcpu++;
-      printf("Process %d ran for enoughtime!\n", GetCurrentPid());
   } 	
     pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
 }
@@ -1033,8 +1049,9 @@ inline int WhichQueue(PCB *pcb){
 // It returns T or F depending on if the function successfully runs or no
 int ProcessInsertRunning(PCB *pcb){
   int queue_number;
-  pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
+  //pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
   queue_number = (int) (pcb->priority / PRIORITIES_PER_QUEUE);
+
   if ((pcb->l = AQueueAllocLink(pcb)) == NULL) {
     printf("FATAL ERROR: could not get link for ProcessInsertRunning!\n");
     exitsim();
@@ -1106,7 +1123,6 @@ void ProcessDecayAllEstcpus(){
   int i;
   Link *l;
   PCB* pcb;
-  printf("decaying\n");
   for(i=0;i<NUM_RUN_QUEUES;i++){
     l = AQueueFirst(&runQueues[i]);
     while (l != NULL) {	
@@ -1164,14 +1180,18 @@ void ProcessPrintRunQueues(){
   Link *l;
   PCB* pcb;
 
+  printf("\nCurrent Queue State:\n");
   for(i=0;i<NUM_RUN_QUEUES;i++){
     l = AQueueFirst(&runQueues[i]);
-    printf("Queue number %d:\n",i);
+    if(l!=NULL) printf("\nQueue # %d:",i);
     while (l != NULL) {	
         pcb = AQueueObject(l);
-        printf("%s", pcb->name);
+        printf("(%d:%d:", pcb->pid, pcb->priority);
+        printf("%f", pcb->estcpu);
+        printf("), ");
         l = AQueueNext(l);
     }	
   }
+  printf("\n");
 }
 

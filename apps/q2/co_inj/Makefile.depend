@@ -1,2 +1,0 @@
-work/co_inj.o: co_inj.c ../../../include/usertraps.h \
- ../../../include/misc.h ../include/co_inj.h ../include/shared.h

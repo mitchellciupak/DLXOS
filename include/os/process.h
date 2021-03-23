@@ -59,6 +59,7 @@ typedef struct PCB {
   int priority;
   float estcpu;
   int window_jiffies;
+  int pid;
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
