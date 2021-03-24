@@ -211,6 +211,7 @@ void ProcessSchedule () {
   int empty = 1;
   Link *l;
   printf("Entering ProcessSchedule:\n");
+  ProcessPrintRunQueues();
   quanta++;
   dbprintf ('p', "Now entering ProcessSchedule (cur=0x%x)\n",(int)currentPCB);
   for(i=0;i<NUM_RUN_QUEUES;i++){
@@ -246,13 +247,20 @@ void ProcessSchedule () {
 
   // Recalculate process priority
   ProcessRecalcPriority(currentPCB);
-  if (quanta > 10){
+  ProcessFixRunQueues();
+  printf("\nAfter Recalculating Priority:\n");
+  ProcessPrintRunQueues();
+  if (quanta >= 10){
+    printf("\nDecaying\nBefore decay:\n");
+    ProcessPrintRunQueues();
     ProcessDecayAllEstcpus();
+    ProcessFixRunQueues();
+    printf("\nAfter decay:\n");
+    ProcessPrintRunQueues();
     quanta=0;
   }
 
-  ProcessFixRunQueues();
-  ProcessPrintRunQueues();
+  
   //ProcessPrintRunQueues();
   currentPCB = ProcessFindHighestPriorityPCB();
 
