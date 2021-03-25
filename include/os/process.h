@@ -60,6 +60,7 @@ typedef struct PCB {
   double estcpu;
   int window_jiffies;
   int pid;
+  int idle_proc;
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
