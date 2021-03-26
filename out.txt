@@ -1,0 +1,345 @@
+Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!
+Compiling and running
+prio_test
+make: Entering directory `/tmp/ckemmet/DLXOS/os'
+gcc-dlx -I../include -I../include/os -MM filesys.c memory.c misc.c process.c queue.c traps.c sysproc.c mbox.c clock.c osend.s trap_random.s dlxos.s | sed "s/^\(.*\):/work\/\1:/" > Makefile.depend
+usleep 50000
+make: Leaving directory `/tmp/ckemmet/DLXOS/os'
+make: Entering directory `/tmp/ckemmet/DLXOS/os'
+rm -rf work ../bin/os.dlx.obj ../lib/usertraps.aso ../lib/misc.o Makefile.depend ../bin/vm
+make: Leaving directory `/tmp/ckemmet/DLXOS/os'
+make: Entering directory `/tmp/ckemmet/DLXOS/os'
+gcc-dlx -I../include -I../include/os -MM filesys.c memory.c misc.c process.c queue.c traps.c sysproc.c mbox.c clock.c osend.s trap_random.s dlxos.s | sed "s/^\(.*\):/work\/\1:/" > Makefile.depend
+usleep 50000
+make: Leaving directory `/tmp/ckemmet/DLXOS/os'
+make: Entering directory `/tmp/ckemmet/DLXOS/os'
+mkdir -p work
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/filesys.o filesys.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/memory.o memory.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/misc.o misc.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/process.o process.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/queue.o queue.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/traps.o traps.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/sysproc.o sysproc.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/mbox.o mbox.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/clock.o clock.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/osend.aso osend.s
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/trap_random.aso trap_random.s
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/dlxos.aso dlxos.s
+gcc-dlx -mtraps -Wall -I../include -I../include/os -o work/os.dlx work/filesys.o work/memory.o work/misc.o work/process.o work/queue.o work/traps.o work/sysproc.o work/mbox.o work/clock.o work/osend.aso work/trap_random.aso work/dlxos.aso ../lib/share_memory.o ../lib/synch.o
+dlxasm -i _osinit -l work/os.lst work/os.dlx
+Starting pass 1.
+Starting pass 2.
+Last text address: 0x16aa0
+Last data address: 0x237b4
+cp work/os.dlx.obj ../bin/os.dlx.obj
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/usertraps.aso usertraps.s
+cp work/usertraps.aso ../lib/usertraps.aso
+cp work/misc.o ../lib/misc.o
+rm work/usertraps.aso
+make: Leaving directory `/tmp/ckemmet/DLXOS/os'
+make: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test'
+cd makeprocs; make clean
+make[1]: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test/makeprocs'
+rm -rf work ../../../bin/makeprocs.dlx.obj Makefile.depend ../../../bin/vm
+make[1]: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test/makeprocs'
+cd spawn_me; make clean
+make[1]: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test/spawn_me'
+rm -rf work ../../../bin/spawn_me.dlx.obj Makefile.depend ../../../bin/vm
+make[1]: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test/spawn_me'
+make: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test'
+make: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test'
+cd makeprocs; make
+make[1]: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test/makeprocs'
+gcc-dlx -I../include -I../../../include -MM makeprocs.c  | sed "s/^\(.*\):/work\/\1:/" > Makefile.depend
+usleep 50000
+make[1]: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test/makeprocs'
+make[1]: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test/makeprocs'
+mkdir -p work
+gcc-dlx -mtraps -O3 -Wall -I../include -I../../../include -c -o work/makeprocs.o makeprocs.c
+gcc-dlx -mtraps -O3 -Wall -I../include -I../../../include -o work/makeprocs.dlx work/makeprocs.o  ../../../lib/usertraps.aso ../../../lib/misc.o
+dlxasm  -l work/makeprocs.lst work/makeprocs.dlx
+Starting pass 1.
+Starting pass 2.
+Last text address: 0x2218
+Last data address: 0x3122
+cp work/makeprocs.dlx.obj ../../../bin/makeprocs.dlx.obj
+make[1]: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test/makeprocs'
+cd spawn_me; make
+make[1]: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test/spawn_me'
+gcc-dlx -I../include -I../../../include -MM spawn_me.c  | sed "s/^\(.*\):/work\/\1:/" > Makefile.depend
+usleep 50000
+make[1]: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test/spawn_me'
+make[1]: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test/spawn_me'
+mkdir -p work
+gcc-dlx -mtraps -O3 -Wall -I../include -I../../../include -c -o work/spawn_me.o spawn_me.c
+gcc-dlx -mtraps -O3 -Wall -I../include -I../../../include -o work/spawn_me.dlx work/spawn_me.o  ../../../lib/usertraps.aso ../../../lib/misc.o
+dlxasm  -l work/spawn_me.lst work/spawn_me.dlx
+Starting pass 1.
+Starting pass 2.
+Last text address: 0x2160
+Last data address: 0x30b2
+cp work/spawn_me.dlx.obj ../../../bin/spawn_me.dlx.obj
+make[1]: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test/spawn_me'
+make: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test'
+make: Entering directory `/tmp/ckemmet/DLXOS/apps/prio_test'
+cd ../../bin; dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 3; ee469_fixterminal
+Stack=0x1fffc8, pc starting at 0x12354
+Got 3 arguments.
+Available memory: 0x22120 -> 0x200000.
+Argument count is 3.
+Argument 0 is -u.
+Argument 1 is makeprocs.dlx.obj.
+Argument 2 is 3.
+makeprocs (31): Creating 3 processes
+makeprocs (31): Process 0 created
+makeprocs (31): Process 1 created
+makeprocs (31): Process 2 created
+spawn_me (29): A0
+spawn_me (28): B0
+spawn_me (27): C0
+spawn_me (29): A1
+spawn_me (28): B1
+spawn_me (29): A2
+spawn_me (28): B2
+spawn_me (29): A3
+spawn_me (28): B3
+spawn_me (27): C1
+spawn_me (29): A4
+spawn_me (28): B4
+spawn_me (29): A5
+spawn_me (28): B5
+spawn_me (29): A6
+spawn_me (28): B6
+spawn_me (29): A7
+spawn_me (28): B7
+spawn_me (29): A8
+spawn_me (27): C2
+spawn_me (28): B8
+spawn_me (29): A9
+spawn_me (28): B9
+spawn_me (29): A10
+spawn_me (28): B10
+spawn_me (29): A11
+spawn_me (28): B11
+spawn_me (29): A12
+spawn_me (28): B12
+spawn_me (27): C3
+spawn_me (29): A13
+spawn_me (28): B13
+spawn_me (29): A14
+spawn_me (28): B14
+spawn_me (29): A15
+spawn_me (28): B15
+spawn_me (29): A16
+spawn_me (28): B16
+spawn_me (29): A17
+spawn_me (27): C4
+spawn_me (28): B17
+spawn_me (29): A18
+spawn_me (28): B18
+spawn_me (29): A19
+spawn_me (28): B19
+spawn_me (29): A20
+spawn_me (28): B20
+spawn_me (29): A21
+spawn_me (28): B21
+spawn_me (29): A22
+spawn_me (27): C5
+spawn_me (28): B22
+spawn_me (29): A23
+spawn_me (28): B23
+spawn_me (29): A24
+spawn_me (28): B24
+spawn_me (29): A25
+spawn_me (28): B25
+spawn_me (29): A26
+spawn_me (27): C6
+spawn_me (28): B26
+spawn_me (29): A27
+spawn_me (28): B27
+spawn_me (29): A28
+spawn_me (28): B28
+spawn_me (29): A29
+spawn_me (28): B29
+spawn_me (29): Done!
+spawn_me (28): Done!
+spawn_me (27): C7
+spawn_me (27): C8
+spawn_me (27): C9
+spawn_me (27): C10
+spawn_me (27): C11
+spawn_me (27): C12
+spawn_me (27): C13
+spawn_me (27): C14
+spawn_me (27): C15
+spawn_me (27): C16
+spawn_me (27): C17
+spawn_me (27): C18
+spawn_me (27): C19
+spawn_me (27): C20
+spawn_me (27): C21
+spawn_me (27): C22
+spawn_me (27): C23
+spawn_me (27): C24
+spawn_me (27): C25
+spawn_me (27): C26
+spawn_me (27): C27
+spawn_me (27): C28
+spawn_me (27): C29
+spawn_me (27): Done!
+makeprocs (31): All other processes completed, exiting main process.
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Error! Idle proc scheduled!
+Got a control-C: exiting!
+make: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test'

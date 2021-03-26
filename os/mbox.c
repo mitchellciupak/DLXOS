@@ -299,7 +299,7 @@ int MboxCloseAllByPid(int pid) {
   int i;
   
   for(i=0;i<MBOX_NUM_MBOXES;i++){
-    if(mboxes[i].track_procs[pid] == 1){
+    if(mboxes[i].track_procs[pid]){
       if(MboxCloseByPID(i, pid) == MBOX_FAIL){
         printf("Couldn't close Mbox number %d Pid %d\n", i, pid);
         exitsim();
