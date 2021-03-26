@@ -112,7 +112,7 @@ void main (int argc, char *argv[])
     if(i < so4.ct) process_create(SO4_REA_FILE, 0, 0, s_mbox_str, o2_mbox_str, so4_mbox_str, s_procs_completed_str, NULL);
   }
 
-  // And finally, wait until all spawned processes have finished.
+  // Wait until all spawned processes have finished.
   if (sem_wait(s_procs_completed) != SYNC_SUCCESS) {
     Printf("Bad semaphore s_procs_completed (%d) in ", s_procs_completed); Printf(argv[0]); Printf("\n");
     Exit();

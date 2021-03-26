@@ -132,7 +132,7 @@ void ProcessFreeResources (PCB *pcb) {
   // Your code for closing any open mailbox connections
   // that a dying process might have goes here.
   //-----------------------------------------------------
-
+  MboxCloseAllByPid(pcb->pid);
 
   // Allocate a new link for this pcb on the freepcbs queue
   if ((pcb->l = AQueueAllocLink(pcb)) == NULL) {
@@ -146,7 +146,6 @@ void ProcessFreeResources (PCB *pcb) {
     printf("FATAL ERROR: could not insert PCB link into freepcbs queue in ProcessFreeResources!\n");
     exitsim();
   }
-  //MboxCloseAllByPid(GetCurrentPid());
 
   // Free the process's memory.  This is easy with a one-level page
   // table, but could get more complex with two-level page tables.

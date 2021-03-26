@@ -134,7 +134,8 @@ int MboxCloseByPID(mbox_t handle, int pid){
   // Check to see if any other processes have this mailbox open
   for(i=0;i<PROCESS_MAX_PROCS;i++){
     if(mboxes[handle].track_procs[i]){
-      break;
+      if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+      return MBOX_SUCCESS;
     }
   }
   if(i == PROCESS_MAX_PROCS){
@@ -143,7 +144,7 @@ int MboxCloseByPID(mbox_t handle, int pid){
   }
 
   if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
-  return 0;
+  return MBOX_SUCCESS;
 }
 
 //-------------------------------------------------------
