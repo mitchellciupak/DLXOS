@@ -134,7 +134,8 @@ int MboxCloseByPID(mbox_t handle, int pid){
   // Check to see if any other processes have this mailbox open
   for(i=0;i<PROCESS_MAX_PROCS;i++){
     if(mboxes[handle].track_procs[i]){
-      break;
+      if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
+      return MBOX_SUCCESS;
     }
   }
   if(i == PROCESS_MAX_PROCS){
@@ -143,7 +144,7 @@ int MboxCloseByPID(mbox_t handle, int pid){
   }
 
   if(LockHandleRelease(mboxes[handle].lock) == SYNC_FAIL) return MBOX_FAIL;
-  return 0;
+  return MBOX_SUCCESS;
 }
 
 //-------------------------------------------------------
@@ -299,7 +300,7 @@ int MboxCloseAllByPid(int pid) {
   int i;
   
   for(i=0;i<MBOX_NUM_MBOXES;i++){
-    if(mboxes[i].track_procs[pid] == 1){
+    if(mboxes[i].track_procs[pid]){
       if(MboxCloseByPID(i, pid) == MBOX_FAIL){
         printf("Couldn't close Mbox number %d Pid %d\n", i, pid);
         exitsim();

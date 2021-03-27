@@ -1,0 +1,5862 @@
+1,2c1,2
+< cd ../../bin; dlxsim -x os.dlx.obj -a  -u makeprocs.dlx.obj 3; ee469_fixterminal
+< Stack=0x1fffc8, pc starting at 0x12480
+---
+> cd ../../bin; dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 3; ee469_fixterminal
+> Stack=0x1fffc8, pc starting at 0x12858
+4c4
+< Available memory: 0x22120 -> 0x200000.
+---
+> Available memory: 0x227b8 -> 0x200000.
+638d637
+< spawn_me (29): A1
+694a694
+> spawn_me (29): A1
+1181d1180
+< spawn_me (28): B1
+1221a1221
+> spawn_me (28): B1
+1435d1434
+< spawn_me (29): A2
+1588a1588
+> spawn_me (29): A2
+1995d1994
+< spawn_me (28): B2
+2133a2133
+> spawn_me (28): B2
+2249d2248
+< spawn_me (29): A3
+2444a2444
+> spawn_me (29): A3
+2813d2812
+< spawn_me (28): B3
+2992d2990
+< spawn_me (27): C1
+3011a3010
+> spawn_me (28): B3
+3112d3110
+< spawn_me (29): A4
+3228a3227
+> spawn_me (27): C1
+3347a3347
+> spawn_me (29): A4
+3680d3679
+< spawn_me (28): B4
+3917a3917
+> spawn_me (28): B4
+3938d3937
+< spawn_me (29): A5
+4253a4253
+> spawn_me (29): A5
+4471d4470
+< spawn_me (28): B5
+4764d4762
+< spawn_me (29): A6
+4824a4823
+> spawn_me (28): B5
+5119a5119
+> spawn_me (29): A6
+5297d5296
+< spawn_me (28): B6
+5630d5628
+< spawn_me (29): A7
+5690a5689
+> spawn_me (28): B6
+5803c5802
+< Q #13: (29:52:8.799911),(27:55:7.999962),(28:55:12.199585), |||
+---
+> Q #13: (29:52:8.799912),(27:55:7.999962),(28:55:12.199585), |||
+5813c5812
+< Q #13: (29:52:8.799911),(27:55:7.999962),(28:55:12.199585), |||
+---
+> Q #13: (29:52:8.799912),(27:55:7.999962),(28:55:12.199585), |||
+5821c5820
+< Q #13: (27:55:7.999962),(28:55:12.199585),(29:52:9.799911), |||
+---
+> Q #13: (27:55:7.999962),(28:55:12.199585),(29:52:9.799912), |||
+5831c5830
+< Q #13: (27:55:7.999962),(28:55:12.199585),(29:52:9.799911), |||
+---
+> Q #13: (27:55:7.999962),(28:55:12.199585),(29:52:9.799912), |||
+5839c5838
+< Q #13: (28:55:12.199585),(29:52:9.799911), |||
+---
+> Q #13: (28:55:12.199585),(29:52:9.799912), |||
+5850c5849
+< Q #13: (28:55:12.199585),(29:52:9.799911), |||
+---
+> Q #13: (28:55:12.199585),(29:52:9.799912), |||
+5859c5858
+< Q #13: (29:52:9.799911),(28:55:13.199585), |||
+---
+> Q #13: (29:52:9.799912),(28:55:13.199585), |||
+5870c5869
+< Q #13: (29:52:9.799911),(28:55:13.199585), |||
+---
+> Q #13: (29:52:9.799912),(28:55:13.199585), |||
+5879c5878
+< Q #13: (28:55:13.199585),(29:52:10.799911), |||
+---
+> Q #13: (28:55:13.199585),(29:52:10.799912), |||
+5890c5889
+< Q #13: (28:55:13.199585),(29:52:10.799911), |||
+---
+> Q #13: (28:55:13.199585),(29:52:10.799912), |||
+5899c5898
+< Q #13: (29:52:10.799911),(28:55:14.199585), |||
+---
+> Q #13: (29:52:10.799912),(28:55:14.199585), |||
+5910c5909
+< Q #13: (29:52:10.799911),(28:55:14.199585), |||
+---
+> Q #13: (29:52:10.799912),(28:55:14.199585), |||
+5919c5918
+< Q #13: (28:55:14.199585),(29:52:11.799911), |||
+---
+> Q #13: (28:55:14.199585),(29:52:11.799912), |||
+5930c5929
+< Q #13: (28:55:14.199585),(29:52:11.799911), |||
+---
+> Q #13: (28:55:14.199585),(29:52:11.799912), |||
+5939c5938
+< Q #13: (29:52:11.799911),(28:55:15.199585), |||
+---
+> Q #13: (29:52:11.799912),(28:55:15.199585), |||
+5950c5949
+< Q #13: (29:52:11.799911),(28:55:15.199585), |||
+---
+> Q #13: (29:52:11.799912),(28:55:15.199585), |||
+5959c5958
+< Q #13: (28:55:15.199585),(29:53:12.799911), |||
+---
+> Q #13: (28:55:15.199585),(29:53:12.799912), |||
+5970c5969
+< Q #13: (28:55:15.199585),(29:53:12.799911), |||
+---
+> Q #13: (28:55:15.199585),(29:53:12.799912), |||
+5979c5978
+< Q #13: (29:53:12.799911), |||
+---
+> Q #13: (29:53:12.799912), |||
+5990c5989
+< Q #13: (29:53:12.799911), |||
+---
+> Q #13: (29:53:12.799912), |||
+5999c5998
+< Q #13: (29:53:13.799911), |||
+---
+> Q #13: (29:53:13.799912), |||
+6009c6008
+< Q #13: (29:53:13.799911), |||
+---
+> Q #13: (29:53:13.799912), |||
+6062a6062
+> spawn_me (29): A7
+6163d6162
+< spawn_me (28): B7
+6419d6417
+< spawn_me (29): A8
+6596a6595
+> spawn_me (28): B7
+6693d6691
+< spawn_me (27): C2
+6929a6928
+> spawn_me (29): A8
+6990d6988
+< spawn_me (28): B8
+7246d7243
+< spawn_me (29): A9
+7324a7322
+> spawn_me (27): C2
+7463a7462
+> spawn_me (28): B8
+7816d7814
+< spawn_me (28): B9
+7836a7835
+> spawn_me (29): A9
+8112d8110
+< spawn_me (29): A10
+8369a8368
+> spawn_me (28): B9
+8682d8680
+< spawn_me (28): B10
+8742a8741
+> spawn_me (29): A10
+8938d8936
+< spawn_me (29): A11
+9310a9309
+> spawn_me (28): B10
+9508d9506
+< spawn_me (28): B11
+9608a9607
+> spawn_me (29): A11
+9764d9762
+< spawn_me (29): A12
+10176a10175
+> spawn_me (28): B11
+10297d10295
+< spawn_me (28): B12
+10356d10353
+< spawn_me (27): C3
+10515a10513
+> spawn_me (29): A12
+10574d10571
+< spawn_me (29): A13
+11083a11081
+> spawn_me (28): B12
+11124d11121
+< spawn_me (28): B13
+11222a11220
+> spawn_me (27): C3
+11381a11380
+> spawn_me (29): A13
+11440d11438
+< spawn_me (29): A14
+11949a11948
+> spawn_me (28): B13
+11990d11988
+< spawn_me (28): B14
+12248d12245
+< spawn_me (29): A15
+12306a12304
+> spawn_me (29): A14
+12816d12813
+< spawn_me (28): B15
+12856a12854
+> spawn_me (28): B14
+13074d13071
+< spawn_me (29): A16
+13229a13227
+> spawn_me (29): A15
+13642d13639
+< spawn_me (28): B16
+13762a13760
+> spawn_me (28): B15
+13940d13937
+< spawn_me (29): A17
+14095a14093
+> spawn_me (29): A16
+14254d14251
+< spawn_me (27): C4
+14509d14505
+< spawn_me (28): B17
+14629a14626
+> spawn_me (28): B16
+14767d14763
+< spawn_me (29): A18
+15002a14999
+> spawn_me (29): A17
+15300d15296
+< spawn_me (28): B18
+15356a15353
+> spawn_me (27): C4
+15572a15570
+> spawn_me (28): B17
+15593d15590
+< spawn_me (29): A19
+15868a15866
+> spawn_me (29): A18
+16126d16123
+< spawn_me (28): B19
+16438a16436
+> spawn_me (28): B18
+16459d16456
+< spawn_me (29): A20
+16774a16772
+> spawn_me (29): A19
+16992d16989
+< spawn_me (28): B20
+17248d17244
+< spawn_me (29): A21
+17345a17342
+> spawn_me (28): B19
+17664a17662
+> spawn_me (29): A20
+17822d17819
+< spawn_me (28): B21
+18038d18034
+< spawn_me (29): A22
+18157d18152
+< spawn_me (27): C5
+18256a18252
+> spawn_me (28): B20
+18511a18508
+> spawn_me (29): A21
+18649d18645
+< spawn_me (28): B22
+18865d18860
+< spawn_me (29): A23
+19122a19118
+> spawn_me (28): B21
+19417a19414
+> spawn_me (29): A22
+19475d19471
+< spawn_me (28): B23
+19691a19688
+> spawn_me (27): C5
+19731d19727
+< spawn_me (29): A24
+20028a20025
+> spawn_me (28): B22
+20283a20281
+> spawn_me (29): A23
+20341d20338
+< spawn_me (28): B24
+20540d20536
+< spawn_me (29): A25
+20894a20891
+> spawn_me (28): B23
+21130d21126
+< spawn_me (28): B25
+21227a21224
+> spawn_me (29): A24
+21348d21344
+< spawn_me (29): A26
+21800a21797
+> spawn_me (28): B24
+21857d21853
+< spawn_me (27): C6
+21957d21952
+< spawn_me (28): B26
+22134a22130
+> spawn_me (29): A25
+22215d22210
+< spawn_me (29): A27
+22742a22738
+> spawn_me (28): B25
+22823d22818
+< spawn_me (28): B27
+23000a22996
+> spawn_me (29): A26
+23041d23036
+< spawn_me (29): A28
+23589a23585
+> spawn_me (27): C6
+23608a23605
+> spawn_me (28): B26
+23649d23645
+< spawn_me (28): B28
+23867d23862
+< spawn_me (29): A29
+23907a23903
+> spawn_me (29): A27
+24475d24470
+< spawn_me (28): B29
+24515a24511
+> spawn_me (28): B27
+24733d24728
+< spawn_me (29): Done!
+24738c24733,25462
+< Q #13: (28:55:13.799995), |||
+---
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> spawn_me (29): A28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(27:55:7.999996),(28:54:11.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:54:11.799995),(29:52:9.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> spawn_me (28): B28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+24747c25471,25528
+< Q #13: (28:55:13.799995), |||
+---
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(27:55:7.999996),(28:54:11.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:54:11.799995),(29:52:9.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+24758c25539,25559
+< Q #13: (28:55:13.799995), |||
+---
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+24767c25568
+< Q #13: (28:55:14.799995), |||
+---
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+24778c25579
+< Q #13: (28:55:14.799995), |||
+---
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+24787c25588,25608
+< Q #13: (28:55:15.799995), |||
+---
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+24798c25619
+< Q #13: (28:55:15.799995), |||
+---
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+24806a25628,25709
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> spawn_me (29): A29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+24811a25715,25750
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+24816a25756,26151
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(27:55:7.999996),(28:54:11.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:54:11.799995),(29:52:9.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+24821a26157,26272
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997),(29:52:9.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997),(29:52:9.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.799995),(28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.199997),(29:52:10.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.799995),(28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+24825c26276,26277
+< Q #14: (28:56:16.799988),(27:56:9.999992), |||
+---
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+24830a26283,26303
+> spawn_me (28): B29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997),(29:52:11.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+24835c26308,26309
+< Q #14: (28:56:16.799988),(27:56:9.999992), |||
+---
+> Q #13: (29:52:11.799995),(28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+24843c26317,26358
+< Q #14: (27:56:9.999992),(28:56:17.799988), |||
+---
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997),(29:53:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+24852c26367,26368
+< Q #14: (27:56:9.999992),(28:56:17.799988), |||
+---
+> Q #13: (29:53:13.799995), |||
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+24860,24861c26376,26395
+< Q #13: (28:55:12.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (29:52:9.199997),(27:55:7.999996),(28:54:11.799995), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:54:11.799995),(29:52:9.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+24871,24872c26405,26426
+< Q #13: (28:55:12.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (28:54:11.799995),(29:52:9.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:9.199997),(28:55:12.799995), |||
+> Q #14: (27:56:8.999992), |||
+24880,24881c26434,26475
+< Q #13: (28:55:13.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.799995),(29:52:10.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:10.199997),(28:55:13.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+24891,24892c26485,26506
+< Q #13: (28:55:13.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (28:55:13.799995),(29:52:11.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:11.199997),(28:55:14.799995), |||
+> Q #14: (27:56:8.999992), |||
+24900,24901c26514,26515
+< Q #13: (28:55:14.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+24911,24912c26525,26526
+< Q #13: (28:55:14.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (28:55:14.799995),(29:53:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+24920,24921c26534,26555
+< Q #13: (28:55:15.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:12.199997),(28:55:15.799995), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+24931,24932c26565,26566
+< Q #13: (28:55:15.866661), |||
+< Q #14: (27:56:8.666664), |||
+---
+> Q #13: (28:55:15.799995),(29:53:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+24940c26574,26612
+< Q #14: (27:56:8.666664),(28:56:16.866653), |||
+---
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:53:13.199997), |||
+> Q #14: (27:56:8.999992),(28:56:16.799988), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (29:52:8.799995),(27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 29
+> spawn_me (29): Done!
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (27:55:7.999996),(28:55:12.199997), |||
+24950c26622,26642
+< Q #14: (27:56:8.666664),(28:56:16.866653), |||
+---
+> Q #13: (27:55:7.999996),(28:55:12.199997), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:12.199997), |||
+> Q #14: (27:56:8.999992), |||
+24958c26650,26651
+< Q #14: (28:56:16.866653),(27:56:9.666664), |||
+---
+> Q #13: (28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+24968c26661,26662
+< Q #14: (28:56:16.866653),(27:56:9.666664), |||
+---
+> Q #13: (28:55:13.199997), |||
+> Q #14: (27:56:8.999992), |||
+24976c26670,26710
+< Q #14: (27:56:9.666664),(28:56:17.866653), |||
+---
+> Q #13: (28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:14.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.199997), |||
+> Q #14: (27:56:8.999992), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+24986c26720
+< Q #14: (27:56:9.666664),(28:56:17.866653), |||
+---
+> Q #14: (27:56:8.999992),(28:56:16.199997), |||
+24994c26728
+< Q #14: (28:56:17.866653),(27:56:10.666664), |||
+---
+> Q #14: (28:56:16.199997),(27:56:9.999992), |||
+25004c26738
+< Q #14: (28:56:17.866653),(27:56:10.666664), |||
+---
+> Q #14: (28:56:16.199997),(27:56:9.999992), |||
+25012c26746
+< Q #14: (27:56:10.666664),(28:56:18.866653), |||
+---
+> Q #14: (27:56:9.999992),(28:56:17.199997), |||
+25022c26756
+< Q #14: (27:56:10.666664),(28:56:18.866653), |||
+---
+> Q #14: (27:56:9.999992),(28:56:17.199997), |||
+25030c26764
+< Q #14: (28:56:18.866653),(27:56:11.666664), |||
+---
+> Q #14: (28:56:17.199997),(27:56:10.999992), |||
+25040c26774
+< Q #14: (28:56:18.866653),(27:56:11.666664), |||
+---
+> Q #14: (28:56:17.199997),(27:56:10.999992), |||
+25048c26782
+< Q #14: (27:56:11.666664),(28:56:19.866653), |||
+---
+> Q #14: (27:56:10.999992),(28:56:18.199997), |||
+25057c26791
+< Q #14: (27:56:11.666664),(28:56:19.866653), |||
+---
+> Q #14: (27:56:10.999992),(28:56:18.199997), |||
+25065,25066c26799,26800
+< Q #13: (28:55:14.244438), |||
+< Q #14: (27:56:9.777771), |||
+---
+> Q #13: (28:55:13.133331), |||
+> Q #14: (27:56:9.333328), |||
+25076,25077c26810,26811
+< Q #13: (28:55:14.244438), |||
+< Q #14: (27:56:9.777771), |||
+---
+> Q #13: (28:55:13.133331), |||
+> Q #14: (27:56:9.333328), |||
+25085,25086c26819,26820
+< Q #13: (28:55:15.244438), |||
+< Q #14: (27:56:9.777771), |||
+---
+> Q #13: (28:55:14.133331), |||
+> Q #14: (27:56:9.333328), |||
+25092d26825
+< spawn_me (28): Done!
+25097c26830,26831
+< Q #14: (27:56:9.777771), |||
+---
+> Q #13: (28:55:14.133331), |||
+> Q #14: (27:56:9.333328), |||
+25105c26839,26931
+< Q #14: (27:56:9.777771), |||
+---
+> Q #13: (28:55:15.133331), |||
+> Q #14: (27:56:9.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:15.133331), |||
+> Q #14: (27:56:9.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:9.333328),(28:56:16.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:9.333328),(28:56:16.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:16.133331),(27:56:10.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:16.133331),(27:56:10.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:10.333328),(28:56:17.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:10.333328),(28:56:17.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:17.133331),(27:56:11.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:17.133331),(27:56:11.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:11.333328),(28:56:18.133331), |||
+25116c26942,27015
+< Q #14: (27:56:9.777771), |||
+---
+> Q #14: (27:56:11.333328),(28:56:18.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:18.133331),(27:57:12.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:18.133331),(27:57:12.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:57:12.333328),(28:56:19.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:57:12.333328),(28:56:19.133331), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:19.133331),(27:57:13.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (28:56:19.133331),(27:57:13.333328), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #13: (28:55:13.755554), |||
+> Q #14: (27:56:10.888885), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 28
+> spawn_me (28): Done!
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:56:10.888885), |||
+25124c27023
+< Q #14: (27:56:10.777771), |||
+---
+> Q #14: (27:56:10.888885), |||
+25134c27033
+< Q #14: (27:56:10.777771), |||
+---
+> Q #14: (27:56:10.888885), |||
+25142c27041
+< Q #14: (27:56:11.777771), |||
+---
+> Q #14: (27:56:11.888885), |||
+25152c27051
+< Q #14: (27:56:11.777771), |||
+---
+> Q #14: (27:56:11.888885), |||
+25160c27059
+< Q #14: (27:57:12.777771), |||
+---
+> Q #14: (27:57:12.888885), |||
+25170c27069
+< Q #14: (27:57:12.777771), |||
+---
+> Q #14: (27:57:12.888885), |||
+25178c27077
+< Q #14: (27:57:13.777771), |||
+---
+> Q #14: (27:57:13.888885), |||
+25188c27087
+< Q #14: (27:57:13.777771), |||
+---
+> Q #14: (27:57:13.888885), |||
+25196c27095
+< Q #14: (27:57:14.777771), |||
+---
+> Q #14: (27:57:14.888885), |||
+25206c27105
+< Q #14: (27:57:14.777771), |||
+---
+> Q #14: (27:57:14.888885), |||
+25214c27113
+< Q #14: (27:57:15.777771), |||
+---
+> Q #14: (27:57:15.888885), |||
+25224c27123
+< Q #14: (27:57:15.777771), |||
+---
+> Q #14: (27:57:15.888885), |||
+25232c27131
+< Q #14: (27:58:16.777771), |||
+---
+> Q #14: (27:58:16.888886), |||
+25242c27141
+< Q #14: (27:58:16.777771), |||
+---
+> Q #14: (27:58:16.888886), |||
+25250c27149,27185
+< Q #14: (27:58:17.777771), |||
+---
+> Q #14: (27:58:17.888886), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:58:17.888886), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:58:18.888886), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:58:18.888886), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #14: (27:58:19.888886), |||
+25259c27194
+< Q #14: (27:58:17.777771), |||
+---
+> Q #14: (27:58:19.888886), |||
+25267c27202
+< Q #14: (27:57:13.851845), |||
+---
+> Q #14: (27:57:15.259254), |||
+25277c27212
+< Q #14: (27:57:13.851845), |||
+---
+> Q #14: (27:57:15.259254), |||
+25285c27220
+< Q #14: (27:57:14.851845), |||
+---
+> Q #14: (27:58:16.259247), |||
+25295c27230
+< Q #14: (27:57:14.851845), |||
+---
+> Q #14: (27:58:16.259247), |||
+25303c27238
+< Q #14: (27:57:15.851845), |||
+---
+> Q #14: (27:58:17.259247), |||
+25313c27248
+< Q #14: (27:57:15.851845), |||
+---
+> Q #14: (27:58:17.259247), |||
+25321c27256
+< Q #14: (27:58:16.851837), |||
+---
+> Q #14: (27:58:18.259247), |||
+25331c27266
+< Q #14: (27:58:16.851837), |||
+---
+> Q #14: (27:58:18.259247), |||
+25339c27274
+< Q #14: (27:58:17.851837), |||
+---
+> Q #14: (27:58:19.259247), |||
+25349c27284
+< Q #14: (27:58:17.851837), |||
+---
+> Q #14: (27:58:19.259247), |||
+25357c27292
+< Q #14: (27:58:18.851837), |||
+---
+> Q #14: (27:59:20.259247), |||
+25367c27302
+< Q #14: (27:58:18.851837), |||
+---
+> Q #14: (27:59:20.259247), |||
+25375c27310
+< Q #14: (27:58:19.851837), |||
+---
+> Q #14: (27:59:21.259247), |||
+25385c27320
+< Q #14: (27:58:19.851837), |||
+---
+> Q #14: (27:59:21.259247), |||
+25393c27328
+< Q #14: (27:59:20.851837), |||
+---
+> Q #14: (27:59:22.259247), |||
+25398a27334
+> spawn_me (27): C8
+25403c27339
+< Q #14: (27:59:20.851837), |||
+---
+> Q #14: (27:59:22.259247), |||
+25411c27347
+< Q #14: (27:59:21.851837), |||
+---
+> Q #14: (27:59:23.259247), |||
+25421c27357
+< Q #14: (27:59:21.851837), |||
+---
+> Q #14: (27:59:23.259247), |||
+25429c27365
+< Q #14: (27:59:22.851837), |||
+---
+> Q #15: (27:60:24.259247), |||
+25435d27370
+< spawn_me (27): C8
+25440c27375
+< Q #14: (27:59:22.851837), |||
+---
+> Q #15: (27:60:24.259247), |||
+25448c27383
+< Q #14: (27:59:23.851837), |||
+---
+> Q #15: (27:60:25.259247), |||
+25457c27392
+< Q #14: (27:59:23.851837), |||
+---
+> Q #15: (27:60:25.259247), |||
+25465c27400
+< Q #14: (27:58:17.901230), |||
+---
+> Q #14: (27:58:18.839493), |||
+25475c27410
+< Q #14: (27:58:17.901230), |||
+---
+> Q #14: (27:58:18.839493), |||
+25483c27418
+< Q #14: (27:58:18.901230), |||
+---
+> Q #14: (27:58:19.839493), |||
+25493c27428
+< Q #14: (27:58:18.901230), |||
+---
+> Q #14: (27:58:19.839493), |||
+25501c27436
+< Q #14: (27:58:19.901230), |||
+---
+> Q #14: (27:59:20.839493), |||
+25511c27446
+< Q #14: (27:58:19.901230), |||
+---
+> Q #14: (27:59:20.839493), |||
+25519c27454
+< Q #14: (27:59:20.901230), |||
+---
+> Q #14: (27:59:21.839493), |||
+25529c27464
+< Q #14: (27:59:20.901230), |||
+---
+> Q #14: (27:59:21.839493), |||
+25537c27472
+< Q #14: (27:59:21.901230), |||
+---
+> Q #14: (27:59:22.839493), |||
+25547c27482
+< Q #14: (27:59:21.901230), |||
+---
+> Q #14: (27:59:22.839493), |||
+25555c27490
+< Q #14: (27:59:22.901230), |||
+---
+> Q #14: (27:59:23.839493), |||
+25565c27500
+< Q #14: (27:59:22.901230), |||
+---
+> Q #14: (27:59:23.839493), |||
+25573c27508
+< Q #14: (27:59:23.901230), |||
+---
+> Q #15: (27:60:24.839493), |||
+25583c27518
+< Q #14: (27:59:23.901230), |||
+---
+> Q #15: (27:60:24.839493), |||
+25591c27526
+< Q #15: (27:60:24.901230), |||
+---
+> Q #15: (27:60:25.839493), |||
+25601c27536
+< Q #15: (27:60:24.901230), |||
+---
+> Q #15: (27:60:25.839493), |||
+25609c27544
+< Q #15: (27:60:25.901230), |||
+---
+> Q #15: (27:60:26.839493), |||
+25619c27554
+< Q #15: (27:60:25.901230), |||
+---
+> Q #15: (27:60:26.839493), |||
+25627c27562
+< Q #15: (27:60:26.901230), |||
+---
+> Q #15: (27:60:27.839493), |||
+25637c27572
+< Q #15: (27:60:26.901230), |||
+---
+> Q #15: (27:60:27.839493), |||
+25645c27580
+< Q #15: (27:60:27.901230), |||
+---
+> Q #15: (27:61:28.839493), |||
+25654c27589
+< Q #15: (27:60:27.901230), |||
+---
+> Q #15: (27:61:28.839493), |||
+25662c27597
+< Q #14: (27:59:20.600815), |||
+---
+> Q #14: (27:59:21.226334), |||
+25672c27607
+< Q #14: (27:59:20.600815), |||
+---
+> Q #14: (27:59:21.226334), |||
+25680c27615
+< Q #14: (27:59:21.600815), |||
+---
+> Q #14: (27:59:22.226334), |||
+25690c27625
+< Q #14: (27:59:21.600815), |||
+---
+> Q #14: (27:59:22.226334), |||
+25698c27633
+< Q #14: (27:59:22.600815), |||
+---
+> Q #14: (27:59:23.226334), |||
+25708c27643
+< Q #14: (27:59:22.600815), |||
+---
+> Q #14: (27:59:23.226334), |||
+25716c27651
+< Q #14: (27:59:23.600815), |||
+---
+> Q #15: (27:60:24.226334), |||
+25726c27661
+< Q #14: (27:59:23.600815), |||
+---
+> Q #15: (27:60:24.226334), |||
+25734c27669
+< Q #15: (27:60:24.600815), |||
+---
+> Q #15: (27:60:25.226334), |||
+25744c27679
+< Q #15: (27:60:24.600815), |||
+---
+> Q #15: (27:60:25.226334), |||
+25752c27687
+< Q #15: (27:60:25.600815), |||
+---
+> Q #15: (27:60:26.226334), |||
+25762c27697
+< Q #15: (27:60:25.600815), |||
+---
+> Q #15: (27:60:26.226334), |||
+25770c27705
+< Q #15: (27:60:26.600815), |||
+---
+> Q #15: (27:60:27.226334), |||
+25781c27716
+< Q #15: (27:60:26.600815), |||
+---
+> Q #15: (27:60:27.226334), |||
+25789c27724
+< Q #15: (27:60:27.600815), |||
+---
+> Q #15: (27:61:28.226334), |||
+25799c27734
+< Q #15: (27:60:27.600815), |||
+---
+> Q #15: (27:61:28.226334), |||
+25807c27742
+< Q #15: (27:61:28.600815), |||
+---
+> Q #15: (27:61:29.226334), |||
+25817c27752
+< Q #15: (27:61:28.600815), |||
+---
+> Q #15: (27:61:29.226334), |||
+25825c27760
+< Q #15: (27:61:29.600815), |||
+---
+> Q #15: (27:61:30.226334), |||
+25835c27770
+< Q #15: (27:61:29.600815), |||
+---
+> Q #15: (27:61:30.226334), |||
+25843c27778
+< Q #15: (27:61:30.600815), |||
+---
+> Q #15: (27:61:31.226334), |||
+25852c27787
+< Q #15: (27:61:30.600815), |||
+---
+> Q #15: (27:61:31.226334), |||
+25860c27795
+< Q #14: (27:59:22.400543), |||
+---
+> Q #14: (27:59:22.817551), |||
+25870c27805
+< Q #14: (27:59:22.400543), |||
+---
+> Q #14: (27:59:22.817551), |||
+25878c27813
+< Q #14: (27:59:23.400543), |||
+---
+> Q #14: (27:59:23.817551), |||
+25888c27823
+< Q #14: (27:59:23.400543), |||
+---
+> Q #14: (27:59:23.817551), |||
+25896c27831
+< Q #15: (27:60:24.400543), |||
+---
+> Q #15: (27:60:24.817551), |||
+25906c27841
+< Q #15: (27:60:24.400543), |||
+---
+> Q #15: (27:60:24.817551), |||
+25914c27849
+< Q #15: (27:60:25.400543), |||
+---
+> Q #15: (27:60:25.817551), |||
+25924c27859
+< Q #15: (27:60:25.400543), |||
+---
+> Q #15: (27:60:25.817551), |||
+25932c27867
+< Q #15: (27:60:26.400543), |||
+---
+> Q #15: (27:60:26.817551), |||
+25942c27877
+< Q #15: (27:60:26.400543), |||
+---
+> Q #15: (27:60:26.817551), |||
+25950c27885
+< Q #15: (27:60:27.400543), |||
+---
+> Q #15: (27:60:27.817551), |||
+25960c27895
+< Q #15: (27:60:27.400543), |||
+---
+> Q #15: (27:60:27.817551), |||
+25968c27903
+< Q #15: (27:61:28.400543), |||
+---
+> Q #15: (27:61:28.817551), |||
+25978c27913
+< Q #15: (27:61:28.400543), |||
+---
+> Q #15: (27:61:28.817551), |||
+25986c27921
+< Q #15: (27:61:29.400543), |||
+---
+> Q #15: (27:61:29.817551), |||
+25996c27931
+< Q #15: (27:61:29.400543), |||
+---
+> Q #15: (27:61:29.817551), |||
+26004c27939
+< Q #15: (27:61:30.400543), |||
+---
+> Q #15: (27:61:30.817551), |||
+26014c27949
+< Q #15: (27:61:30.400543), |||
+---
+> Q #15: (27:61:30.817551), |||
+26022c27957
+< Q #15: (27:61:31.400543), |||
+---
+> Q #15: (27:61:31.817551), |||
+26032c27967
+< Q #15: (27:61:31.400543), |||
+---
+> Q #15: (27:61:31.817551), |||
+26040c27975
+< Q #15: (27:62:32.400543), |||
+---
+> Q #15: (27:62:32.817535), |||
+26049c27984
+< Q #15: (27:62:32.400543), |||
+---
+> Q #15: (27:62:32.817535), |||
+26057c27992
+< Q #14: (27:59:23.600357), |||
+---
+> Q #14: (27:59:23.878372), |||
+26067c28002
+< Q #14: (27:59:23.600357), |||
+---
+> Q #14: (27:59:23.878372), |||
+26075c28010
+< Q #15: (27:60:24.600357), |||
+---
+> Q #15: (27:60:24.878372), |||
+26085c28020
+< Q #15: (27:60:24.600357), |||
+---
+> Q #15: (27:60:24.878372), |||
+26093c28028
+< Q #15: (27:60:25.600357), |||
+---
+> Q #15: (27:60:25.878372), |||
+26103c28038
+< Q #15: (27:60:25.600357), |||
+---
+> Q #15: (27:60:25.878372), |||
+26111c28046
+< Q #15: (27:60:26.600357), |||
+---
+> Q #15: (27:60:26.878372), |||
+26121c28056
+< Q #15: (27:60:26.600357), |||
+---
+> Q #15: (27:60:26.878372), |||
+26129c28064
+< Q #15: (27:60:27.600357), |||
+---
+> Q #15: (27:60:27.878372), |||
+26135d28069
+< spawn_me (27): C10
+26140c28074
+< Q #15: (27:60:27.600357), |||
+---
+> Q #15: (27:60:27.878372), |||
+26148c28082
+< Q #15: (27:61:28.600357), |||
+---
+> Q #15: (27:61:28.878372), |||
+26153a28088
+> spawn_me (27): C10
+26158c28093
+< Q #15: (27:61:28.600357), |||
+---
+> Q #15: (27:61:28.878372), |||
+26166c28101
+< Q #15: (27:61:29.600357), |||
+---
+> Q #15: (27:61:29.878372), |||
+26176c28111
+< Q #15: (27:61:29.600357), |||
+---
+> Q #15: (27:61:29.878372), |||
+26184c28119
+< Q #15: (27:61:30.600357), |||
+---
+> Q #15: (27:61:30.878372), |||
+26194c28129
+< Q #15: (27:61:30.600357), |||
+---
+> Q #15: (27:61:30.878372), |||
+26202c28137
+< Q #15: (27:61:31.600357), |||
+---
+> Q #15: (27:61:31.878372), |||
+26212c28147
+< Q #15: (27:61:31.600357), |||
+---
+> Q #15: (27:61:31.878372), |||
+26220c28155
+< Q #15: (27:62:32.600342), |||
+---
+> Q #15: (27:62:32.878357), |||
+26230c28165
+< Q #15: (27:62:32.600342), |||
+---
+> Q #15: (27:62:32.878357), |||
+26238c28173
+< Q #15: (27:62:33.600342), |||
+---
+> Q #15: (27:62:33.878357), |||
+26247c28182
+< Q #15: (27:62:33.600342), |||
+---
+> Q #15: (27:62:33.878357), |||
+26255c28190
+< Q #15: (27:60:24.400238), |||
+---
+> Q #15: (27:60:24.585571), |||
+26265c28200
+< Q #15: (27:60:24.400238), |||
+---
+> Q #15: (27:60:24.585571), |||
+26273c28208
+< Q #15: (27:60:25.400238), |||
+---
+> Q #15: (27:60:25.585571), |||
+26283c28218
+< Q #15: (27:60:25.400238), |||
+---
+> Q #15: (27:60:25.585571), |||
+26291c28226
+< Q #15: (27:60:26.400238), |||
+---
+> Q #15: (27:60:26.585571), |||
+26301c28236
+< Q #15: (27:60:26.400238), |||
+---
+> Q #15: (27:60:26.585571), |||
+26309c28244
+< Q #15: (27:60:27.400238), |||
+---
+> Q #15: (27:60:27.585571), |||
+26319c28254
+< Q #15: (27:60:27.400238), |||
+---
+> Q #15: (27:60:27.585571), |||
+26327c28262
+< Q #15: (27:61:28.400238), |||
+---
+> Q #15: (27:61:28.585571), |||
+26337c28272
+< Q #15: (27:61:28.400238), |||
+---
+> Q #15: (27:61:28.585571), |||
+26345c28280
+< Q #15: (27:61:29.400238), |||
+---
+> Q #15: (27:61:29.585571), |||
+26355c28290
+< Q #15: (27:61:29.400238), |||
+---
+> Q #15: (27:61:29.585571), |||
+26363c28298
+< Q #15: (27:61:30.400238), |||
+---
+> Q #15: (27:61:30.585571), |||
+26373c28308
+< Q #15: (27:61:30.400238), |||
+---
+> Q #15: (27:61:30.585571), |||
+26381c28316
+< Q #15: (27:61:31.400238), |||
+---
+> Q #15: (27:61:31.585571), |||
+26391c28326
+< Q #15: (27:61:31.400238), |||
+---
+> Q #15: (27:61:31.585571), |||
+26399c28334
+< Q #15: (27:62:32.400238), |||
+---
+> Q #15: (27:62:32.585571), |||
+26409c28344
+< Q #15: (27:62:32.400238), |||
+---
+> Q #15: (27:62:32.585571), |||
+26417c28352
+< Q #15: (27:62:33.400238), |||
+---
+> Q #15: (27:62:33.585571), |||
+26427c28362
+< Q #15: (27:62:33.400238), |||
+---
+> Q #15: (27:62:33.585571), |||
+26435c28370
+< Q #15: (27:62:34.400238), |||
+---
+> Q #15: (27:62:34.585571), |||
+26444c28379
+< Q #15: (27:62:34.400238), |||
+---
+> Q #15: (27:62:34.585571), |||
+26452c28387
+< Q #15: (27:60:24.933487), |||
+---
+> Q #15: (27:60:25.057053), |||
+26462c28397
+< Q #15: (27:60:24.933487), |||
+---
+> Q #15: (27:60:25.057053), |||
+26470c28405
+< Q #15: (27:60:25.933487), |||
+---
+> Q #15: (27:60:26.057053), |||
+26476d28410
+< spawn_me (27): C11
+26481c28415
+< Q #15: (27:60:25.933487), |||
+---
+> Q #15: (27:60:26.057053), |||
+26489c28423
+< Q #15: (27:60:26.933487), |||
+---
+> Q #15: (27:60:27.057053), |||
+26499c28433
+< Q #15: (27:60:26.933487), |||
+---
+> Q #15: (27:60:27.057053), |||
+26507c28441
+< Q #15: (27:60:27.933487), |||
+---
+> Q #15: (27:61:28.057053), |||
+26512a28447
+> spawn_me (27): C11
+26517c28452
+< Q #15: (27:60:27.933487), |||
+---
+> Q #15: (27:61:28.057053), |||
+26525c28460
+< Q #15: (27:61:28.933487), |||
+---
+> Q #15: (27:61:29.057053), |||
+26535c28470
+< Q #15: (27:61:28.933487), |||
+---
+> Q #15: (27:61:29.057053), |||
+26543c28478
+< Q #15: (27:61:29.933487), |||
+---
+> Q #15: (27:61:30.057053), |||
+26553c28488
+< Q #15: (27:61:29.933487), |||
+---
+> Q #15: (27:61:30.057053), |||
+26561c28496
+< Q #15: (27:61:30.933487), |||
+---
+> Q #15: (27:61:31.057053), |||
+26571c28506
+< Q #15: (27:61:30.933487), |||
+---
+> Q #15: (27:61:31.057053), |||
+26579c28514
+< Q #15: (27:61:31.933487), |||
+---
+> Q #15: (27:62:32.057037), |||
+26589c28524
+< Q #15: (27:61:31.933487), |||
+---
+> Q #15: (27:62:32.057037), |||
+26597c28532
+< Q #15: (27:62:32.933472), |||
+---
+> Q #15: (27:62:33.057037), |||
+26607c28542
+< Q #15: (27:62:32.933472), |||
+---
+> Q #15: (27:62:33.057037), |||
+26615c28550
+< Q #15: (27:62:33.933472), |||
+---
+> Q #15: (27:62:34.057037), |||
+26625c28560
+< Q #15: (27:62:33.933472), |||
+---
+> Q #15: (27:62:34.057037), |||
+26633c28568
+< Q #15: (27:62:34.933472), |||
+---
+> Q #15: (27:62:35.057037), |||
+26642c28577
+< Q #15: (27:62:34.933472), |||
+---
+> Q #15: (27:62:35.057037), |||
+26650c28585
+< Q #15: (27:60:25.288986), |||
+---
+> Q #15: (27:60:25.371368), |||
+26660c28595
+< Q #15: (27:60:25.288986), |||
+---
+> Q #15: (27:60:25.371368), |||
+26668c28603
+< Q #15: (27:60:26.288986), |||
+---
+> Q #15: (27:60:26.371368), |||
+26678c28613
+< Q #15: (27:60:26.288986), |||
+---
+> Q #15: (27:60:26.371368), |||
+26686c28621
+< Q #15: (27:60:27.288986), |||
+---
+> Q #15: (27:60:27.371368), |||
+26696c28631
+< Q #15: (27:60:27.288986), |||
+---
+> Q #15: (27:60:27.371368), |||
+26704c28639
+< Q #15: (27:61:28.288986), |||
+---
+> Q #15: (27:61:28.371368), |||
+26714c28649
+< Q #15: (27:61:28.288986), |||
+---
+> Q #15: (27:61:28.371368), |||
+26722c28657
+< Q #15: (27:61:29.288986), |||
+---
+> Q #15: (27:61:29.371368), |||
+26732c28667
+< Q #15: (27:61:29.288986), |||
+---
+> Q #15: (27:61:29.371368), |||
+26740c28675
+< Q #15: (27:61:30.288986), |||
+---
+> Q #15: (27:61:30.371368), |||
+26750c28685
+< Q #15: (27:61:30.288986), |||
+---
+> Q #15: (27:61:30.371368), |||
+26758c28693
+< Q #15: (27:61:31.288986), |||
+---
+> Q #15: (27:61:31.371368), |||
+26768c28703
+< Q #15: (27:61:31.288986), |||
+---
+> Q #15: (27:61:31.371368), |||
+26776c28711
+< Q #15: (27:62:32.288971), |||
+---
+> Q #15: (27:62:32.371368), |||
+26786c28721
+< Q #15: (27:62:32.288971), |||
+---
+> Q #15: (27:62:32.371368), |||
+26794c28729
+< Q #15: (27:62:33.288971), |||
+---
+> Q #15: (27:62:33.371368), |||
+26800d28734
+< spawn_me (27): C12
+26805c28739
+< Q #15: (27:62:33.288971), |||
+---
+> Q #15: (27:62:33.371368), |||
+26813c28747
+< Q #15: (27:62:34.288971), |||
+---
+> Q #15: (27:62:34.371368), |||
+26823c28757
+< Q #15: (27:62:34.288971), |||
+---
+> Q #15: (27:62:34.371368), |||
+26831c28765
+< Q #15: (27:62:35.288971), |||
+---
+> Q #15: (27:62:35.371368), |||
+26840c28774
+< Q #15: (27:62:35.288971), |||
+---
+> Q #15: (27:62:35.371368), |||
+26848c28782
+< Q #15: (27:60:25.525986), |||
+---
+> Q #15: (27:60:25.580902), |||
+26858c28792
+< Q #15: (27:60:25.525986), |||
+---
+> Q #15: (27:60:25.580902), |||
+26866c28800
+< Q #15: (27:60:26.525986), |||
+---
+> Q #15: (27:60:26.580902), |||
+26876c28810
+< Q #15: (27:60:26.525986), |||
+---
+> Q #15: (27:60:26.580902), |||
+26884c28818
+< Q #15: (27:60:27.525986), |||
+---
+> Q #15: (27:60:27.580902), |||
+26889a28824
+> spawn_me (27): C12
+26894c28829
+< Q #15: (27:60:27.525986), |||
+---
+> Q #15: (27:60:27.580902), |||
+26902c28837
+< Q #15: (27:61:28.525986), |||
+---
+> Q #15: (27:61:28.580902), |||
+26912c28847
+< Q #15: (27:61:28.525986), |||
+---
+> Q #15: (27:61:28.580902), |||
+26920c28855
+< Q #15: (27:61:29.525986), |||
+---
+> Q #15: (27:61:29.580902), |||
+26930c28865
+< Q #15: (27:61:29.525986), |||
+---
+> Q #15: (27:61:29.580902), |||
+26938c28873
+< Q #15: (27:61:30.525986), |||
+---
+> Q #15: (27:61:30.580902), |||
+26948c28883
+< Q #15: (27:61:30.525986), |||
+---
+> Q #15: (27:61:30.580902), |||
+26956c28891
+< Q #15: (27:61:31.525986), |||
+---
+> Q #15: (27:61:31.580902), |||
+26966c28901
+< Q #15: (27:61:31.525986), |||
+---
+> Q #15: (27:61:31.580902), |||
+26974c28909
+< Q #15: (27:62:32.525970), |||
+---
+> Q #15: (27:62:32.580902), |||
+26984c28919
+< Q #15: (27:62:32.525970), |||
+---
+> Q #15: (27:62:32.580902), |||
+26992c28927
+< Q #15: (27:62:33.525970), |||
+---
+> Q #15: (27:62:33.580902), |||
+27002c28937
+< Q #15: (27:62:33.525970), |||
+---
+> Q #15: (27:62:33.580902), |||
+27010c28945
+< Q #15: (27:62:34.525970), |||
+---
+> Q #15: (27:62:34.580902), |||
+27020c28955
+< Q #15: (27:62:34.525970), |||
+---
+> Q #15: (27:62:34.580902), |||
+27028c28963
+< Q #15: (27:62:35.525970), |||
+---
+> Q #15: (27:62:35.580902), |||
+27037c28972
+< Q #15: (27:62:35.525970), |||
+---
+> Q #15: (27:62:35.580902), |||
+27045c28980
+< Q #15: (27:60:25.683990), |||
+---
+> Q #15: (27:60:25.720596), |||
+27055c28990
+< Q #15: (27:60:25.683990), |||
+---
+> Q #15: (27:60:25.720596), |||
+27063c28998
+< Q #15: (27:60:26.683990), |||
+---
+> Q #15: (27:60:26.720596), |||
+27073c29008
+< Q #15: (27:60:26.683990), |||
+---
+> Q #15: (27:60:26.720596), |||
+27081c29016
+< Q #15: (27:60:27.683990), |||
+---
+> Q #15: (27:60:27.720596), |||
+27091c29026
+< Q #15: (27:60:27.683990), |||
+---
+> Q #15: (27:60:27.720596), |||
+27099c29034
+< Q #15: (27:61:28.683990), |||
+---
+> Q #15: (27:61:28.720596), |||
+27109c29044
+< Q #15: (27:61:28.683990), |||
+---
+> Q #15: (27:61:28.720596), |||
+27117c29052
+< Q #15: (27:61:29.683990), |||
+---
+> Q #15: (27:61:29.720596), |||
+27127c29062
+< Q #15: (27:61:29.683990), |||
+---
+> Q #15: (27:61:29.720596), |||
+27135c29070
+< Q #15: (27:61:30.683990), |||
+---
+> Q #15: (27:61:30.720596), |||
+27141d29075
+< spawn_me (27): C13
+27146c29080
+< Q #15: (27:61:30.683990), |||
+---
+> Q #15: (27:61:30.720596), |||
+27154c29088
+< Q #15: (27:61:31.683990), |||
+---
+> Q #15: (27:61:31.720596), |||
+27164c29098
+< Q #15: (27:61:31.683990), |||
+---
+> Q #15: (27:61:31.720596), |||
+27172c29106
+< Q #15: (27:62:32.683990), |||
+---
+> Q #15: (27:62:32.720581), |||
+27182c29116
+< Q #15: (27:62:32.683990), |||
+---
+> Q #15: (27:62:32.720581), |||
+27190c29124
+< Q #15: (27:62:33.683990), |||
+---
+> Q #15: (27:62:33.720581), |||
+27200c29134
+< Q #15: (27:62:33.683990), |||
+---
+> Q #15: (27:62:33.720581), |||
+27208c29142
+< Q #15: (27:62:34.683990), |||
+---
+> Q #15: (27:62:34.720581), |||
+27218c29152
+< Q #15: (27:62:34.683990), |||
+---
+> Q #15: (27:62:34.720581), |||
+27226c29160
+< Q #15: (27:62:35.683990), |||
+---
+> Q #15: (27:62:35.720581), |||
+27235c29169
+< Q #15: (27:62:35.683990), |||
+---
+> Q #15: (27:62:35.720581), |||
+27243c29177
+< Q #15: (27:60:25.789322), |||
+---
+> Q #15: (27:60:25.813736), |||
+27248a29183
+> spawn_me (27): C13
+27253c29188
+< Q #15: (27:60:25.789322), |||
+---
+> Q #15: (27:60:25.813736), |||
+27261c29196
+< Q #15: (27:60:26.789322), |||
+---
+> Q #15: (27:60:26.813736), |||
+27271c29206
+< Q #15: (27:60:26.789322), |||
+---
+> Q #15: (27:60:26.813736), |||
+27279c29214
+< Q #15: (27:60:27.789322), |||
+---
+> Q #15: (27:60:27.813736), |||
+27289c29224
+< Q #15: (27:60:27.789322), |||
+---
+> Q #15: (27:60:27.813736), |||
+27297c29232
+< Q #15: (27:61:28.789322), |||
+---
+> Q #15: (27:61:28.813736), |||
+27307c29242
+< Q #15: (27:61:28.789322), |||
+---
+> Q #15: (27:61:28.813736), |||
+27315c29250
+< Q #15: (27:61:29.789322), |||
+---
+> Q #15: (27:61:29.813736), |||
+27325c29260
+< Q #15: (27:61:29.789322), |||
+---
+> Q #15: (27:61:29.813736), |||
+27333c29268
+< Q #15: (27:61:30.789322), |||
+---
+> Q #15: (27:61:30.813736), |||
+27343c29278
+< Q #15: (27:61:30.789322), |||
+---
+> Q #15: (27:61:30.813736), |||
+27351c29286
+< Q #15: (27:61:31.789322), |||
+---
+> Q #15: (27:61:31.813736), |||
+27361c29296
+< Q #15: (27:61:31.789322), |||
+---
+> Q #15: (27:61:31.813736), |||
+27369c29304
+< Q #15: (27:62:32.789307), |||
+---
+> Q #15: (27:62:32.813721), |||
+27379c29314
+< Q #15: (27:62:32.789307), |||
+---
+> Q #15: (27:62:32.813721), |||
+27387c29322
+< Q #15: (27:62:33.789307), |||
+---
+> Q #15: (27:62:33.813721), |||
+27397c29332
+< Q #15: (27:62:33.789307), |||
+---
+> Q #15: (27:62:33.813721), |||
+27405c29340
+< Q #15: (27:62:34.789307), |||
+---
+> Q #15: (27:62:34.813721), |||
+27415c29350
+< Q #15: (27:62:34.789307), |||
+---
+> Q #15: (27:62:34.813721), |||
+27423c29358
+< Q #15: (27:62:35.789307), |||
+---
+> Q #15: (27:62:35.813721), |||
+27432c29367
+< Q #15: (27:62:35.789307), |||
+---
+> Q #15: (27:62:35.813721), |||
+27440c29375
+< Q #15: (27:60:25.859543), |||
+---
+> Q #15: (27:60:25.875824), |||
+27450c29385
+< Q #15: (27:60:25.859543), |||
+---
+> Q #15: (27:60:25.875824), |||
+27458c29393
+< Q #15: (27:60:26.859543), |||
+---
+> Q #15: (27:60:26.875824), |||
+27468c29403
+< Q #15: (27:60:26.859543), |||
+---
+> Q #15: (27:60:26.875824), |||
+27476c29411
+< Q #15: (27:60:27.859543), |||
+---
+> Q #15: (27:60:27.875824), |||
+27486c29421
+< Q #15: (27:60:27.859543), |||
+---
+> Q #15: (27:60:27.875824), |||
+27494c29429
+< Q #15: (27:61:28.859543), |||
+---
+> Q #15: (27:61:28.875824), |||
+27500d29434
+< spawn_me (27): C14
+27505c29439
+< Q #15: (27:61:28.859543), |||
+---
+> Q #15: (27:61:28.875824), |||
+27513c29447
+< Q #15: (27:61:29.859543), |||
+---
+> Q #15: (27:61:29.875824), |||
+27523c29457
+< Q #15: (27:61:29.859543), |||
+---
+> Q #15: (27:61:29.875824), |||
+27531c29465
+< Q #15: (27:61:30.859543), |||
+---
+> Q #15: (27:61:30.875824), |||
+27541c29475
+< Q #15: (27:61:30.859543), |||
+---
+> Q #15: (27:61:30.875824), |||
+27549c29483
+< Q #15: (27:61:31.859543), |||
+---
+> Q #15: (27:61:31.875824), |||
+27559c29493
+< Q #15: (27:61:31.859543), |||
+---
+> Q #15: (27:61:31.875824), |||
+27567c29501
+< Q #15: (27:62:32.859528), |||
+---
+> Q #15: (27:62:32.875824), |||
+27577c29511
+< Q #15: (27:62:32.859528), |||
+---
+> Q #15: (27:62:32.875824), |||
+27585c29519
+< Q #15: (27:62:33.859528), |||
+---
+> Q #15: (27:62:33.875824), |||
+27595c29529
+< Q #15: (27:62:33.859528), |||
+---
+> Q #15: (27:62:33.875824), |||
+27603c29537
+< Q #15: (27:62:34.859528), |||
+---
+> Q #15: (27:62:34.875824), |||
+27608a29543
+> spawn_me (27): C14
+27613c29548
+< Q #15: (27:62:34.859528), |||
+---
+> Q #15: (27:62:34.875824), |||
+27621c29556
+< Q #15: (27:62:35.859528), |||
+---
+> Q #15: (27:62:35.875824), |||
+27630c29565
+< Q #15: (27:62:35.859528), |||
+---
+> Q #15: (27:62:35.875824), |||
+27638c29573
+< Q #15: (27:60:25.906357), |||
+---
+> Q #15: (27:60:25.917206), |||
+27648c29583
+< Q #15: (27:60:25.906357), |||
+---
+> Q #15: (27:60:25.917206), |||
+27656c29591
+< Q #15: (27:60:26.906357), |||
+---
+> Q #15: (27:60:26.917206), |||
+27666c29601
+< Q #15: (27:60:26.906357), |||
+---
+> Q #15: (27:60:26.917206), |||
+27674c29609
+< Q #15: (27:60:27.906357), |||
+---
+> Q #15: (27:60:27.917206), |||
+27684c29619
+< Q #15: (27:60:27.906357), |||
+---
+> Q #15: (27:60:27.917206), |||
+27692c29627
+< Q #15: (27:61:28.906357), |||
+---
+> Q #15: (27:61:28.917206), |||
+27702c29637
+< Q #15: (27:61:28.906357), |||
+---
+> Q #15: (27:61:28.917206), |||
+27710c29645
+< Q #15: (27:61:29.906357), |||
+---
+> Q #15: (27:61:29.917206), |||
+27720c29655
+< Q #15: (27:61:29.906357), |||
+---
+> Q #15: (27:61:29.917206), |||
+27728c29663
+< Q #15: (27:61:30.906357), |||
+---
+> Q #15: (27:61:30.917206), |||
+27738c29673
+< Q #15: (27:61:30.906357), |||
+---
+> Q #15: (27:61:30.917206), |||
+27746c29681
+< Q #15: (27:61:31.906357), |||
+---
+> Q #15: (27:61:31.917206), |||
+27756c29691
+< Q #15: (27:61:31.906357), |||
+---
+> Q #15: (27:61:31.917206), |||
+27764c29699
+< Q #15: (27:62:32.906342), |||
+---
+> Q #15: (27:62:32.917206), |||
+27774c29709
+< Q #15: (27:62:32.906342), |||
+---
+> Q #15: (27:62:32.917206), |||
+27782c29717
+< Q #15: (27:62:33.906342), |||
+---
+> Q #15: (27:62:33.917206), |||
+27792c29727
+< Q #15: (27:62:33.906342), |||
+---
+> Q #15: (27:62:33.917206), |||
+27800c29735
+< Q #15: (27:62:34.906342), |||
+---
+> Q #15: (27:62:34.917206), |||
+27810c29745
+< Q #15: (27:62:34.906342), |||
+---
+> Q #15: (27:62:34.917206), |||
+27818c29753
+< Q #15: (27:62:35.906342), |||
+---
+> Q #15: (27:62:35.917206), |||
+27827c29762
+< Q #15: (27:62:35.906342), |||
+---
+> Q #15: (27:62:35.917206), |||
+27835c29770
+< Q #15: (27:60:25.937576), |||
+---
+> Q #15: (27:60:25.944809), |||
+27841d29775
+< spawn_me (27): C15
+27846c29780
+< Q #15: (27:60:25.937576), |||
+---
+> Q #15: (27:60:25.944809), |||
+27854c29788
+< Q #15: (27:60:26.937576), |||
+---
+> Q #15: (27:60:26.944809), |||
+27864c29798
+< Q #15: (27:60:26.937576), |||
+---
+> Q #15: (27:60:26.944809), |||
+27872c29806
+< Q #15: (27:60:27.937576), |||
+---
+> Q #15: (27:60:27.944809), |||
+27882c29816
+< Q #15: (27:60:27.937576), |||
+---
+> Q #15: (27:60:27.944809), |||
+27890c29824
+< Q #15: (27:61:28.937576), |||
+---
+> Q #15: (27:61:28.944809), |||
+27900c29834
+< Q #15: (27:61:28.937576), |||
+---
+> Q #15: (27:61:28.944809), |||
+27908c29842
+< Q #15: (27:61:29.937576), |||
+---
+> Q #15: (27:61:29.944809), |||
+27918c29852
+< Q #15: (27:61:29.937576), |||
+---
+> Q #15: (27:61:29.944809), |||
+27926c29860
+< Q #15: (27:61:30.937576), |||
+---
+> Q #15: (27:61:30.944809), |||
+27936c29870
+< Q #15: (27:61:30.937576), |||
+---
+> Q #15: (27:61:30.944809), |||
+27944c29878
+< Q #15: (27:61:31.937576), |||
+---
+> Q #15: (27:61:31.944809), |||
+27954c29888
+< Q #15: (27:61:31.937576), |||
+---
+> Q #15: (27:61:31.944809), |||
+27962c29896
+< Q #15: (27:62:32.937561), |||
+---
+> Q #15: (27:62:32.944794), |||
+27972c29906
+< Q #15: (27:62:32.937561), |||
+---
+> Q #15: (27:62:32.944794), |||
+27980c29914
+< Q #15: (27:62:33.937561), |||
+---
+> Q #15: (27:62:33.944794), |||
+27985a29920
+> spawn_me (27): C15
+27990c29925
+< Q #15: (27:62:33.937561), |||
+---
+> Q #15: (27:62:33.944794), |||
+27998c29933
+< Q #15: (27:62:34.937561), |||
+---
+> Q #15: (27:62:34.944794), |||
+28008c29943
+< Q #15: (27:62:34.937561), |||
+---
+> Q #15: (27:62:34.944794), |||
+28016c29951
+< Q #15: (27:62:35.937561), |||
+---
+> Q #15: (27:62:35.944794), |||
+28025c29960
+< Q #15: (27:62:35.937561), |||
+---
+> Q #15: (27:62:35.944794), |||
+28033c29968
+< Q #15: (27:60:25.958374), |||
+---
+> Q #15: (27:60:25.963196), |||
+28043c29978
+< Q #15: (27:60:25.958374), |||
+---
+> Q #15: (27:60:25.963196), |||
+28051c29986
+< Q #15: (27:60:26.958374), |||
+---
+> Q #15: (27:60:26.963196), |||
+28061c29996
+< Q #15: (27:60:26.958374), |||
+---
+> Q #15: (27:60:26.963196), |||
+28069c30004
+< Q #15: (27:60:27.958374), |||
+---
+> Q #15: (27:60:27.963196), |||
+28079c30014
+< Q #15: (27:60:27.958374), |||
+---
+> Q #15: (27:60:27.963196), |||
+28087c30022
+< Q #15: (27:61:28.958374), |||
+---
+> Q #15: (27:61:28.963196), |||
+28097c30032
+< Q #15: (27:61:28.958374), |||
+---
+> Q #15: (27:61:28.963196), |||
+28105c30040
+< Q #15: (27:61:29.958374), |||
+---
+> Q #15: (27:61:29.963196), |||
+28115c30050
+< Q #15: (27:61:29.958374), |||
+---
+> Q #15: (27:61:29.963196), |||
+28123c30058
+< Q #15: (27:61:30.958374), |||
+---
+> Q #15: (27:61:30.963196), |||
+28133c30068
+< Q #15: (27:61:30.958374), |||
+---
+> Q #15: (27:61:30.963196), |||
+28141c30076
+< Q #15: (27:61:31.958374), |||
+---
+> Q #15: (27:61:31.963196), |||
+28151c30086
+< Q #15: (27:61:31.958374), |||
+---
+> Q #15: (27:61:31.963196), |||
+28159c30094
+< Q #15: (27:62:32.958374), |||
+---
+> Q #15: (27:62:32.963196), |||
+28165d30099
+< spawn_me (27): C16
+28170c30104
+< Q #15: (27:62:32.958374), |||
+---
+> Q #15: (27:62:32.963196), |||
+28178c30112
+< Q #15: (27:62:33.958374), |||
+---
+> Q #15: (27:62:33.963196), |||
+28188c30122
+< Q #15: (27:62:33.958374), |||
+---
+> Q #15: (27:62:33.963196), |||
+28196c30130
+< Q #15: (27:62:34.958374), |||
+---
+> Q #15: (27:62:34.963196), |||
+28206c30140
+< Q #15: (27:62:34.958374), |||
+---
+> Q #15: (27:62:34.963196), |||
+28214c30148
+< Q #15: (27:62:35.958374), |||
+---
+> Q #15: (27:62:35.963196), |||
+28223c30157
+< Q #15: (27:62:35.958374), |||
+---
+> Q #15: (27:62:35.963196), |||
+28231c30165
+< Q #15: (27:60:25.972244), |||
+---
+> Q #15: (27:60:25.975464), |||
+28241c30175
+< Q #15: (27:60:25.972244), |||
+---
+> Q #15: (27:60:25.975464), |||
+28249c30183
+< Q #15: (27:60:26.972244), |||
+---
+> Q #15: (27:60:26.975464), |||
+28259c30193
+< Q #15: (27:60:26.972244), |||
+---
+> Q #15: (27:60:26.975464), |||
+28267c30201
+< Q #15: (27:60:27.972244), |||
+---
+> Q #15: (27:60:27.975464), |||
+28277c30211
+< Q #15: (27:60:27.972244), |||
+---
+> Q #15: (27:60:27.975464), |||
+28285c30219
+< Q #15: (27:61:28.972244), |||
+---
+> Q #15: (27:61:28.975464), |||
+28295c30229
+< Q #15: (27:61:28.972244), |||
+---
+> Q #15: (27:61:28.975464), |||
+28303c30237
+< Q #15: (27:61:29.972244), |||
+---
+> Q #15: (27:61:29.975464), |||
+28313c30247
+< Q #15: (27:61:29.972244), |||
+---
+> Q #15: (27:61:29.975464), |||
+28321c30255
+< Q #15: (27:61:30.972244), |||
+---
+> Q #15: (27:61:30.975464), |||
+28331c30265
+< Q #15: (27:61:30.972244), |||
+---
+> Q #15: (27:61:30.975464), |||
+28339c30273
+< Q #15: (27:61:31.972244), |||
+---
+> Q #15: (27:61:31.975464), |||
+28344a30279
+> spawn_me (27): C16
+28349c30284
+< Q #15: (27:61:31.972244), |||
+---
+> Q #15: (27:61:31.975464), |||
+28357c30292
+< Q #15: (27:62:32.972229), |||
+---
+> Q #15: (27:62:32.975464), |||
+28367c30302
+< Q #15: (27:62:32.972229), |||
+---
+> Q #15: (27:62:32.975464), |||
+28375c30310
+< Q #15: (27:62:33.972229), |||
+---
+> Q #15: (27:62:33.975464), |||
+28385c30320
+< Q #15: (27:62:33.972229), |||
+---
+> Q #15: (27:62:33.975464), |||
+28393c30328
+< Q #15: (27:62:34.972229), |||
+---
+> Q #15: (27:62:34.975464), |||
+28403c30338
+< Q #15: (27:62:34.972229), |||
+---
+> Q #15: (27:62:34.975464), |||
+28411c30346
+< Q #15: (27:62:35.972229), |||
+---
+> Q #15: (27:62:35.975464), |||
+28420c30355
+< Q #15: (27:62:35.972229), |||
+---
+> Q #15: (27:62:35.975464), |||
+28428c30363
+< Q #15: (27:60:25.981491), |||
+---
+> Q #15: (27:60:25.983643), |||
+28438c30373
+< Q #15: (27:60:25.981491), |||
+---
+> Q #15: (27:60:25.983643), |||
+28446c30381
+< Q #15: (27:60:26.981491), |||
+---
+> Q #15: (27:60:26.983643), |||
+28456c30391
+< Q #15: (27:60:26.981491), |||
+---
+> Q #15: (27:60:26.983643), |||
+28464c30399
+< Q #15: (27:60:27.981491), |||
+---
+> Q #15: (27:60:27.983643), |||
+28474c30409
+< Q #15: (27:60:27.981491), |||
+---
+> Q #15: (27:60:27.983643), |||
+28482c30417
+< Q #15: (27:61:28.981491), |||
+---
+> Q #15: (27:61:28.983643), |||
+28492c30427
+< Q #15: (27:61:28.981491), |||
+---
+> Q #15: (27:61:28.983643), |||
+28500c30435
+< Q #15: (27:61:29.981491), |||
+---
+> Q #15: (27:61:29.983643), |||
+28510c30445
+< Q #15: (27:61:29.981491), |||
+---
+> Q #15: (27:61:29.983643), |||
+28518c30453
+< Q #15: (27:61:30.981491), |||
+---
+> Q #15: (27:61:30.983643), |||
+28524d30458
+< spawn_me (27): C17
+28529c30463
+< Q #15: (27:61:30.981491), |||
+---
+> Q #15: (27:61:30.983643), |||
+28537c30471
+< Q #15: (27:61:31.981491), |||
+---
+> Q #15: (27:61:31.983643), |||
+28547c30481
+< Q #15: (27:61:31.981491), |||
+---
+> Q #15: (27:61:31.983643), |||
+28555c30489
+< Q #15: (27:62:32.981476), |||
+---
+> Q #15: (27:62:32.983643), |||
+28565c30499
+< Q #15: (27:62:32.981476), |||
+---
+> Q #15: (27:62:32.983643), |||
+28573c30507
+< Q #15: (27:62:33.981476), |||
+---
+> Q #15: (27:62:33.983643), |||
+28583c30517
+< Q #15: (27:62:33.981476), |||
+---
+> Q #15: (27:62:33.983643), |||
+28591c30525
+< Q #15: (27:62:34.981476), |||
+---
+> Q #15: (27:62:34.983643), |||
+28601c30535
+< Q #15: (27:62:34.981476), |||
+---
+> Q #15: (27:62:34.983643), |||
+28609c30543
+< Q #15: (27:62:35.981476), |||
+---
+> Q #15: (27:62:35.983643), |||
+28618c30552
+< Q #15: (27:62:35.981476), |||
+---
+> Q #15: (27:62:35.983643), |||
+28626c30560
+< Q #15: (27:60:25.987656), |||
+---
+> Q #15: (27:60:25.989090), |||
+28636c30570
+< Q #15: (27:60:25.987656), |||
+---
+> Q #15: (27:60:25.989090), |||
+28644c30578
+< Q #15: (27:60:26.987656), |||
+---
+> Q #15: (27:60:26.989090), |||
+28654c30588
+< Q #15: (27:60:26.987656), |||
+---
+> Q #15: (27:60:26.989090), |||
+28662c30596
+< Q #15: (27:60:27.987656), |||
+---
+> Q #15: (27:60:27.989090), |||
+28672c30606
+< Q #15: (27:60:27.987656), |||
+---
+> Q #15: (27:60:27.989090), |||
+28680c30614
+< Q #15: (27:61:28.987656), |||
+---
+> Q #15: (27:61:28.989090), |||
+28690c30624
+< Q #15: (27:61:28.987656), |||
+---
+> Q #15: (27:61:28.989090), |||
+28698c30632
+< Q #15: (27:61:29.987656), |||
+---
+> Q #15: (27:61:29.989090), |||
+28708c30642
+< Q #15: (27:61:29.987656), |||
+---
+> Q #15: (27:61:29.989090), |||
+28716c30650
+< Q #15: (27:61:30.987656), |||
+---
+> Q #15: (27:61:30.989090), |||
+28721a30656
+> spawn_me (27): C17
+28726c30661
+< Q #15: (27:61:30.987656), |||
+---
+> Q #15: (27:61:30.989090), |||
+28734c30669
+< Q #15: (27:61:31.987656), |||
+---
+> Q #15: (27:61:31.989090), |||
+28744c30679
+< Q #15: (27:61:31.987656), |||
+---
+> Q #15: (27:61:31.989090), |||
+28752c30687
+< Q #15: (27:62:32.987640), |||
+---
+> Q #15: (27:62:32.989075), |||
+28762c30697
+< Q #15: (27:62:32.987640), |||
+---
+> Q #15: (27:62:32.989075), |||
+28770c30705
+< Q #15: (27:62:33.987640), |||
+---
+> Q #15: (27:62:33.989075), |||
+28780c30715
+< Q #15: (27:62:33.987640), |||
+---
+> Q #15: (27:62:33.989075), |||
+28788c30723
+< Q #15: (27:62:34.987640), |||
+---
+> Q #15: (27:62:34.989075), |||
+28798c30733
+< Q #15: (27:62:34.987640), |||
+---
+> Q #15: (27:62:34.989075), |||
+28806c30741
+< Q #15: (27:62:35.987640), |||
+---
+> Q #15: (27:62:35.989075), |||
+28815c30750
+< Q #15: (27:62:35.987640), |||
+---
+> Q #15: (27:62:35.989075), |||
+28823c30758
+< Q #15: (27:60:25.991776), |||
+---
+> Q #15: (27:60:25.992722), |||
+28833c30768
+< Q #15: (27:60:25.991776), |||
+---
+> Q #15: (27:60:25.992722), |||
+28841c30776
+< Q #15: (27:60:26.991776), |||
+---
+> Q #15: (27:60:26.992722), |||
+28851c30786
+< Q #15: (27:60:26.991776), |||
+---
+> Q #15: (27:60:26.992722), |||
+28859c30794
+< Q #15: (27:60:27.991776), |||
+---
+> Q #15: (27:60:27.992722), |||
+28865d30799
+< spawn_me (27): C18
+28870c30804
+< Q #15: (27:60:27.991776), |||
+---
+> Q #15: (27:60:27.992722), |||
+28878c30812
+< Q #15: (27:61:28.991776), |||
+---
+> Q #15: (27:61:28.992722), |||
+28888c30822
+< Q #15: (27:61:28.991776), |||
+---
+> Q #15: (27:61:28.992722), |||
+28896c30830
+< Q #15: (27:61:29.991776), |||
+---
+> Q #15: (27:61:29.992722), |||
+28906c30840
+< Q #15: (27:61:29.991776), |||
+---
+> Q #15: (27:61:29.992722), |||
+28914c30848
+< Q #15: (27:61:30.991776), |||
+---
+> Q #15: (27:61:30.992722), |||
+28924c30858
+< Q #15: (27:61:30.991776), |||
+---
+> Q #15: (27:61:30.992722), |||
+28932c30866
+< Q #15: (27:61:31.991776), |||
+---
+> Q #15: (27:61:31.992722), |||
+28942c30876
+< Q #15: (27:61:31.991776), |||
+---
+> Q #15: (27:61:31.992722), |||
+28950c30884
+< Q #15: (27:62:32.991760), |||
+---
+> Q #15: (27:62:32.992706), |||
+28960c30894
+< Q #15: (27:62:32.991760), |||
+---
+> Q #15: (27:62:32.992706), |||
+28968c30902
+< Q #15: (27:62:33.991760), |||
+---
+> Q #15: (27:62:33.992706), |||
+28978c30912
+< Q #15: (27:62:33.991760), |||
+---
+> Q #15: (27:62:33.992706), |||
+28986c30920
+< Q #15: (27:62:34.991760), |||
+---
+> Q #15: (27:62:34.992706), |||
+28996c30930
+< Q #15: (27:62:34.991760), |||
+---
+> Q #15: (27:62:34.992706), |||
+29004c30938
+< Q #15: (27:62:35.991760), |||
+---
+> Q #15: (27:62:35.992706), |||
+29013c30947
+< Q #15: (27:62:35.991760), |||
+---
+> Q #15: (27:62:35.992706), |||
+29021c30955
+< Q #15: (27:60:25.994507), |||
+---
+> Q #15: (27:60:25.995148), |||
+29031c30965
+< Q #15: (27:60:25.994507), |||
+---
+> Q #15: (27:60:25.995148), |||
+29039c30973
+< Q #15: (27:60:26.994507), |||
+---
+> Q #15: (27:60:26.995148), |||
+29049c30983
+< Q #15: (27:60:26.994507), |||
+---
+> Q #15: (27:60:26.995148), |||
+29057c30991
+< Q #15: (27:60:27.994507), |||
+---
+> Q #15: (27:60:27.995148), |||
+29067c31001
+< Q #15: (27:60:27.994507), |||
+---
+> Q #15: (27:60:27.995148), |||
+29075c31009
+< Q #15: (27:61:28.994507), |||
+---
+> Q #15: (27:61:28.995148), |||
+29080a31015
+> spawn_me (27): C18
+29085c31020
+< Q #15: (27:61:28.994507), |||
+---
+> Q #15: (27:61:28.995148), |||
+29093c31028
+< Q #15: (27:61:29.994507), |||
+---
+> Q #15: (27:61:29.995148), |||
+29103c31038
+< Q #15: (27:61:29.994507), |||
+---
+> Q #15: (27:61:29.995148), |||
+29111c31046
+< Q #15: (27:61:30.994507), |||
+---
+> Q #15: (27:61:30.995148), |||
+29121c31056
+< Q #15: (27:61:30.994507), |||
+---
+> Q #15: (27:61:30.995148), |||
+29129c31064
+< Q #15: (27:61:31.994507), |||
+---
+> Q #15: (27:61:31.995148), |||
+29139c31074
+< Q #15: (27:61:31.994507), |||
+---
+> Q #15: (27:61:31.995148), |||
+29147c31082
+< Q #15: (27:62:32.994507), |||
+---
+> Q #15: (27:62:32.995148), |||
+29157c31092
+< Q #15: (27:62:32.994507), |||
+---
+> Q #15: (27:62:32.995148), |||
+29165c31100
+< Q #15: (27:62:33.994507), |||
+---
+> Q #15: (27:62:33.995148), |||
+29175c31110
+< Q #15: (27:62:33.994507), |||
+---
+> Q #15: (27:62:33.995148), |||
+29183c31118
+< Q #15: (27:62:34.994507), |||
+---
+> Q #15: (27:62:34.995148), |||
+29189d31123
+< spawn_me (27): C19
+29194c31128
+< Q #15: (27:62:34.994507), |||
+---
+> Q #15: (27:62:34.995148), |||
+29202c31136
+< Q #15: (27:62:35.994507), |||
+---
+> Q #15: (27:62:35.995148), |||
+29211c31145
+< Q #15: (27:62:35.994507), |||
+---
+> Q #15: (27:62:35.995148), |||
+29219c31153
+< Q #15: (27:60:25.996338), |||
+---
+> Q #15: (27:60:25.996765), |||
+29229c31163
+< Q #15: (27:60:25.996338), |||
+---
+> Q #15: (27:60:25.996765), |||
+29237c31171
+< Q #15: (27:60:26.996338), |||
+---
+> Q #15: (27:60:26.996765), |||
+29247c31181
+< Q #15: (27:60:26.996338), |||
+---
+> Q #15: (27:60:26.996765), |||
+29255c31189
+< Q #15: (27:60:27.996338), |||
+---
+> Q #15: (27:60:27.996765), |||
+29265c31199
+< Q #15: (27:60:27.996338), |||
+---
+> Q #15: (27:60:27.996765), |||
+29273c31207
+< Q #15: (27:61:28.996338), |||
+---
+> Q #15: (27:61:28.996765), |||
+29283c31217
+< Q #15: (27:61:28.996338), |||
+---
+> Q #15: (27:61:28.996765), |||
+29291c31225
+< Q #15: (27:61:29.996338), |||
+---
+> Q #15: (27:61:29.996765), |||
+29301c31235
+< Q #15: (27:61:29.996338), |||
+---
+> Q #15: (27:61:29.996765), |||
+29309c31243
+< Q #15: (27:61:30.996338), |||
+---
+> Q #15: (27:61:30.996765), |||
+29319c31253
+< Q #15: (27:61:30.996338), |||
+---
+> Q #15: (27:61:30.996765), |||
+29327c31261
+< Q #15: (27:61:31.996338), |||
+---
+> Q #15: (27:61:31.996765), |||
+29337c31271
+< Q #15: (27:61:31.996338), |||
+---
+> Q #15: (27:61:31.996765), |||
+29345c31279
+< Q #15: (27:62:32.996338), |||
+---
+> Q #15: (27:62:32.996765), |||
+29355c31289
+< Q #15: (27:62:32.996338), |||
+---
+> Q #15: (27:62:32.996765), |||
+29363c31297
+< Q #15: (27:62:33.996338), |||
+---
+> Q #15: (27:62:33.996765), |||
+29373c31307
+< Q #15: (27:62:33.996338), |||
+---
+> Q #15: (27:62:33.996765), |||
+29381c31315
+< Q #15: (27:62:34.996338), |||
+---
+> Q #15: (27:62:34.996765), |||
+29391c31325
+< Q #15: (27:62:34.996338), |||
+---
+> Q #15: (27:62:34.996765), |||
+29399c31333
+< Q #15: (27:62:35.996338), |||
+---
+> Q #15: (27:62:35.996765), |||
+29408c31342
+< Q #15: (27:62:35.996338), |||
+---
+> Q #15: (27:62:35.996765), |||
+29416c31350
+< Q #15: (27:60:25.997559), |||
+---
+> Q #15: (27:60:25.997833), |||
+29426c31360
+< Q #15: (27:60:25.997559), |||
+---
+> Q #15: (27:60:25.997833), |||
+29434c31368
+< Q #15: (27:60:26.997559), |||
+---
+> Q #15: (27:60:26.997833), |||
+29444c31378
+< Q #15: (27:60:26.997559), |||
+---
+> Q #15: (27:60:26.997833), |||
+29452c31386
+< Q #15: (27:60:27.997559), |||
+---
+> Q #15: (27:60:27.997833), |||
+29457a31392
+> spawn_me (27): C19
+29462c31397
+< Q #15: (27:60:27.997559), |||
+---
+> Q #15: (27:60:27.997833), |||
+29470c31405
+< Q #15: (27:61:28.997559), |||
+---
+> Q #15: (27:61:28.997833), |||
+29480c31415
+< Q #15: (27:61:28.997559), |||
+---
+> Q #15: (27:61:28.997833), |||
+29488c31423
+< Q #15: (27:61:29.997559), |||
+---
+> Q #15: (27:61:29.997833), |||
+29498c31433
+< Q #15: (27:61:29.997559), |||
+---
+> Q #15: (27:61:29.997833), |||
+29506c31441
+< Q #15: (27:61:30.997559), |||
+---
+> Q #15: (27:61:30.997833), |||
+29516c31451
+< Q #15: (27:61:30.997559), |||
+---
+> Q #15: (27:61:30.997833), |||
+29524c31459
+< Q #15: (27:61:31.997559), |||
+---
+> Q #15: (27:61:31.997833), |||
+29534c31469
+< Q #15: (27:61:31.997559), |||
+---
+> Q #15: (27:61:31.997833), |||
+29542c31477
+< Q #15: (27:62:32.997559), |||
+---
+> Q #15: (27:62:32.997833), |||
+29548d31482
+< spawn_me (27): C20
+29553c31487
+< Q #15: (27:62:32.997559), |||
+---
+> Q #15: (27:62:32.997833), |||
+29561c31495
+< Q #15: (27:62:33.997559), |||
+---
+> Q #15: (27:62:33.997833), |||
+29571c31505
+< Q #15: (27:62:33.997559), |||
+---
+> Q #15: (27:62:33.997833), |||
+29579c31513
+< Q #15: (27:62:34.997559), |||
+---
+> Q #15: (27:62:34.997833), |||
+29589c31523
+< Q #15: (27:62:34.997559), |||
+---
+> Q #15: (27:62:34.997833), |||
+29597c31531
+< Q #15: (27:62:35.997559), |||
+---
+> Q #15: (27:62:35.997833), |||
+29606c31540
+< Q #15: (27:62:35.997559), |||
+---
+> Q #15: (27:62:35.997833), |||
+29614c31548
+< Q #15: (27:60:25.998367), |||
+---
+> Q #15: (27:60:25.998550), |||
+29624c31558
+< Q #15: (27:60:25.998367), |||
+---
+> Q #15: (27:60:25.998550), |||
+29632c31566
+< Q #15: (27:60:26.998367), |||
+---
+> Q #15: (27:60:26.998550), |||
+29642c31576
+< Q #15: (27:60:26.998367), |||
+---
+> Q #15: (27:60:26.998550), |||
+29650c31584
+< Q #15: (27:60:27.998367), |||
+---
+> Q #15: (27:60:27.998550), |||
+29660c31594
+< Q #15: (27:60:27.998367), |||
+---
+> Q #15: (27:60:27.998550), |||
+29668c31602
+< Q #15: (27:61:28.998367), |||
+---
+> Q #15: (27:61:28.998550), |||
+29678c31612
+< Q #15: (27:61:28.998367), |||
+---
+> Q #15: (27:61:28.998550), |||
+29686c31620
+< Q #15: (27:61:29.998367), |||
+---
+> Q #15: (27:61:29.998550), |||
+29696c31630
+< Q #15: (27:61:29.998367), |||
+---
+> Q #15: (27:61:29.998550), |||
+29704c31638
+< Q #15: (27:61:30.998367), |||
+---
+> Q #15: (27:61:30.998550), |||
+29714c31648
+< Q #15: (27:61:30.998367), |||
+---
+> Q #15: (27:61:30.998550), |||
+29722c31656
+< Q #15: (27:61:31.998367), |||
+---
+> Q #15: (27:61:31.998550), |||
+29732c31666
+< Q #15: (27:61:31.998367), |||
+---
+> Q #15: (27:61:31.998550), |||
+29740c31674
+< Q #15: (27:62:32.998352), |||
+---
+> Q #15: (27:62:32.998535), |||
+29750c31684
+< Q #15: (27:62:32.998352), |||
+---
+> Q #15: (27:62:32.998535), |||
+29758c31692
+< Q #15: (27:62:33.998352), |||
+---
+> Q #15: (27:62:33.998535), |||
+29768c31702
+< Q #15: (27:62:33.998352), |||
+---
+> Q #15: (27:62:33.998535), |||
+29776c31710
+< Q #15: (27:62:34.998352), |||
+---
+> Q #15: (27:62:34.998535), |||
+29786c31720
+< Q #15: (27:62:34.998352), |||
+---
+> Q #15: (27:62:34.998535), |||
+29794c31728
+< Q #15: (27:62:35.998352), |||
+---
+> Q #15: (27:62:35.998535), |||
+29803c31737
+< Q #15: (27:62:35.998352), |||
+---
+> Q #15: (27:62:35.998535), |||
+29811c31745
+< Q #15: (27:60:25.998917), |||
+---
+> Q #15: (27:60:25.999039), |||
+29821c31755
+< Q #15: (27:60:25.998917), |||
+---
+> Q #15: (27:60:25.999039), |||
+29829c31763
+< Q #15: (27:60:26.998917), |||
+---
+> Q #15: (27:60:26.999039), |||
+29834a31769
+> spawn_me (27): C20
+29839c31774
+< Q #15: (27:60:26.998917), |||
+---
+> Q #15: (27:60:26.999039), |||
+29847c31782
+< Q #15: (27:60:27.998917), |||
+---
+> Q #15: (27:60:27.999039), |||
+29857c31792
+< Q #15: (27:60:27.998917), |||
+---
+> Q #15: (27:60:27.999039), |||
+29865c31800
+< Q #15: (27:61:28.998917), |||
+---
+> Q #15: (27:61:28.999039), |||
+29875c31810
+< Q #15: (27:61:28.998917), |||
+---
+> Q #15: (27:61:28.999039), |||
+29883c31818
+< Q #15: (27:61:29.998917), |||
+---
+> Q #15: (27:61:29.999039), |||
+29889d31823
+< spawn_me (27): C21
+29894c31828
+< Q #15: (27:61:29.998917), |||
+---
+> Q #15: (27:61:29.999039), |||
+29902c31836
+< Q #15: (27:61:30.998917), |||
+---
+> Q #15: (27:61:30.999039), |||
+29912c31846
+< Q #15: (27:61:30.998917), |||
+---
+> Q #15: (27:61:30.999039), |||
+29920c31854
+< Q #15: (27:61:31.998917), |||
+---
+> Q #15: (27:61:31.999039), |||
+29930c31864
+< Q #15: (27:61:31.998917), |||
+---
+> Q #15: (27:61:31.999039), |||
+29938c31872
+< Q #15: (27:62:32.998901), |||
+---
+> Q #15: (27:62:32.999023), |||
+29948c31882
+< Q #15: (27:62:32.998901), |||
+---
+> Q #15: (27:62:32.999023), |||
+29956c31890
+< Q #15: (27:62:33.998901), |||
+---
+> Q #15: (27:62:33.999023), |||
+29966c31900
+< Q #15: (27:62:33.998901), |||
+---
+> Q #15: (27:62:33.999023), |||
+29974c31908
+< Q #15: (27:62:34.998901), |||
+---
+> Q #15: (27:62:34.999023), |||
+29984c31918
+< Q #15: (27:62:34.998901), |||
+---
+> Q #15: (27:62:34.999023), |||
+29992c31926
+< Q #15: (27:62:35.998901), |||
+---
+> Q #15: (27:62:35.999023), |||
+30001c31935
+< Q #15: (27:62:35.998901), |||
+---
+> Q #15: (27:62:35.999023), |||
+30009c31943
+< Q #15: (27:60:25.999268), |||
+---
+> Q #15: (27:60:25.999359), |||
+30019c31953
+< Q #15: (27:60:25.999268), |||
+---
+> Q #15: (27:60:25.999359), |||
+30027c31961
+< Q #15: (27:60:26.999268), |||
+---
+> Q #15: (27:60:26.999359), |||
+30037c31971
+< Q #15: (27:60:26.999268), |||
+---
+> Q #15: (27:60:26.999359), |||
+30045c31979
+< Q #15: (27:60:27.999268), |||
+---
+> Q #15: (27:60:27.999359), |||
+30055c31989
+< Q #15: (27:60:27.999268), |||
+---
+> Q #15: (27:60:27.999359), |||
+30063c31997
+< Q #15: (27:61:28.999268), |||
+---
+> Q #15: (27:61:28.999359), |||
+30073c32007
+< Q #15: (27:61:28.999268), |||
+---
+> Q #15: (27:61:28.999359), |||
+30081c32015
+< Q #15: (27:61:29.999268), |||
+---
+> Q #15: (27:61:29.999359), |||
+30091c32025
+< Q #15: (27:61:29.999268), |||
+---
+> Q #15: (27:61:29.999359), |||
+30099c32033
+< Q #15: (27:61:30.999268), |||
+---
+> Q #15: (27:61:30.999359), |||
+30109c32043
+< Q #15: (27:61:30.999268), |||
+---
+> Q #15: (27:61:30.999359), |||
+30117c32051
+< Q #15: (27:61:31.999268), |||
+---
+> Q #15: (27:61:31.999359), |||
+30127c32061
+< Q #15: (27:61:31.999268), |||
+---
+> Q #15: (27:61:31.999359), |||
+30135c32069
+< Q #15: (27:62:32.999268), |||
+---
+> Q #15: (27:62:32.999359), |||
+30145c32079
+< Q #15: (27:62:32.999268), |||
+---
+> Q #15: (27:62:32.999359), |||
+30153c32087
+< Q #15: (27:62:33.999268), |||
+---
+> Q #15: (27:62:33.999359), |||
+30163c32097
+< Q #15: (27:62:33.999268), |||
+---
+> Q #15: (27:62:33.999359), |||
+30171c32105
+< Q #15: (27:62:34.999268), |||
+---
+> Q #15: (27:62:34.999359), |||
+30176a32111
+> spawn_me (27): C21
+30181c32116
+< Q #15: (27:62:34.999268), |||
+---
+> Q #15: (27:62:34.999359), |||
+30189c32124
+< Q #15: (27:62:35.999268), |||
+---
+> Q #15: (27:62:35.999359), |||
+30198c32133
+< Q #15: (27:62:35.999268), |||
+---
+> Q #15: (27:62:35.999359), |||
+30206c32141
+< Q #15: (27:60:25.999512), |||
+---
+> Q #15: (27:60:25.999573), |||
+30216c32151
+< Q #15: (27:60:25.999512), |||
+---
+> Q #15: (27:60:25.999573), |||
+30224c32159
+< Q #15: (27:60:26.999512), |||
+---
+> Q #15: (27:60:26.999573), |||
+30230d32164
+< spawn_me (27): C22
+30235c32169
+< Q #15: (27:60:26.999512), |||
+---
+> Q #15: (27:60:26.999573), |||
+30243c32177
+< Q #15: (27:60:27.999512), |||
+---
+> Q #15: (27:60:27.999573), |||
+30253c32187
+< Q #15: (27:60:27.999512), |||
+---
+> Q #15: (27:60:27.999573), |||
+30261c32195
+< Q #15: (27:61:28.999512), |||
+---
+> Q #15: (27:61:28.999573), |||
+30271c32205
+< Q #15: (27:61:28.999512), |||
+---
+> Q #15: (27:61:28.999573), |||
+30279c32213
+< Q #15: (27:61:29.999512), |||
+---
+> Q #15: (27:61:29.999573), |||
+30289c32223
+< Q #15: (27:61:29.999512), |||
+---
+> Q #15: (27:61:29.999573), |||
+30297c32231
+< Q #15: (27:61:30.999512), |||
+---
+> Q #15: (27:61:30.999573), |||
+30307c32241
+< Q #15: (27:61:30.999512), |||
+---
+> Q #15: (27:61:30.999573), |||
+30315c32249
+< Q #15: (27:61:31.999512), |||
+---
+> Q #15: (27:61:31.999573), |||
+30325c32259
+< Q #15: (27:61:31.999512), |||
+---
+> Q #15: (27:61:31.999573), |||
+30333c32267
+< Q #15: (27:62:32.999512), |||
+---
+> Q #15: (27:62:32.999573), |||
+30343c32277
+< Q #15: (27:62:32.999512), |||
+---
+> Q #15: (27:62:32.999573), |||
+30351c32285
+< Q #15: (27:62:33.999512), |||
+---
+> Q #15: (27:62:33.999573), |||
+30361c32295
+< Q #15: (27:62:33.999512), |||
+---
+> Q #15: (27:62:33.999573), |||
+30369c32303
+< Q #15: (27:62:34.999512), |||
+---
+> Q #15: (27:62:34.999573), |||
+30379c32313
+< Q #15: (27:62:34.999512), |||
+---
+> Q #15: (27:62:34.999573), |||
+30387c32321
+< Q #15: (27:62:35.999512), |||
+---
+> Q #15: (27:62:35.999573), |||
+30396c32330
+< Q #15: (27:62:35.999512), |||
+---
+> Q #15: (27:62:35.999573), |||
+30404c32338
+< Q #15: (27:60:25.999664), |||
+---
+> Q #15: (27:60:25.999710), |||
+30414c32348
+< Q #15: (27:60:25.999664), |||
+---
+> Q #15: (27:60:25.999710), |||
+30422c32356
+< Q #15: (27:60:26.999664), |||
+---
+> Q #15: (27:60:26.999710), |||
+30432c32366
+< Q #15: (27:60:26.999664), |||
+---
+> Q #15: (27:60:26.999710), |||
+30440c32374
+< Q #15: (27:60:27.999664), |||
+---
+> Q #15: (27:60:27.999710), |||
+30450c32384
+< Q #15: (27:60:27.999664), |||
+---
+> Q #15: (27:60:27.999710), |||
+30458c32392
+< Q #15: (27:61:28.999664), |||
+---
+> Q #15: (27:61:28.999710), |||
+30468c32402
+< Q #15: (27:61:28.999664), |||
+---
+> Q #15: (27:61:28.999710), |||
+30476c32410
+< Q #15: (27:61:29.999664), |||
+---
+> Q #15: (27:61:29.999710), |||
+30486c32420
+< Q #15: (27:61:29.999664), |||
+---
+> Q #15: (27:61:29.999710), |||
+30494c32428
+< Q #15: (27:61:30.999664), |||
+---
+> Q #15: (27:61:30.999710), |||
+30504c32438
+< Q #15: (27:61:30.999664), |||
+---
+> Q #15: (27:61:30.999710), |||
+30512c32446
+< Q #15: (27:61:31.999664), |||
+---
+> Q #15: (27:61:31.999710), |||
+30522c32456
+< Q #15: (27:61:31.999664), |||
+---
+> Q #15: (27:61:31.999710), |||
+30530c32464
+< Q #15: (27:62:32.999664), |||
+---
+> Q #15: (27:62:32.999695), |||
+30540c32474
+< Q #15: (27:62:32.999664), |||
+---
+> Q #15: (27:62:32.999695), |||
+30548c32482
+< Q #15: (27:62:33.999664), |||
+---
+> Q #15: (27:62:33.999695), |||
+30554c32488
+< spawn_me (27): C23
+---
+> spawn_me (27): C22
+30559c32493
+< Q #15: (27:62:33.999664), |||
+---
+> Q #15: (27:62:33.999695), |||
+30567c32501
+< Q #15: (27:62:34.999664), |||
+---
+> Q #15: (27:62:34.999695), |||
+30577c32511
+< Q #15: (27:62:34.999664), |||
+---
+> Q #15: (27:62:34.999695), |||
+30585c32519
+< Q #15: (27:62:35.999664), |||
+---
+> Q #15: (27:62:35.999695), |||
+30594c32528
+< Q #15: (27:62:35.999664), |||
+---
+> Q #15: (27:62:35.999695), |||
+30602c32536
+< Q #15: (27:60:25.999771), |||
+---
+> Q #15: (27:60:25.999802), |||
+30612c32546
+< Q #15: (27:60:25.999771), |||
+---
+> Q #15: (27:60:25.999802), |||
+30620c32554
+< Q #15: (27:60:26.999771), |||
+---
+> Q #15: (27:60:26.999802), |||
+30630c32564
+< Q #15: (27:60:26.999771), |||
+---
+> Q #15: (27:60:26.999802), |||
+30638c32572
+< Q #15: (27:60:27.999771), |||
+---
+> Q #15: (27:60:27.999802), |||
+30648c32582
+< Q #15: (27:60:27.999771), |||
+---
+> Q #15: (27:60:27.999802), |||
+30656c32590
+< Q #15: (27:61:28.999771), |||
+---
+> Q #15: (27:61:28.999802), |||
+30666c32600
+< Q #15: (27:61:28.999771), |||
+---
+> Q #15: (27:61:28.999802), |||
+30674c32608
+< Q #15: (27:61:29.999771), |||
+---
+> Q #15: (27:61:29.999802), |||
+30684c32618
+< Q #15: (27:61:29.999771), |||
+---
+> Q #15: (27:61:29.999802), |||
+30692c32626
+< Q #15: (27:61:30.999771), |||
+---
+> Q #15: (27:61:30.999802), |||
+30702c32636
+< Q #15: (27:61:30.999771), |||
+---
+> Q #15: (27:61:30.999802), |||
+30710c32644
+< Q #15: (27:61:31.999771), |||
+---
+> Q #15: (27:61:31.999802), |||
+30720c32654
+< Q #15: (27:61:31.999771), |||
+---
+> Q #15: (27:61:31.999802), |||
+30728c32662
+< Q #15: (27:62:32.999756), |||
+---
+> Q #15: (27:62:32.999786), |||
+30738c32672
+< Q #15: (27:62:32.999756), |||
+---
+> Q #15: (27:62:32.999786), |||
+30746c32680
+< Q #15: (27:62:33.999756), |||
+---
+> Q #15: (27:62:33.999786), |||
+30756c32690
+< Q #15: (27:62:33.999756), |||
+---
+> Q #15: (27:62:33.999786), |||
+30764c32698
+< Q #15: (27:62:34.999756), |||
+---
+> Q #15: (27:62:34.999786), |||
+30774c32708
+< Q #15: (27:62:34.999756), |||
+---
+> Q #15: (27:62:34.999786), |||
+30782c32716
+< Q #15: (27:62:35.999756), |||
+---
+> Q #15: (27:62:35.999786), |||
+30791c32725
+< Q #15: (27:62:35.999756), |||
+---
+> Q #15: (27:62:35.999786), |||
+30799c32733
+< Q #15: (27:60:25.999847), |||
+---
+> Q #15: (27:60:25.999863), |||
+30809c32743
+< Q #15: (27:60:25.999847), |||
+---
+> Q #15: (27:60:25.999863), |||
+30817c32751
+< Q #15: (27:60:26.999847), |||
+---
+> Q #15: (27:60:26.999863), |||
+30827c32761
+< Q #15: (27:60:26.999847), |||
+---
+> Q #15: (27:60:26.999863), |||
+30835c32769
+< Q #15: (27:60:27.999847), |||
+---
+> Q #15: (27:60:27.999863), |||
+30845c32779
+< Q #15: (27:60:27.999847), |||
+---
+> Q #15: (27:60:27.999863), |||
+30853c32787
+< Q #15: (27:61:28.999847), |||
+---
+> Q #15: (27:61:28.999863), |||
+30863c32797
+< Q #15: (27:61:28.999847), |||
+---
+> Q #15: (27:61:28.999863), |||
+30871c32805
+< Q #15: (27:61:29.999847), |||
+---
+> Q #15: (27:61:29.999863), |||
+30881c32815
+< Q #15: (27:61:29.999847), |||
+---
+> Q #15: (27:61:29.999863), |||
+30889c32823
+< Q #15: (27:61:30.999847), |||
+---
+> Q #15: (27:61:30.999863), |||
+30899c32833
+< Q #15: (27:61:30.999847), |||
+---
+> Q #15: (27:61:30.999863), |||
+30907c32841
+< Q #15: (27:61:31.999847), |||
+---
+> Q #15: (27:61:31.999863), |||
+30913c32847
+< spawn_me (27): C24
+---
+> spawn_me (27): C23
+30918c32852
+< Q #15: (27:61:31.999847), |||
+---
+> Q #15: (27:61:31.999863), |||
+30997c32931
+< Q #15: (27:60:25.999893), |||
+---
+> Q #15: (27:60:25.999908), |||
+31007c32941
+< Q #15: (27:60:25.999893), |||
+---
+> Q #15: (27:60:25.999908), |||
+31015c32949
+< Q #15: (27:60:26.999893), |||
+---
+> Q #15: (27:60:26.999908), |||
+31025c32959
+< Q #15: (27:60:26.999893), |||
+---
+> Q #15: (27:60:26.999908), |||
+31033c32967
+< Q #15: (27:60:27.999893), |||
+---
+> Q #15: (27:60:27.999908), |||
+31043c32977
+< Q #15: (27:60:27.999893), |||
+---
+> Q #15: (27:60:27.999908), |||
+31051c32985
+< Q #15: (27:61:28.999893), |||
+---
+> Q #15: (27:61:28.999908), |||
+31061c32995
+< Q #15: (27:61:28.999893), |||
+---
+> Q #15: (27:61:28.999908), |||
+31069c33003
+< Q #15: (27:61:29.999893), |||
+---
+> Q #15: (27:61:29.999908), |||
+31079c33013
+< Q #15: (27:61:29.999893), |||
+---
+> Q #15: (27:61:29.999908), |||
+31087c33021
+< Q #15: (27:61:30.999893), |||
+---
+> Q #15: (27:61:30.999908), |||
+31097c33031
+< Q #15: (27:61:30.999893), |||
+---
+> Q #15: (27:61:30.999908), |||
+31105c33039
+< Q #15: (27:61:31.999893), |||
+---
+> Q #15: (27:61:31.999908), |||
+31115c33049
+< Q #15: (27:61:31.999893), |||
+---
+> Q #15: (27:61:31.999908), |||
+31123c33057
+< Q #15: (27:62:32.999878), |||
+---
+> Q #15: (27:62:32.999908), |||
+31133c33067
+< Q #15: (27:62:32.999878), |||
+---
+> Q #15: (27:62:32.999908), |||
+31141c33075
+< Q #15: (27:62:33.999878), |||
+---
+> Q #15: (27:62:33.999908), |||
+31151c33085
+< Q #15: (27:62:33.999878), |||
+---
+> Q #15: (27:62:33.999908), |||
+31159c33093
+< Q #15: (27:62:34.999878), |||
+---
+> Q #15: (27:62:34.999908), |||
+31169c33103
+< Q #15: (27:62:34.999878), |||
+---
+> Q #15: (27:62:34.999908), |||
+31177c33111
+< Q #15: (27:62:35.999878), |||
+---
+> Q #15: (27:62:35.999908), |||
+31186c33120
+< Q #15: (27:62:35.999878), |||
+---
+> Q #15: (27:62:35.999908), |||
+31194c33128
+< Q #15: (27:60:25.999924), |||
+---
+> Q #15: (27:60:25.999939), |||
+31204c33138
+< Q #15: (27:60:25.999924), |||
+---
+> Q #15: (27:60:25.999939), |||
+31212c33146
+< Q #15: (27:60:26.999924), |||
+---
+> Q #15: (27:60:26.999939), |||
+31222c33156
+< Q #15: (27:60:26.999924), |||
+---
+> Q #15: (27:60:26.999939), |||
+31230c33164
+< Q #15: (27:60:27.999924), |||
+---
+> Q #15: (27:60:27.999939), |||
+31240c33174
+< Q #15: (27:60:27.999924), |||
+---
+> Q #15: (27:60:27.999939), |||
+31248c33182
+< Q #15: (27:61:28.999924), |||
+---
+> Q #15: (27:61:28.999939), |||
+31254d33187
+< spawn_me (27): C25
+31259c33192
+< Q #15: (27:61:28.999924), |||
+---
+> Q #15: (27:61:28.999939), |||
+31267c33200
+< Q #15: (27:61:29.999924), |||
+---
+> Q #15: (27:61:29.999939), |||
+31277c33210
+< Q #15: (27:61:29.999924), |||
+---
+> Q #15: (27:61:29.999939), |||
+31285c33218
+< Q #15: (27:61:30.999924), |||
+---
+> Q #15: (27:61:30.999939), |||
+31290a33224
+> spawn_me (27): C24
+31295c33229
+< Q #15: (27:61:30.999924), |||
+---
+> Q #15: (27:61:30.999939), |||
+31303c33237
+< Q #15: (27:61:31.999924), |||
+---
+> Q #15: (27:61:31.999939), |||
+31313c33247
+< Q #15: (27:61:31.999924), |||
+---
+> Q #15: (27:61:31.999939), |||
+31321c33255
+< Q #15: (27:62:32.999908), |||
+---
+> Q #15: (27:62:32.999939), |||
+31331c33265
+< Q #15: (27:62:32.999908), |||
+---
+> Q #15: (27:62:32.999939), |||
+31339c33273
+< Q #15: (27:62:33.999908), |||
+---
+> Q #15: (27:62:33.999939), |||
+31349c33283
+< Q #15: (27:62:33.999908), |||
+---
+> Q #15: (27:62:33.999939), |||
+31357c33291
+< Q #15: (27:62:34.999908), |||
+---
+> Q #15: (27:62:34.999939), |||
+31367c33301
+< Q #15: (27:62:34.999908), |||
+---
+> Q #15: (27:62:34.999939), |||
+31375c33309
+< Q #15: (27:62:35.999908), |||
+---
+> Q #15: (27:62:35.999939), |||
+31384c33318
+< Q #15: (27:62:35.999908), |||
+---
+> Q #15: (27:62:35.999939), |||
+31595d33528
+< spawn_me (27): C26
+31667a33601
+> spawn_me (27): C25
+31937d33870
+< spawn_me (27): C27
+32026a33960
+> spawn_me (27): C26
+32278d34211
+< spawn_me (27): C28
+32403a34337
+> spawn_me (27): C27
+32619d34552
+< spawn_me (27): C29
+32745a34679
+> spawn_me (27): C28
+32978d34911
+< spawn_me (27): Done!
+32983c34916
+< Q #12: (31:50:0.000000), |||
+---
+> Q #15: (27:60:25.999985), |||
+32991c34924
+< Q #12: (31:50:0.000000), |||
+---
+> Q #15: (27:60:26.999985), |||
+32996,32997c34929,35056
+< Switching to 31
+< makeprocs (31): All other processes completed, exiting main process.
+---
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:26.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:27.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:27.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:28.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:28.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:29.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:29.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:30.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:30.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:31.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:31.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:32.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:32.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:33.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> spawn_me (27): C29
+33001a35061
+> Q #15: (27:62:33.999969), |||
+33006c35066,35453
+< ProcessSchedule: No runnable processes - exiting!
+---
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:34.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:34.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:35.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:35.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:25.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:25.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:26.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:26.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:27.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:27.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:28.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:28.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:29.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:29.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:30.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:30.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:31.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:31.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:32.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:32.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:33.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:33.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:34.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:34.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:35.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Decaying
+> Before Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:35.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Decaying
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:25.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:25.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:26.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:26.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:27.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:60:27.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:28.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:28.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:29.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:29.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:30.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:30.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:31.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:61:31.999985), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #15: (27:62:32.999969), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 27
+> spawn_me (27): Done!
+> Entering ProcessSchedule
+> Current Queue State:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #12: (31:50:0.000000), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> After Recalculating Priority:
+> 
+> ------PRINTING PROCESS PRINT QUEUES------
+> Q #12: (31:50:0.000000), |||
+> Q #31: (30:127:0.000000), |||
+> 
+> ------FINISHED PROCESS PRINT QUEUES------
+> 
+> Switching to 31
+> makeprocs (31): All other processes completed, exiting main process.
+> Entering ProcessSchedule
+33008,33012c35455,35458
+< Instructions executed: 47003775
+< Time simulated: 47.004 secs
+< Real time elapsed: 2.613 secs
+< Execution rate: 17.99M simulated instructions per real second.
+< make: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test'
+---
+> Instructions executed: 49833829
+> Time simulated: 49.834 secs
+> Real time elapsed: 2.870 secs
+> Execution rate: 17.36M simulated instructions per real second.

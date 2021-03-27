@@ -56,10 +56,12 @@ typedef struct PCB {
 
   int start_jiffie; //
   int cumul_jiffie; //
+  int sleep_jiffie;
   int priority;
   double estcpu;
   int window_jiffies;
   int pid;
+  int idle_proc;
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
