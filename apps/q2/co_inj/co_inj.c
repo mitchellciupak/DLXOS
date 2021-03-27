@@ -11,10 +11,10 @@ void main (int argc, char *argv[]) {
   int mol = 0;
 
   // Argument Check
-  if (argc != 3) { 
-    Printf("Usage: %s <handle_to_mailbox> <handle_to_page_mapped_semaphore>\n"); 
+  if (argc != 3) {
+    Printf("Usage: %s <handle_to_mailbox> <handle_to_page_mapped_semaphore>\n");
     Exit();
-  } 
+  }
 
   // Argument Handleing
   h_mbox = dstrtol(argv[1], NULL, 10); // The "10" means base 10
@@ -29,8 +29,9 @@ void main (int argc, char *argv[]) {
     Printf("Could not send message to mailbox %d in %s (%d)\n", h_mbox, argv[0], getpid());
     Exit();
   }
-  Printf("CO Injected into Radeon atmosphere, PID: %d\n", getpid());
-  
+
+  Printf("PID: %d, CO Injected into Radeon atmosphere.\n", getpid());
+
   if (mbox_close(h_mbox) == MBOX_FAIL) {
     Printf("makeprocs (%d): Could not close mailbox %d!\n", getpid(), h_mbox);
     Exit();

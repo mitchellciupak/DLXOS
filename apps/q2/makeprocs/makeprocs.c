@@ -39,14 +39,14 @@ void main (int argc, char *argv[])
 
   // Usage Checking
   if (argc != 3) {
-    Printf("Usage: "); 
+    Printf("Usage: ");
     Printf(argv[0]);
     Printf(" <number of h2o injections> <number of so4 injections>\n");
     Exit();
   }
 
   // Argument Handling
-  s2.ct = dstrtol(argv[1], NULL, 10); // Convert string from ascii command line argument to integer number base 10 
+  s2.ct = dstrtol(argv[1], NULL, 10); // Convert string from ascii command line argument to integer number base 10
   co.ct = dstrtol(argv[2], NULL, 10);
 
   // Initialize counts
@@ -59,6 +59,7 @@ void main (int argc, char *argv[])
   else{
     so4.ct = s.ct;
   }
+
   // Convert string from ascii command line argument to integer number
   numprocs = s2.ct + co.ct + s2.ct + (int)(co.ct / 4) + so4.ct;
 
@@ -75,13 +76,13 @@ void main (int argc, char *argv[])
       Exit();
     }
     MoleList[i]->box = h_mbox;
-    
+
   }
 
-  // Create semaphore to not exit this process until all other processes 
+  // Create semaphore to not exit this process until all other processes
   // have signalled that they are complete.  To do this, we will initialize
   // the semaphore to (-1) * (number of signals), where "number of signals"
-  // should be equal to the number of processes we're spawning - 1.  Once 
+  // should be equal to the number of processes we're spawning - 1.  Once
   // each of the processes has signaled, the semaphore should be back to
   // zero and the final sem_wait below will return.
   if ((s_procs_completed = sem_create(-(numprocs-1))) == SYNC_FAIL) {
@@ -126,7 +127,7 @@ void main (int argc, char *argv[])
     if (mbox_close(MoleList[i]->box) == MBOX_FAIL) {
       Printf("makeprocs (%d) molecule (%d): Could not open mailbox %d!\n", getpid(), i, h_mbox);
       Exit();
-    }    
+    }
   }
   Printf("makeprocs (%d): All other processes completed, exiting main process.\n", getpid());
 }
