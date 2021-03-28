@@ -18,7 +18,7 @@ clean:
 
 
 run:
-	cd ../../bin; dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 1 4; ee469_fixterminal
+	cd ../../bin; dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 3 12; ee469_fixterminal
 
 all:
 	make clean
