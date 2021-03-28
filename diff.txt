@@ -1,11 +1,11 @@
 1,2c1,2
 < cd ../../bin; dlxsim -x os.dlx.obj -a  -u makeprocs.dlx.obj 3; ee469_fixterminal
-< Stack=0x1fffc8, pc starting at 0x12480
+< Stack=0x1fffc8, pc starting at 0x128cc
 ---
 > cd ../../bin; dlxsim -x os.dlx.obj -a -u makeprocs.dlx.obj 3; ee469_fixterminal
 > Stack=0x1fffc8, pc starting at 0x12858
 4c4
-< Available memory: 0x22120 -> 0x200000.
+< Available memory: 0x231e8 -> 0x200000.
 ---
 > Available memory: 0x227b8 -> 0x200000.
 638d637
@@ -5850,10 +5850,10 @@
 > makeprocs (31): All other processes completed, exiting main process.
 > Entering ProcessSchedule
 33008,33012c35455,35458
-< Instructions executed: 47003775
-< Time simulated: 47.004 secs
-< Real time elapsed: 2.613 secs
-< Execution rate: 17.99M simulated instructions per real second.
+< Instructions executed: 53393712
+< Time simulated: 53.394 secs
+< Real time elapsed: 3.146 secs
+< Execution rate: 16.97M simulated instructions per real second.
 < make: Leaving directory `/tmp/ckemmet/DLXOS/apps/prio_test'
 ---
 > Instructions executed: 49833829

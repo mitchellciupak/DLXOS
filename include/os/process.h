@@ -50,18 +50,23 @@ typedef struct PCB {
   uint32	pagetable[16];	// Statically allocated page table
   int		npages;		// Number of pages allocated to this process
   Link		*l;		// Used for keeping PCB in queues
+  int pid;
 
   int           pinfo;          // Turns on printing of runtime stats
-  int           pnice;          // Used in priority calculation
+  int           pnice;          // Used in priority calculations
+
+  int priority;
+  double estcpu;
 
   int start_jiffie; //
   int cumul_jiffie; //
   int sleep_jiffie;
-  int priority;
-  double estcpu;
   int window_jiffies;
-  int pid;
+
   int idle_proc;
+  char yield;
+  int sleep_s;
+
 } PCB;
 
 // Offsets of various registers from the stack pointer in the register
