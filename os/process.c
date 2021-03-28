@@ -58,7 +58,6 @@ int ProcessGetCodeInfo(const char *file, uint32 *startAddr, uint32 *codeStart, u
 int ProcessGetFromFile(int fd, unsigned char *buf, uint32 *addr, int max);
 uint32 get_argument(char *string);
 
-
 
 //----------------------------------------------------------------------
 //
@@ -286,11 +285,22 @@ void ProcessSchedule () {
   if (currentPCB->flags & PROCESS_STATUS_RUNNABLE){
     queue_number = WhichQueue(currentPCB);
     AQueueMoveAfter(&(runQueues[queue_number]), AQueueLast(&(runQueues[queue_number])), AQueueFirst(&(runQueues[queue_number])));
-  }
 
-  // Recalculate process priority
-  ProcessRecalcPriority(currentPCB);
-  ProcessFixRunQueues();
+    if(currentPCB->yield){
+      currentPCB->yield = 0;
+    }
+    else{
+      if(currentPCB->window_jiffies > CLOCK_PROCESS_JIFFIES) currentPCB->estcpu++;
+      ProcessRecalcPriority(currentPCB);
+      // Take it out of its old queue
+      if (AQueueRemove(&(currentPCB->l)) != QUEUE_SUCCESS) {
+        printf("FATAL ERROR: could not remove wakeup PCB from old runQueue in ProcessSchedule!\n");
+        exitsim();
+      }
+      ProcessInsertRunning(currentPCB);
+    }
+    
+  }
 
   if (print) printf("After Recalculating Priority:\n\n");
   if (print) ProcessPrintRunQueues();
@@ -312,7 +322,7 @@ void ProcessSchedule () {
     AQueueMoveAfter(&(runQueues[31]), AQueueLast(&(runQueues[queue_number])), AQueueFirst(&(runQueues[queue_number])));
     currentPCB = ProcessFindHighestPriorityPCB();
   }
-
+  // See if pcb has just ran. If so, check for other processes in the same queue.
   if(pcb == currentPCB){
     queue_number = WhichQueue(currentPCB);
     AQueueMoveAfter(&(runQueues[queue_number]), AQueueLast(&(runQueues[queue_number])), AQueueFirst(&(runQueues[queue_number])));
@@ -443,7 +453,7 @@ void ProcessDestroy (PCB *pcb) {
 //
 //	This routine is called to exit from a system process.  It simply
 //	calls an exit trap, which will be caught to exit the process.
-//  *** Jiffie
+//
 //----------------------------------------------------------------------
 static void ProcessExit () {
   exit ();
@@ -1129,11 +1139,11 @@ void ProcessRecalcPriority(PCB *pcb){
   if(pcb->yield){
     pcb->yield = 0;
   }
-  else if (pcb->window_jiffies > CLOCK_PROCESS_JIFFIES){
-    pcb->estcpu += (double)1;
+  ///else if (pcb->window_jiffies > CLOCK_PROCESS_JIFFIES){
+    //pcb->estcpu += (double)1;
     pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
     if(pcb->priority > 127) pcb->priority = 127;
-  }
+  //}
 }
 
 // Figure out which queue a given pcb is in
@@ -1187,7 +1197,6 @@ void ProcessDecayEstcpuSleep(PCB *pcb, int time_asleep_jiffies){
 
 // To decide which process to run, you start at the lowest-numbered (highest-priority) queue (queue 0), and look for any processes in there. If you don't find any, move up one queue. Continue this until you find the queue with the highest priority that contains processes.
 // Once you find the PCB at the highest priority queue with processess, you can start it
-// DONE
 PCB *ProcessFindHighestPriorityPCB(){
   int i;
   Link *l;
@@ -1207,13 +1216,14 @@ void ProcessDecayAllEstcpus(){
   int i;
   Link *l;
   PCB* pcb;
-  for(i=0;i<NUM_RUN_QUEUES;i++){ // TODO (should run last)
+  for(i=0;i<NUM_RUN_QUEUES;i++){
     l = AQueueFirst(&runQueues[i]);
     while (l != NULL) {
       pcb = AQueueObject(l);
       if(pcb->pid != IdleProcess){
         pcb->estcpu = ((double)(pcb->estcpu * ((2 * load)/(2*load + 1))) + pcb->pnice);
         pcb->priority = BASE_PRIORITY + pcb->estcpu/4 + 2*pcb->pnice;
+        if(pcb->priority > 127) pcb->priority = 127;
       }
       l = AQueueNext(l);
     }
@@ -1223,7 +1233,6 @@ void ProcessDecayAllEstcpus(){
 
 // Looks through all of the queues and moves any process whose priority indicates
 // that it is in the wrong queue
-// DONE
 void ProcessFixRunQueues(){
   int i;
   Link *l;
