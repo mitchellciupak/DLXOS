@@ -57,8 +57,6 @@ Explain how to run the automated tests for this system.
 ```
 chmod u+x
 make.sh -R q2
-make.sh -R q4
-make.sh -R q5
 ```
 Run each process (q2, q3, and q5) with the commands above from the DLXOS folder. Alternatively, you could cd into the project's respective directory under the DLXOS/apps folder and run
 
