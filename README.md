@@ -14,7 +14,7 @@
 
 ---
 
-<p align="center"> Lab 2 - Process Synchronization by Kempak Kernels (Team No. 24)
+<p align="center"> Lab 3 by Kempak Kernels (Team No. 24)
     <br>
 </p>
 
@@ -46,7 +46,7 @@ These instructions will get you a copy of the project up and running on your loc
 Simply, unzip and run given you have the required programs
 
 ```
-unzip ee469lab2_g24.tar.gz
+unzip ee469lab3_g24.tar.gz
 gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c #TODO-is this correct Compiling Step
 #TODO-is this correct run (dlxsim) Step
 ```
@@ -60,7 +60,7 @@ make.sh -R q2
 make.sh -R q4
 make.sh -R q5
 ```
-Run each process (q2, q3, and q5) with the commands above from the DLXOS folder. Alternatively, you could cd into the project's respective directory under the DLXOS/apps folder and run 
+Run each process (q2, q3, and q5) with the commands above from the DLXOS folder. Alternatively, you could cd into the project's respective directory under the DLXOS/apps folder and run
 
 ```
 make
