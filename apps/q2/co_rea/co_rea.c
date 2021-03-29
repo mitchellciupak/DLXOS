@@ -61,7 +61,7 @@ void main (int argc, char *argv[]) {
       Exit();
      }
   }
-  Printf("PID: %d,4CO -> 2C2 + 2O2 reacted.\n", getpid());
+  Printf("4CO -> 2C2 + 2O2 reacted, PID: %d\n", getpid());
 
   if (mbox_close(h_mbox_co) == MBOX_FAIL) {
     Printf("co_rea (%d): Could not close mailbox %d!\n", getpid(), h_mbox_co);

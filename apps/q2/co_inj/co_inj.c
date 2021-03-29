@@ -30,7 +30,7 @@ void main (int argc, char *argv[]) {
     Exit();
   }
 
-  Printf("PID: %d, CO Injected into Radeon atmosphere.\n", getpid());
+  Printf("CO Injected into Radeon atmosphere, PID: %d\n", getpid());
 
   if (mbox_close(h_mbox) == MBOX_FAIL) {
     Printf("makeprocs (%d): Could not close mailbox %d!\n", getpid(), h_mbox);
