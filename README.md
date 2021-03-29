@@ -29,10 +29,6 @@
 
 ## 🧐 About <a name = "about"></a>
 
-For answers to the questions listed in the assignment description please visit the [Assignement](./ASSIGNMENT.md) file.
-
-Information about how are code works goes here
-
 ## 🏁 Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
@@ -46,7 +42,7 @@ These instructions will get you a copy of the project up and running on your loc
 Simply, unzip and run given you have the required programs
 
 ```
-unzip ee469lab3_g24.tar.gz
+unzip ee469lab3_g24.zip
 gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c #TODO-is this correct Compiling Step
 #TODO-is this correct run (dlxsim) Step
 ```
@@ -58,9 +54,9 @@ Explain how to run the automated tests for this system.
 chmod u+x
 make.sh -R q2
 ```
-Run each process (q2, q3, and q5) with the commands above from the DLXOS folder. Alternatively, you could cd into the project's respective directory under the DLXOS/apps folder and run
 
 ```
+//cd to apps and os and do the following
 make
 make run
 ```
@@ -78,6 +74,7 @@ Add notes about how to use the system.
 * When you login again to ecegrid, you can restore your work to tmp as:
 
         cp -r ~/ee469 /tmp/$USER/"
+
 
 ## 🚀 Deployment <a name = "deployment"></a>
 Add additional notes about how to deploy this on a live system.
