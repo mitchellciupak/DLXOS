@@ -12,7 +12,7 @@
 #include "queue.h"
 
 // num_pages = size_of_memory / size_of_one_page
-static uint32 freemap[/*size*/];
+static uint32 freemap[/*size*/]; //TODO
 static uint32 pagestart;
 static int nfreepages;
 static int freemapmax;
@@ -56,6 +56,10 @@ int MemoryGetSize() {
 //
 //----------------------------------------------------------------------
 void MemoryModuleInit() {
+
+  nfreepages = 0; //Not always true
+
+  //TODO
 }
 
 
@@ -68,6 +72,7 @@ void MemoryModuleInit() {
 //
 //----------------------------------------------------------------------
 uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
+  //TODO
 }
 
 
@@ -106,7 +111,7 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
     // Calculate the number of bytes to copy this time.  If we have more bytes
     // to copy than there are left in the current page, we'll have to just copy to the
     // end of the page and then go through the loop again with the next page.
-    // In other words, "bytesToCopy" is the minimum of the bytes left on this page 
+    // In other words, "bytesToCopy" is the minimum of the bytes left on this page
     // and the total number of bytes left to copy ("n").
 
     // First, compute number of bytes left in this page.  This is just
@@ -115,7 +120,7 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
     // MEM_ADDRESS_OFFSET_MASK should be the bit mask required to get just the
     // "offset" portion of an address.
     bytesToCopy = MEM_PAGESIZE - ((uint32)curUser & MEM_ADDRESS_OFFSET_MASK);
-    
+
     // Now find minimum of bytes in this page vs. total bytes left to copy
     if (bytesToCopy > n) {
       bytesToCopy = n;
@@ -154,20 +159,21 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 }
 
 //---------------------------------------------------------------------
-// MemoryPageFaultHandler is called in traps.c whenever a page fault 
+// MemoryPageFaultHandler is called in traps.c whenever a page fault
 // (better known as a "seg fault" occurs.  If the address that was
-// being accessed is on the stack, we need to allocate a new page 
+// being accessed is on the stack, we need to allocate a new page
 // for the stack.  If it is not on the stack, then this is a legitimate
 // seg fault and we should kill the process.  Returns MEM_SUCCESS
 // on success, and kills the current process on failure.  Note that
-// fault_address is the beginning of the page of the virtual address that 
+// fault_address is the beginning of the page of the virtual address that
 // caused the page fault, i.e. it is the vaddr with the offset zero-ed
 // out.
 //
-// Note: The existing code is incomplete and only for reference. 
+// Note: The existing code is incomplete and only for reference.
 // Feel free to edit.
 //---------------------------------------------------------------------
 int MemoryPageFaultHandler(PCB *pcb) {
+  //TODO
   return MEM_FAIL;
 }
 
@@ -178,15 +184,25 @@ int MemoryPageFaultHandler(PCB *pcb) {
 //---------------------------------------------------------------------
 
 int MemoryAllocPage(void) {
+  //TODO
   return -1;
 }
 
 
 uint32 MemorySetupPte (uint32 page) {
-  return -1;
+  //Make Page Valid
+  return (page | MEM_PTE_VALID);
 }
 
 
 void MemoryFreePage(uint32 page) {
-}
 
+  //Set Freemap Bit to Available //TODO - test and conceptualize
+  uint32 bit_position = page % 32;
+  freemap[page/32] = (freemap[page/32] & invert(1 << bit_position)) | (val << bit_position);
+
+  //Incrament Number of Free Pages
+  nfreepages += 1;
+
+
+}
