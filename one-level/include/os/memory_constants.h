@@ -28,8 +28,8 @@
 #define MEM_PTE_VALID    0b001
 #define MEM_PTE_MASK4PAGE (~(MEM_PTE_READONLY | MEM_PTE_DIRTY | MEM_PTE_VALID)) //Attempting to get 0b000
 
-#define MEM_L1PTSIZE 1048576 >> 12                  //TODO - Convert to Calculation of Above, Page Size is 4KB = 4096
-#define MEM_PAGESIZE (0b1 << MEM_L1FIELD_FIRST_BITNUM)  //Used in Memory.c
-#define MEM_ADDRESS_OFFSET_MASK (MEM_PAGESIZE - 1)    //Used in memory.c
+#define MEM_L1PTSIZE 1048576 >> 12                      //TODO - Convert to Calculation of Above, Page Size is 4KB = 4096
+#define MEM_PAGESIZE (0x1 << MEM_L1FIELD_FIRST_BITNUM)  //Used in Memory.c
+#define MEM_ADDRESS_OFFSET_MASK (MEM_PAGESIZE - 1)      //Used in memory.c
 
 #endif	// _memory_constants_h_
