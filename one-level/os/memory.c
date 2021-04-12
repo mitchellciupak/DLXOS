@@ -10,6 +10,8 @@
 #include "process.h"
 #include "memory.h"
 #include "queue.h"
+#include "queue.h"
+#include "memory_constants.h"
 
 // num_pages = size_of_memory / size_of_one_page
 static uint32 freemap[/*size*/]; //TODO
@@ -72,7 +74,24 @@ void MemoryModuleInit() {
 //
 //----------------------------------------------------------------------
 uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
-  //TODO
+
+  int page_num = addr/MEM_PAGESIZE;
+
+  if(page_num < MEM_MAX_VIRTUAL_ADDRESS / MEM_PAGESIZE){
+    //Check for page fault
+    if(MemoryPageFaultHandler(pcb) != MEM_SUCCESS) {
+      return 0;
+    }
+
+    //Return Physical Address
+    return (pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) + (addr % MEM_PAGESIZE); //TODO - could change + to |
+
+  } else {
+
+    //Address exceeds max available
+    ProcessKill();
+    return MEM_FAIL;
+  }
 }
 
 

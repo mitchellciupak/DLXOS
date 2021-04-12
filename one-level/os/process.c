@@ -8,6 +8,8 @@
 //	code.  Note, however, that the actual context switching is
 //	done in assembly language elsewhere.
 
+//TODO - pass hellow world test
+
 #include "ostraps.h"
 #include "dlxos.h"
 #include "process.h"
