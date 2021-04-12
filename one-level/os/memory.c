@@ -11,7 +11,7 @@
 #include "memory.h"
 #include "queue.h"
 #include "queue.h"
-#include "memory_constants.h"
+#include "os/memory_constants.h"
 
 // num_pages = size_of_memory / size_of_one_page
 static uint32 freemap[/*size*/]; //TODO
@@ -84,14 +84,13 @@ uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
     }
 
     //Return Physical Address
-    return (pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) + (addr % MEM_PAGESIZE); //TODO - could change + to |
+    return (pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) + (addr % MEM_PAGESIZE); //TODO - maybe change + to |
 
-  } else {
-
-    //Address exceeds max available
-    ProcessKill();
-    return MEM_FAIL;
   }
+
+  //Address exceeds max available
+  ProcessKill();
+  return MEM_FAIL;
 }
 
 
