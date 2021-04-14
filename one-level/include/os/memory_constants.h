@@ -31,5 +31,6 @@
 #define MEM_L1PTSIZE 1048576 >> 12                      //TODO - Convert to Calculation of Above, Page Size is 4KB = 4096
 #define MEM_PAGESIZE (0x1 << MEM_L1FIELD_FIRST_BITNUM)  //Used in Memory.c
 #define MEM_ADDRESS_OFFSET_MASK (MEM_PAGESIZE - 1)      //Used in memory.c
-
+#define MEM_SIZE_OF_ONE_PAGE 32 //TODO - convert to summ of above
+#define MEM_FREEMAP_SIZE (MEM_MAX_SIZE >> MEM_L1FIELD_FIRST_BITNUM) / MEM_SIZE_OF_ONE_PAGE //TODO - double chekc
 #endif	// _memory_constants_h_

@@ -13,8 +13,8 @@
 #include "queue.h"
 #include "os/memory_constants.h"
 
-// num_pages = size_of_memory / size_of_one_page
-static uint32 freemap[/*size*/]; //TODO
+//num_pages = size_of_memory / size_of_one_page
+static uint32 freemap[MEM_FREEMAP_SIZE];
 static uint32 pagestart;
 static int nfreepages;
 static int freemapmax;
@@ -59,9 +59,21 @@ int MemoryGetSize() {
 //----------------------------------------------------------------------
 void MemoryModuleInit() {
 
+  //Inits
+  int i = 0;
+  freemapmax = MEM_FREEMAP_SIZE; //TODO get rid of freemapmax as a variable
+
+  //setup a freemap for pages
+  for(i=0; i<freemapmax;i++){
+    freemap[i] = 0;
+  }
   nfreepages = 0; //Not always true
 
-  //TODO
+  //mark the ones in use by the operating system as "VALID"
+  for(i=lastosaddress/MEM_PAGESIZE;i<MemoryGetSize()/MEM_PAGESIZE;i++){
+    freemap[i/32] = (freemap[i/32] & invert(1 << i%32)) | (1 << i%32); //TODO - test
+    nfreepages += 1;
+  }
 }
 
 
@@ -191,7 +203,19 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 // Feel free to edit.
 //---------------------------------------------------------------------
 int MemoryPageFaultHandler(PCB *pcb) {
-  //TODO
+  uint32 createdPage;
+  int index;
+
+  if(pcv->currentSavedFrame[PROCESS_STACK_FAULT] >= pcb->currentSavedFrame[PROCESS_STACK_USER_STACKPOINTER]){
+    //Allocate a new page on the stack
+    createdPage = MemoryAllocPage();
+    index = ADDRESS_TO_PAGE(pcv->currentSavedFrame[PROCESS_STACK_FAULT]);
+    pcb->pagetable[index] = MemorySetupPte(createdPage);
+    pcb->npages += 1;
+    return MEM_SUCCESS;
+  }
+
+  ProcessKill();
   return MEM_FAIL;
 }
 
@@ -202,6 +226,7 @@ int MemoryPageFaultHandler(PCB *pcb) {
 //---------------------------------------------------------------------
 int MemoryAllocPage(void) {
   int i = 0;
+
   uint32 segment;
 
   //Corner Case Check
@@ -217,7 +242,8 @@ int MemoryAllocPage(void) {
     }
   }
 
-
+  //Loop through segment to find the first bit open
+  for()
 
 
 }
