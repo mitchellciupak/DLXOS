@@ -404,7 +404,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   uint32 offset;           // Used in parsing command line argument strings, holds offset (in bytes) from
                            // beginning of the string to the current argument.
   uint32 initial_user_params_bytes;  // total number of bytes in initial user parameters array
-
+  uint32 page;
 
   intrs = DisableIntrs ();
   dbprintf ('I', "Old interrupt value was 0x%x.\n", intrs);
@@ -442,10 +442,28 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   // STUDENT: allocate pages for a new process here.  The
   // code below assumes that you set the "stackframe" variable
   // equal to the last 4-byte-aligned address in physical page
-  // for the system stack.
+  // for the system stack. (allocate for global, user, and system stacks)
   //---------------------------------------------------------
-  //TODO - allocate for global, user, and system stacks
 
+  //Global
+  for(i=0; i<4;i++){
+    page = MemoryAllocPage();
+    pab->pagetable[i] = MemorySetupPte(page);
+    pcb->nfreepages -= 1;
+    pcb->npages += 1;
+  }
+
+  //User (only 1)
+  page = MemoryAllocPage();
+  pcb->pagetable[ADDRESS_TO_PAGE(MEM_MAX_VIRTUAL_ADDRESS)] = MemorySetupPte(PAGE);
+  pcb->nfreepages -= 1;
+  pcb->npages += 1;
+
+  //System (only 1)
+  page = MemoryAllocPage();
+  pcb->pagetable[ADDRESS_TO_PAGE(MEM_MAX_VIRTUAL_ADDRESS)] = MemorySetupPte(PAGE);
+  pcb->sysStackArea = page * MEM_PAGESIZE;
+  stackframe = (-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3);
 
   // Now that the stack frame points at the bottom of the system stack memory area, we need to
   // move it up (decrement it) by one stack frame size because we're about to fill in the
@@ -475,10 +493,10 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   // STUDENT: setup the PTBASE, PTBITS, and PTSIZE here on the current
   // stack frame.
   //----------------------------------------------------------------------
-  //TODO
+  //TODO - test
   stackframe[PROCESS_STACK_PTBASE] = 0;
   stackframe[PROCESS_STACK_PTSIZE] = MEM_L1PTSIZE;
-  stackframe[PROCESS_STACK_PTBITS] = "I forgot";
+  stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << MEM_FREEMAP_SIZE) | MEM_L1FIELD_FIRST_BITNUM;
 
 
   if (isUser) {
@@ -509,7 +527,8 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     // STUDENT: setup the initial user stack pointer here as the top
     // of the process's virtual address space (4-byte aligned).
     //----------------------------------------------------------------------
-    //TODO - in current frame, never got quite right
+    //TODO - test (in current frame, never got quite right)
+    stackframe[PROCESS_STACK_USER_STACKPOINTER] = MEM_MAX_VIRTUAL_ADDRESS & invert(0x3);
 
     //--------------------------------------------------------------------
     // This part is setting up the initial user stack with argc and argv.
