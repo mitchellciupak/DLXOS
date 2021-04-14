@@ -1,3 +1,0 @@
-work/reactor.o: reactor.c ../../../include/lab2-api.h \
- ../../../include/usertraps.h ../../../include/misc.h \
- ../include/reactor.h ../include/shared.h
