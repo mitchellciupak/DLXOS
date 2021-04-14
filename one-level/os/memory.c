@@ -226,6 +226,7 @@ int MemoryPageFaultHandler(PCB *pcb) {
 //---------------------------------------------------------------------
 int MemoryAllocPage(void) {
   int i = 0;
+  int bit = 0;
 
   uint32 segment;
 
@@ -243,9 +244,16 @@ int MemoryAllocPage(void) {
   }
 
   //Loop through segment to find the first bit open
-  for()
+  for(bit = 0; (segment & 1<<bit) == 0; bit++) //TODO - check conditional
 
+  //Invert
+  freemap[i] &= invert(1 << bit);
 
+  //Update
+  segment = bit + i*32; //TODO update 32 with a macro define
+
+  nfreepages = nfreepages - 1;
+  return segment
 }
 
 
