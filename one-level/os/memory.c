@@ -84,7 +84,7 @@ uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
     }
 
     //Return Physical Address
-    return (pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) + (addr % MEM_PAGESIZE); //TODO - maybe change + to |
+    return (pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) + (addr % MEM_PAGESIZE); //TODO - maybe change + to | //TODO
 
   }
 
@@ -197,13 +197,29 @@ int MemoryPageFaultHandler(PCB *pcb) {
 
 
 //---------------------------------------------------------------------
-// You may need to implement the following functions and access them from process.c
-// Feel free to edit/remove them
+// STUDENT:
+// * MemoryAllocPage - Given an open page, allocate and return the page number
 //---------------------------------------------------------------------
-
 int MemoryAllocPage(void) {
-  //TODO
-  return -1;
+  int i = 0;
+  uint32 segment;
+
+  //Corner Case Check
+  if(nfreepages == 0){
+    return MEM_FAIL;
+  }
+
+  //Loop through freemap to find free segment
+  for(i=0;i<=freemapmax;i++){
+    if(freemap[i] != 0){
+      segment = freemap[i];
+      break;
+    }
+  }
+
+
+
+
 }
 
 
@@ -217,7 +233,7 @@ void MemoryFreePage(uint32 page) {
 
   //Set Freemap Bit to Available //TODO - test and conceptualize
   uint32 bit_position = page % 32;
-  freemap[page/32] = (freemap[page/32] & invert(1 << bit_position)) | (val << bit_position);
+  freemap[page/32] = (freemap[page/32] & invert(1 << bit_position)) | (page < bit_position);
 
   //Incrament Number of Free Pages
   nfreepages += 1;

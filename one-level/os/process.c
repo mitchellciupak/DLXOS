@@ -415,7 +415,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     printf ("FATAL error: no free processes!\n");
     exitsim ();	// NEVER RETURNS!
   }
-  pcb = (PCB *)AQueueObject(AQueueFirst (&freepcbs));
+  pcb = (PCB *)AQueueObject(AQueueFirst ( &freepcbs));
   dbprintf ('p', "Got a link @ 0x%x\n", (int)(pcb->l));
   if (AQueueRemove (&(pcb->l)) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not remove link from freepcbsQueue in ProcessFork!\n");

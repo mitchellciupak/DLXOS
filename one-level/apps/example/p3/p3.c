@@ -16,16 +16,16 @@ void main (int argc, char *argv[])
   s_procs_completed = dstrtol(argv[1], NULL, 10);
 
   // Now print a message to show that everything worked
-  Printf("Part 2 (%d): Out of Max Virtual Address being Attempted!\n", getpid());
+  Printf("Part 3 (%d): Out of Max Virtual Address being Attempted!\n", getpid());
 
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
-    Printf("Part 2 (%d): Bad semaphore s_procs_completed (%d)!\n", getpid(), s_procs_completed);
+    Printf("Part 3 (%d): Bad semaphore s_procs_completed (%d)!\n", getpid(), s_procs_completed);
     Exit();
   }
 
   location = (MEM_MAX_VIRTUAL_ADDRESS << 2);
-  Printf("Part 2 (%d): Acessing Location: (%d)!\n", getpid(), location);
-  Printf("Part 2 (%d): (%d)!\n", getpid(), *location);
-  Printf("Part 2 (%d): Done!\n", getpid());
+  Printf("Part 3 (%d): Acessing Location: (%d)!\n", getpid(), location);
+  Printf("Part 3 (%d): (%d)!\n", getpid(), *location);
+  Printf("Part 3 (%d): Done!\n", getpid());
 }
