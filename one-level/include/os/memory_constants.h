@@ -18,19 +18,22 @@
 // Be sure to prepend any constant names with "MEM_" so
 // that the grader knows they are defined in this file.
 
-//--------------------------------------------------------
-#define MEM_L1FIELD_FIRST_BITNUM 12     //least sig bit in vadd
-#define MEM_MAX_VIRTUAL_ADDRESS 1048575 //maximum virtual memory size (1024KB - 1 = 1048575 Bytes).
-#define MEM_MAX_SIZE 2097152            //maximum physical memory size (2MB = 2097152 Bytes).
+//Note:
+// * Had to convert decimal values to hex due to error: nondigits in number and not hexadecimal in memory.c
 
-#define MEM_PTE_READONLY 0b100
-#define MEM_PTE_DIRTY    0b010
-#define MEM_PTE_VALID    0b001
+//--------------------------------------------------------
+#define MEM_L1FIELD_FIRST_BITNUM 0xC    //least sig bit in vadd
+#define MEM_MAX_VIRTUAL_ADDRESS 0xFFFFF //maximum virtual memory size (1024KB - 1 = 1048575 Bytes = 0xFFFFF).
+#define MEM_MAX_SIZE 0x200000           //maximum physical memory size (2MB = 2097152 Bytes = 0x200000).
+
+#define MEM_PTE_READONLY 0x4//0b100
+#define MEM_PTE_DIRTY    0x2//0b010
+#define MEM_PTE_VALID    0x1//0b001
 #define MEM_PTE_MASK4PAGE (~(MEM_PTE_READONLY | MEM_PTE_DIRTY | MEM_PTE_VALID)) //Attempting to get 0b000
 
-#define MEM_L1PTSIZE 1048576 >> 12                      //TODO - Convert to Calculation of Above, Page Size is 4KB = 4096
+#define MEM_L1PTSIZE (MEM_MAX_VIRTUAL_ADDRESS + 1) >> MEM_L1FIELD_FIRST_BITNUM //Page Size is 4KB = 4096
 #define MEM_PAGESIZE (0x1 << MEM_L1FIELD_FIRST_BITNUM)  //Used in Memory.c
 #define MEM_ADDRESS_OFFSET_MASK (MEM_PAGESIZE - 1)      //Used in memory.c
-#define MEM_SIZE_OF_ONE_PAGE 32 //TODO - convert to summ of above
+#define MEM_SIZE_OF_ONE_PAGE 0x20 //TODO - convert to summ of above
 #define MEM_FREEMAP_SIZE (MEM_MAX_SIZE >> MEM_L1FIELD_FIRST_BITNUM) / MEM_SIZE_OF_ONE_PAGE //TODO - double chekc
 #endif	// _memory_constants_h_

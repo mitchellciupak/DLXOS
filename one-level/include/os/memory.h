@@ -19,8 +19,25 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from, unsigned char *to, in
 int MemoryPageFaultHandler(PCB *pcb);
 
 //---------------------------------------------------------
-// Put your function prototypes here
+// STUDENT: Put your function prototypes here
 //---------------------------------------------------------
-// All function prototypes including the malloc and mfree functions go here
+uint32 MemorySetupPte (uint32 page);
+void MemoryFreePage(uint32 page);
+int MemoryAllocPage(void);
+
+
+//----------------------------------------------------------------------
+//
+//	This silliness is required because the compiler believes that
+//	it can invert a number by subtracting it from zero and subtracting
+//	an additional 1.  This works unless you try to negate 0x80000000,
+//	which causes an overflow when subtracted from 0.  Simply
+//	trying to do an XOR with 0xffffffff results in the same code
+//	being emitted.
+//
+//----------------------------------------------------------------------
+static inline uint32 invert (uint32 n) {
+  return (n ^ 0xFFFFFFFF);
+}
 
 #endif	// _memory_h_

@@ -37,8 +37,8 @@ uint32 GetUintFromTrapArg(uint32 *trapArgs, int sysmode)
   if(!sysmode)
   {
     MemoryCopyUserToSystem (currentPCB, (char *)trapArgs, (char *)&arg, sizeof (arg));
-  } 
-  else 
+  }
+  else
   {
     bcopy ((void *)trapArgs, (void *)&arg, sizeof (arg));
   }
@@ -55,8 +55,8 @@ static int GetIntFromTrapArg(uint32 *trapArgs, int sysmode)
   if(!sysmode)
   {
     MemoryCopyUserToSystem (currentPCB, (char *)trapArgs, (char *)&arg, sizeof (arg));
-  } 
-  else 
+  }
+  else
   {
     bcopy ((void *)trapArgs, (void *)&arg, sizeof (arg));
   }
@@ -67,9 +67,9 @@ static int GetIntFromTrapArg(uint32 *trapArgs, int sysmode)
 //
 // int process_create(char *exec_name, ...);
 //
-// Here we support reading command-line arguments.  Maximum MAX_ARGS 
-// command-line arguments are allowed.  Also the total length of the 
-// arguments including the terminating '\0' should be less than or 
+// Here we support reading command-line arguments.  Maximum MAX_ARGS
+// command-line arguments are allowed.  Also the total length of the
+// arguments including the terminating '\0' should be less than or
 // equal to SIZE_ARG_BUFF.
 //
 //--------------------------------------------------------------------
@@ -142,7 +142,7 @@ static void TrapProcessCreateHandler(uint32 *trapArgs, int sysmode) {
     numargs = i+1;
     // Arguments are now setup
   } else {
-    // Addresses are already in kernel space, so just copy into our local variables 
+    // Addresses are already in kernel space, so just copy into our local variables
     // for simplicity
     // Argument 0: (char *) name of program
     dstrncpy(name, (char *)(trapArgs[0]), PROCESS_MAX_NAME_LENGTH);
@@ -184,7 +184,7 @@ static void TrapProcessCreateHandler(uint32 *trapArgs, int sysmode) {
 //	TrapPrintfHandler
 //
 //	Handle a printf trap.here.
-//	Note that the maximum format string length is PRINTF_MAX_FORMAT_LENGTH 
+//	Note that the maximum format string length is PRINTF_MAX_FORMAT_LENGTH
 //      characters.  Exceeding this length could have unexpected results.
 //
 //----------------------------------------------------------------------
@@ -427,7 +427,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       RestoreIntrs (intrs);
       break;
     case TRAP_PROCESS_GETPID:
-      ProcessSetResult(currentPCB, GetCurrentPid()); 
+      ProcessSetResult(currentPCB, GetCurrentPid());
       break;
     case TRAP_PROCESS_CREATE:
       TrapProcessCreateHandler(trapArgs, isr & DLX_STATUS_SYSMODE);
@@ -447,16 +447,16 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       handle = SemHandleSignal(ihandle);
       ProcessSetResult(currentPCB, handle); //Return 1 or 0
       break;
-    case TRAP_MALLOC:
-      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
-      ihandle = (int)malloc(currentPCB, ihandle);
-      ProcessSetResult(currentPCB, ihandle); //Return handle
-      break;
-    case TRAP_MFREE:
-      ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
-      ihandle = mfree(currentPCB, (void*)ihandle);
-      ProcessSetResult(currentPCB, ihandle); //Return handle
-      break;
+    // case TRAP_MALLOC: //TODO - Temp Commented Out until later
+    //   ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+    //   ihandle = (int)malloc(currentPCB, ihandle);
+    //   ProcessSetResult(currentPCB, ihandle); //Return handle
+    //   break;
+    // case TRAP_MFREE:
+    //   ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
+    //   ihandle = mfree(currentPCB, (void*)ihandle);
+    //   ProcessSetResult(currentPCB, ihandle); //Return handle
+    //   break;
     case TRAP_LOCK_CREATE:
       ihandle = LockCreate();
       ProcessSetResult(currentPCB, ihandle); //Return handle
@@ -543,4 +543,3 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
   // Note that this return may schedule a new process!
   intrreturn ();
 }
-

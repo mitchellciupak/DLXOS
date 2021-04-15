@@ -5,34 +5,20 @@
 
 //static char rcsid[] = "$Id: memory.c,v 1.1 2000/09/20 01:50:19 elm Exp elm $";
 
+#include "os/memory_constants.h"
 #include "ostraps.h"
 #include "dlxos.h"
 #include "process.h"
 #include "memory.h"
 #include "queue.h"
 #include "queue.h"
-#include "os/memory_constants.h"
+
 
 //num_pages = size_of_memory / size_of_one_page
 static uint32 freemap[MEM_FREEMAP_SIZE];
-static uint32 pagestart;
+// static uint32 pagestart; ///TODO - not used
 static int nfreepages;
 static int freemapmax;
-
-//----------------------------------------------------------------------
-//
-//	This silliness is required because the compiler believes that
-//	it can invert a number by subtracting it from zero and subtracting
-//	an additional 1.  This works unless you try to negate 0x80000000,
-//	which causes an overflow when subtracted from 0.  Simply
-//	trying to do an XOR with 0xffffffff results in the same code
-//	being emitted.
-//
-//----------------------------------------------------------------------
-static int negativeone = 0xFFFFFFFF;
-static inline uint32 invert (uint32 n) {
-  return (n ^ negativeone);
-}
 
 //----------------------------------------------------------------------
 //
@@ -96,8 +82,7 @@ uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
     }
 
     //Return Physical Address
-    return (pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) + (addr % MEM_PAGESIZE); //TODO - maybe change + to | //TODO
-
+    return (pcb->pagetable[page_num] & (MEM_PTE_MASK4PAGE)) + (addr % MEM_PAGESIZE); //TODO - maybe change + to | //TODO
   }
 
   //Address exceeds max available
@@ -189,38 +174,6 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 }
 
 //---------------------------------------------------------------------
-// MemoryPageFaultHandler is called in traps.c whenever a page fault
-// (better known as a "seg fault" occurs.  If the address that was
-// being accessed is on the stack, we need to allocate a new page
-// for the stack.  If it is not on the stack, then this is a legitimate
-// seg fault and we should kill the process.  Returns MEM_SUCCESS
-// on success, and kills the current process on failure.  Note that
-// fault_address is the beginning of the page of the virtual address that
-// caused the page fault, i.e. it is the vaddr with the offset zero-ed
-// out.
-//
-// Note: The existing code is incomplete and only for reference.
-// Feel free to edit.
-//---------------------------------------------------------------------
-int MemoryPageFaultHandler(PCB *pcb) {
-  uint32 createdPage;
-  int index;
-
-  if(pcv->currentSavedFrame[PROCESS_STACK_FAULT] >= pcb->currentSavedFrame[PROCESS_STACK_USER_STACKPOINTER]){
-    //Allocate a new page on the stack
-    createdPage = MemoryAllocPage();
-    index = ADDRESS_TO_PAGE(pcv->currentSavedFrame[PROCESS_STACK_FAULT]);
-    pcb->pagetable[index] = MemorySetupPte(createdPage);
-    pcb->npages += 1;
-    return MEM_SUCCESS;
-  }
-
-  ProcessKill();
-  return MEM_FAIL;
-}
-
-
-//---------------------------------------------------------------------
 // STUDENT:
 // * MemoryAllocPage - Given an open page, allocate and return the page number
 //---------------------------------------------------------------------
@@ -253,7 +206,38 @@ int MemoryAllocPage(void) {
   segment = bit + i*32; //TODO update 32 with a macro define
 
   nfreepages = nfreepages - 1;
-  return segment
+  return segment;
+}
+
+//---------------------------------------------------------------------
+// MemoryPageFaultHandler is called in traps.c whenever a page fault
+// (better known as a "seg fault" occurs.  If the address that was
+// being accessed is on the stack, we need to allocate a new page
+// for the stack.  If it is not on the stack, then this is a legitimate
+// seg fault and we should kill the process.  Returns MEM_SUCCESS
+// on success, and kills the current process on failure.  Note that
+// fault_address is the beginning of the page of the virtual address that
+// caused the page fault, i.e. it is the vaddr with the offset zero-ed
+// out.
+//
+// Note: The existing code is incomplete and only for reference.
+// Feel free to edit.
+//---------------------------------------------------------------------
+int MemoryPageFaultHandler(PCB *pcb) {
+  uint32 createdPage;
+  int index;
+
+  if(pcb->currentSavedFrame[PROCESS_STACK_FAULT] >= pcb->currentSavedFrame[PROCESS_STACK_USER_STACKPOINTER]){
+    //Allocate a new page on the stack
+    createdPage = MemoryAllocPage();
+    index = pcb->currentSavedFrame[PROCESS_STACK_FAULT] >> MEM_L1FIELD_FIRST_BITNUM;
+    pcb->pagetable[index] = MemorySetupPte(createdPage);
+    pcb->npages += 1;
+    return MEM_SUCCESS;
+  }
+
+  ProcessKill();
+  return MEM_FAIL;
 }
 
 
@@ -266,8 +250,8 @@ uint32 MemorySetupPte (uint32 page) {
 void MemoryFreePage(uint32 page) {
 
   //Set Freemap Bit to Available //TODO - test and conceptualize
-  uint32 bit_position = page % 32;
-  freemap[page/32] = (freemap[page/32] & invert(1 << bit_position)) | (page < bit_position);
+  uint32 bit = page % 32;
+  freemap[page/32] = (freemap[page/32] & invert(1 << bit)) | (page < bit);
 
   //Incrament Number of Free Pages
   nfreepages += 1;

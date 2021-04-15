@@ -154,7 +154,7 @@ void ProcessFreeResources (PCB *pcb) {
 
   // Free Initial 4 Pages (Code and Global Data)
   for(i=0; i<4;i++){
-    MemoryFreePage((pcb->pagetable[i] & MEM_PTE_MASK4PAGE) / MEM_PAGESIZE)
+    MemoryFreePage((pcb->pagetable[i] & MEM_PTE_MASK4PAGE) / MEM_PAGESIZE);
   }
 
   // Free User's Stack
@@ -448,20 +448,19 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   //Global
   for(i=0; i<4;i++){
     page = MemoryAllocPage();
-    pab->pagetable[i] = MemorySetupPte(page);
-    pcb->nfreepages -= 1;
+    pcb->pagetable[i] = MemorySetupPte(page);
     pcb->npages += 1;
   }
 
   //User (only 1)
   page = MemoryAllocPage();
-  pcb->pagetable[ADDRESS_TO_PAGE(MEM_MAX_VIRTUAL_ADDRESS)] = MemorySetupPte(PAGE);
-  pcb->nfreepages -= 1;
+  pcb->pagetable[MEM_MAX_VIRTUAL_ADDRESS >> MEM_L1FIELD_FIRST_BITNUM] = MemorySetupPte(page);
+
   pcb->npages += 1;
 
   //System (only 1)
   page = MemoryAllocPage();
-  pcb->pagetable[ADDRESS_TO_PAGE(MEM_MAX_VIRTUAL_ADDRESS)] = MemorySetupPte(PAGE);
+  pcb->pagetable[MEM_MAX_VIRTUAL_ADDRESS >> MEM_L1FIELD_FIRST_BITNUM] = MemorySetupPte(page);
   pcb->sysStackArea = page * MEM_PAGESIZE;
   stackframe = (-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3);
 
