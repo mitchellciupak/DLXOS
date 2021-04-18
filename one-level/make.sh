@@ -27,7 +27,7 @@ function compile() {
 }
 
 function run() {
-    dlxsim -x ./os/work/os.dlx.obj -a -u ./apps/work/userprog.dlx.obj
+    dlxsim -D p -x ./os/work/os.dlx.obj -a D p -u ./apps/work/userprog.dlx.obj
 }
 
 function run_example(){
@@ -36,21 +36,24 @@ function run_example(){
     make clean -C ./os/
     make -C ./os/
     make -C ./apps/example/
-    ee469_fixterminal
+    # ee469_fixterminal
     make run -C ./apps/example/
 }
 
 function run_program(){
     if [ ${args[1]} ]
     then
-      echo 'Compiling and running'
+      echo '---STARTING---'
       echo ${args[1]}
 
+      echo '---CLEANING---'
       make clean -C ./os/
       make -C ./os/
       make clean -C ./apps/${args[1]}/
+      echo '---COMPILING---'
       make -C ./apps/${args[1]}/
       ee469_fixterminal
+      echo '---RUNNING---'
       make run -C ./apps/${args[1]}/
     else
       echo 'Nothing was Run, No Argment was Added'
@@ -72,8 +75,8 @@ function move() {
         echo 'This project has been copied to:' /home/shay/a/$USER/469ECE/DLXOS
     else
         rm -rf /tmp/$USER/ee469/*
-        cp -r . /tmp/$USER/ee469/ 2>/dev/null
-        echo 'This project has been copied to:' /tmp/$USER/ee469
+        cp -r . /tmp/$USER/ee469/og/ 2>/dev/null
+        echo 'This project has been copied to:' /tmp/$USER/ee469/og/
     fi
 }
 
@@ -85,7 +88,7 @@ case ${args[0]} in
     compile
     ;;
   -R)
-    echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
+    # echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
     run_program
     ;;
   -A)

@@ -13,12 +13,10 @@
 #include "queue.h"
 #include "queue.h"
 
-
-//num_pages = size_of_memory / size_of_one_page
 static uint32 freemap[MEM_FREEMAP_SIZE];
-// static uint32 pagestart; ///TODO - not used
 static int nfreepages;
-static int freemapmax;
+static int whichmap_memalloc;
+static int whichpage_memalloc;
 
 //----------------------------------------------------------------------
 //
@@ -29,13 +27,27 @@ static int freemapmax;
 //
 //----------------------------------------------------------------------
 int MemoryGetSize() {
+  // return 1 << 20; //TODO - adviced by RAVI
   return (*((int *)DLX_MEMSIZE_ADDRESS));
 }
 
+//----------------------------------------------------------------------
+//
+//	This silliness is required because the compiler believes that
+//	it can invert a number by subtracting it from zero and subtracting
+//	an additional 1.  This works unless you try to negate 0x80000000,
+//	which causes an overflow when subtracted from 0.  Simply
+//	trying to do an XOR with 0xffffffff results in the same code
+//	being emitted.
+//
+//----------------------------------------------------------------------
+static inline uint32 invert(uint32 n) {
+  return (n ^ 0xFFFFFFFF);
+}
 
 //----------------------------------------------------------------------
 //
-//	MemoryModuleInit
+//	MemoryModuleInit (Completed)
 //
 //	Initialize the memory module of the operating system.
 //      Basically just need to setup the freemap for pages, and mark
@@ -44,22 +56,28 @@ int MemoryGetSize() {
 //
 //----------------------------------------------------------------------
 void MemoryModuleInit() {
+  int i;
 
-  //Inits
-  int i = 0;
-  freemapmax = MEM_FREEMAP_SIZE; //TODO get rid of freemapmax as a variable
+  dbprintf('m', "MemoryModuleInit: Entering\n");
+  dbprintf('m', "MemoryModuleInit: PAGE_MAX_MEM_SIZE: %d\n",MemoryGetSize()/MEM_PAGESIZE);
+  dbprintf('m', "MemoryModuleInit: PAGE_START: 0x%x\n",(lastosaddress / MEM_PAGESIZE) + 1);
+  dbprintf('m', "MemoryModuleInit: NUM_MAP_ENTRIES: %d\n",MemoryGetSize() / MEM_PAGESIZE);
 
   //setup a freemap for pages
-  for(i=0; i<freemapmax;i++){
+  for (i = 0; i < MEM_FREEMAP_SIZE;i++){
+    // dbprintf('m', "MemoryModuleInit: clearing freemap of index %d\n", i);
     freemap[i] = 0;
   }
-  nfreepages = 0; //Not always true
+  nfreepages = 0;
 
-  //mark the ones in use by the operating system as "VALID"
-  for(i=lastosaddress/MEM_PAGESIZE;i<MemoryGetSize()/MEM_PAGESIZE;i++){
-    freemap[i/32] = (freemap[i/32] & invert(1 << i%32)) | (1 << i%32); //TODO - test
+  //mark the ones in use by the operating system as "VALID" or 1
+  for (i = (lastosaddress / MEM_PAGESIZE) + 1;i < (MemoryGetSize() / MEM_PAGESIZE);i++){
+    freemap[i / 32] |= (1 << i % 32);
+    // dbprintf('m', "MemoryModuleInit: setting freemap VALID for freemap[%d] as %d\n", i / 32,freemap[i / 32]);
     nfreepages += 1;
   }
+
+  dbprintf('m', "MemoryModuleInit: Exiting with %d free pages created\n",nfreepages);
 }
 
 
@@ -71,21 +89,38 @@ void MemoryModuleInit() {
 //	into an OS (physical) address.  Return the physical address.
 //
 //----------------------------------------------------------------------
-uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
+uint32 MemoryTranslateUserToSystem(PCB* pcb, uint32 addr) { //TODO - Assure Correct Inputs
 
-  int page_num = addr/MEM_PAGESIZE;
+  int page_num = ((addr & 0xFF000) >> MEM_L1FIELD_FIRST_BITNUM); //Addr is fff-ff-ff0
 
-  if(page_num < MEM_MAX_VIRTUAL_ADDRESS / MEM_PAGESIZE){
-    //Check for page fault
-    if(MemoryPageFaultHandler(pcb) != MEM_SUCCESS) {
-      return 0;
+  // dbprintf('m', "MemoryTranslateUserToSystem: Starting for page of %d\n", page_num);
+
+  //is virtual address grater than possible?
+  if (addr > MEM_MAX_VIRTUAL_ADDRESS){ ProcessKill(); }
+
+  // dbprintf('m', "MemoryTranslateUserToSystem: Addr 0x%x, Page: %d,\n", page_num, addr);
+
+  if (pcb->pagetable[page_num] & MEM_PTE_VALID) {
+
+    // dbprintf('m', "MemoryTranslateUserToSystem: Page is valid\n");
+
+    //  //Check for page fault
+    if ((pcb->pagetable[page_num] & MEM_PTE_VALID) != MEM_PTE_VALID){
+
+      pcb->currentSavedFrame[PROCESS_STACK_FAULT] = addr;
+      if (MemoryPageFaultHandler(pcb) != MEM_SUCCESS) {
+        dbprintf('m', "MemoryTranslateUserToSystem: Failing due to Page Fault\n");
+        return MEM_FAIL;
+      }
     }
 
     //Return Physical Address
-    return (pcb->pagetable[page_num] & (MEM_PTE_MASK4PAGE)) + (addr % MEM_PAGESIZE); //TODO - maybe change + to | //TODO
+    // dbprintf('m', "MemoryTranslateUserToSystem: Returning 0x%x\n", ((pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) | (addr & MEM_ADDRESS_OFFSET_MASK)));
+    return ((pcb->pagetable[page_num] & MEM_PTE_MASK4PAGE) | (addr & MEM_ADDRESS_OFFSET_MASK));
   }
 
   //Address exceeds max available
+  dbprintf('m', "MemoryTranslateUserToSystem: Failing due to invalid page of %d\n", pcb->pagetable[page_num]);
   ProcessKill();
   return MEM_FAIL;
 }
@@ -110,18 +145,23 @@ uint32 MemoryTranslateUserToSystem (PCB *pcb, uint32 addr) {
 //	first unmapped address.
 //
 //----------------------------------------------------------------------
-int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *user, int n, int dir) {
-  unsigned char *curUser;         // Holds current physical address representing user-space virtual address
-  int		bytesCopied = 0;  // Running counter
-  int		bytesToCopy;      // Used to compute number of bytes left in page to be copied
+int MemoryMoveBetweenSpaces(PCB* pcb, unsigned char* system, unsigned char* user, int n, int dir) {
+
+
+  unsigned char* curUser;         // Holds current physical address representing user-space virtual address
+  int		bytesCopied = 0;          // Running counter
+  int		bytesToCopy;              // Used to compute number of bytes left in page to be copied
+
+  // dbprintf('m',"MemoryMoveBetweenSpaces: STARTING\n");
 
   while (n > 0) {
+
     // Translate current user page to system address.  If this fails, return
     // the number of bytes copied so far.
-    curUser = (unsigned char *)MemoryTranslateUserToSystem (pcb, (uint32)user);
+    curUser = (unsigned char*)MemoryTranslateUserToSystem(pcb, (uint32)user);
 
     // If we could not translate address, exit now
-    if (curUser == (unsigned char *)0) break;
+    if (curUser == (unsigned char*)0) break;
 
     // Calculate the number of bytes to copy this time.  If we have more bytes
     // to copy than there are left in the current page, we'll have to just copy to the
@@ -137,23 +177,22 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
     bytesToCopy = MEM_PAGESIZE - ((uint32)curUser & MEM_ADDRESS_OFFSET_MASK);
 
     // Now find minimum of bytes in this page vs. total bytes left to copy
-    if (bytesToCopy > n) {
-      bytesToCopy = n;
-    }
+    if (bytesToCopy > n) { bytesToCopy = n; }
 
     // Perform the copy.
     if (dir >= 0) {
-      bcopy (system, curUser, bytesToCopy);
-    } else {
-      bcopy (curUser, system, bytesToCopy);
+      bcopy(system, curUser, bytesToCopy);
     }
+    else { bcopy(curUser, system, bytesToCopy); }
 
     // Keep track of bytes copied and adjust addresses appropriately.
     n -= bytesToCopy;           // Total number of bytes left to copy
     bytesCopied += bytesToCopy; // Total number of bytes copied thus far
     system += bytesToCopy;      // Current address in system space to copy next bytes from/into
     user += bytesToCopy;        // Current virtual address in user space to copy next bytes from/into
+
   }
+
   return (bytesCopied);
 }
 
@@ -165,48 +204,51 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
 //	else is identical.
 //
 //----------------------------------------------------------------------
-int MemoryCopySystemToUser (PCB *pcb, unsigned char *from,unsigned char *to, int n) {
-  return (MemoryMoveBetweenSpaces (pcb, from, to, n, 1));
+int MemoryCopySystemToUser(PCB* pcb, unsigned char* from, unsigned char* to, int n) {
+  // dbprintf('m',"MemoryCopySystemToUser: STARTING\n");
+  return (MemoryMoveBetweenSpaces(pcb, from, to, n, 1));
 }
 
-int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int n) {
-  return (MemoryMoveBetweenSpaces (pcb, to, from, n, -1));
+int MemoryCopyUserToSystem(PCB* pcb, unsigned char* from, unsigned char* to, int n) {
+  return (MemoryMoveBetweenSpaces(pcb, to, from, n, -1));
 }
 
 //---------------------------------------------------------------------
-// STUDENT:
-// * MemoryAllocPage - Given an open page, allocate and return the page number
+// STUDENT
 //---------------------------------------------------------------------
+
+void MemoryPreAlloc(void) {
+  whichmap_memalloc = 0;
+  whichpage_memalloc = 0;
+}
+
 int MemoryAllocPage(void) {
-  int i = 0;
-  int bit = 0;
-
-  uint32 segment;
 
   //Corner Case Check
-  if(nfreepages == 0){
+  if (nfreepages == 0){
+    dbprintf('m',"MemoryAllocPage: No More Free Pages: %d\n",whichmap_memalloc);
     return MEM_FAIL;
   }
 
-  //Loop through freemap to find free segment
-  for(i=0;i<=freemapmax;i++){
-    if(freemap[i] != 0){
-      segment = freemap[i];
-      break;
+  dbprintf('m',"MemoryAllocPage: Allocating Starting At: %d\n",whichmap_memalloc);
+
+  //Finding Map (int)
+  while(freemap[whichmap_memalloc] == 0){
+    // dbprintf('m',"MemoryAllocPage: Searching through freemap %d\n",whichmap_memalloc); //added for bedbuging infinite loop
+    whichmap_memalloc++;
+    if (whichmap_memalloc >= MEM_FREEMAP_SIZE) {
+      whichmap_memalloc = 0;
     }
   }
 
-  //Loop through segment to find the first bit open
-  for(bit = 0; (segment & 1<<bit) == 0; bit++) //TODO - check conditional
+  //Finding Page (bit)
+  for (whichpage_memalloc = 0; (freemap[whichmap_memalloc] & (1 << whichpage_memalloc)) == 0; whichpage_memalloc++) {}
 
-  //Invert
-  freemap[i] &= invert(1 << bit);
+  //Mark Allocated
+  freemap[whichmap_memalloc] &= invert(1<<whichpage_memalloc);
+  nfreepages -= 1;
 
-  //Update
-  segment = bit + i*32; //TODO update 32 with a macro define
-
-  nfreepages = nfreepages - 1;
-  return segment;
+  return (uint32 *)(whichmap_memalloc * 32) + whichpage_memalloc;
 }
 
 //---------------------------------------------------------------------
@@ -219,42 +261,48 @@ int MemoryAllocPage(void) {
 // fault_address is the beginning of the page of the virtual address that
 // caused the page fault, i.e. it is the vaddr with the offset zero-ed
 // out.
-//
-// Note: The existing code is incomplete and only for reference.
-// Feel free to edit.
 //---------------------------------------------------------------------
-int MemoryPageFaultHandler(PCB *pcb) {
+int MemoryPageFaultHandler(PCB* pcb) {
   uint32 createdPage;
-  int index;
+  uint32 faddr = pcb->currentSavedFrame[PROCESS_STACK_FAULT];
+  uint32 addr = pcb->currentSavedFrame[PROCESS_STACK_FAULT] >> MEM_L1FIELD_FIRST_BITNUM;
 
-  if(pcb->currentSavedFrame[PROCESS_STACK_FAULT] >= pcb->currentSavedFrame[PROCESS_STACK_USER_STACKPOINTER]){
-    //Allocate a new page on the stack
-    createdPage = MemoryAllocPage();
-    index = pcb->currentSavedFrame[PROCESS_STACK_FAULT] >> MEM_L1FIELD_FIRST_BITNUM;
-    pcb->pagetable[index] = MemorySetupPte(createdPage);
-    pcb->npages += 1;
-    return MEM_SUCCESS;
+
+  dbprintf('m',"MemoryPageFaultHandler: STARTING\n");
+  dbprintf('m',"MemoryPageFaultHandler: Has an adress of %d and Stack Pointer address of %d\n", pcb->currentSavedFrame[PROCESS_STACK_FAULT], pcb->currentSavedFrame[PROCESS_STACK_USER_STACKPOINTER]);
+
+  //Check for undersized address
+  if (faddr < pcb->currentSavedFrame[PROCESS_STACK_USER_STACKPOINTER]) { ProcessKill();return MEM_FAIL; }
+
+  //Check for oversided address
+  if (addr > (MEM_L1PTSIZE + 1)) {
+    ProcessKill();return MEM_FAIL; }
+
+  //Allocate a new page
+  createdPage = MemoryAllocPage();
+
+  //Checl for allocation faulure
+  if (createdPage == 0){
+    ProcessKill();
   }
 
-  ProcessKill();
-  return MEM_FAIL;
+  pcb->pagetable[faddr >> MEM_L1FIELD_FIRST_BITNUM] = MemorySetupPte(createdPage);
+  pcb->npages += 1;
+  return MEM_SUCCESS;
+
 }
 
-
-uint32 MemorySetupPte (uint32 page) {
+uint32 MemorySetupPte(uint32 page) {
   //Make Page Valid
-  return (page | MEM_PTE_VALID);
+  dbprintf('m',"MemorySetupPte: Returing %d\n",((page<<MEM_L1FIELD_FIRST_BITNUM) | MEM_PTE_VALID));
+  return ((page<<MEM_L1FIELD_FIRST_BITNUM) | MEM_PTE_VALID);
 }
-
 
 void MemoryFreePage(uint32 page) {
-
-  //Set Freemap Bit to Available //TODO - test and conceptualize
+  //Set Freemap Bit to Available or 1
   uint32 bit = page % 32;
-  freemap[page/32] = (freemap[page/32] & invert(1 << bit)) | (page < bit);
+  freemap[page / 32] |= (1 << bit);
 
   //Incrament Number of Free Pages
   nfreepages += 1;
-
-
 }

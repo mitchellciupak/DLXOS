@@ -8,8 +8,6 @@
 //	code.  Note, however, that the actual context switching is
 //	done in assembly language elsewhere.
 
-//TODO - pass hellow world test
-
 #include "ostraps.h"
 #include "dlxos.h"
 #include "process.h"
@@ -18,16 +16,16 @@
 #include "filesys.h"
 #include "clock.h"
 
-// Pointer to the current PCB.  This is used by the assembly language
+// Pointer to the current PCB. This is used by the assembly language
 // routines for context switches.
-PCB		*currentPCB;
+PCB	*currentPCB;
 
 // List of free PCBs.
-static Queue	freepcbs;
+static Queue freepcbs;
 
 // List of processes that are ready to run (ie, not waiting for something
 // to happen).
-static Queue	runQueue;
+static Queue runQueue;
 
 // List of processes that are waiting for something to happen.  There's no
 // reason why this must be a single list; there could be many lists for many
@@ -55,6 +53,19 @@ int ProcessGetCodeInfo(const char *file, uint32 *startAddr, uint32 *codeStart, u
 int ProcessGetFromFile(int fd, unsigned char *buf, uint32 *addr, int max);
 uint32 get_argument(char *string);
 
+//----------------------------------------------------------------------
+//
+//	This silliness is required because the compiler believes that
+//	it can invert a number by subtracting it from zero and subtracting
+//	an additional 1.  This works unless you try to negate 0x80000000,
+//	which causes an overflow when subtracted from 0.  Simply
+//	trying to do an XOR with 0xffffffff results in the same code
+//	being emitted.
+//
+//----------------------------------------------------------------------
+static inline uint32 invert (uint32 n) {
+  return (n ^ 0xFFFFFFFF);
+}
 
 
 //----------------------------------------------------------------------
@@ -67,36 +78,41 @@ uint32 get_argument(char *string);
 //
 //----------------------------------------------------------------------
 void ProcessModuleInit () {
-  int		i;
-  int   j;
+  int i = 0;
+  int k = 0;
 
-  dbprintf ('p', "Entering ProcessModuleInit\n");
+  dbprintf ('p', "ProcessModuleInit: Entering\n");
+
   AQueueInit (&freepcbs);
   AQueueInit (&runQueue);
   AQueueInit (&waitQueue);
   AQueueInit (&zombieQueue);
+
   // For each PCB slot in the global pcbs array:
   for (i = 0; i < PROCESS_MAX_PROCS; i++) {
-    dbprintf ('p', "Initializing PCB %d @ 0x%x.\n", i, (int)&(pcbs[i]));
+
+    dbprintf ('p', "ProcessModuleInit: Initializing PCB %d @ 0x%x.\n", i, (int)&(pcbs[i]));
     // First, set the internal PCB link pointer to a newly allocated link
     if ((pcbs[i].l = AQueueAllocLink(&pcbs[i])) == NULL) {
       printf("FATAL ERROR: could not allocate link in ProcessModuleInit!\n");
       exitsim();
     }
+
     // Next, set the pcb to be available
     pcbs[i].flags = PROCESS_STATUS_FREE;
 
     //-------------------------------------------------------
-    // STUDENT: Initialize the PCB's page table here. //TODO - Test
+    // STUDENT: Initialize the PCB's page table here. (Completed)
     //-------------------------------------------------------
+
+    // Set Page Tables to 0
+    for (k = 0;k <= (MEM_MAX_VIRTUAL_ADDRESS >> MEM_L1FIELD_FIRST_BITNUM); k++) {
+      // dbprintf('p', "ProcessModuleInit: Setting the pcbs[%d].pagetable[%d] = 0\n",i,k);
+      pcbs[i].pagetable[k] = 0;
+    }
 
     // Set Number of Pages to 0
     pcbs[i].npages = 0;
-
-    // Set Page Tables to 0
-    for(j=0; j < MEM_L1PTSIZE; j++){
-        pcbs[i].pagetable[j] = 0;
-    }
 
     //-------------------------------------------------------
 
@@ -106,9 +122,11 @@ void ProcessModuleInit () {
       exitsim();
     }
   }
+
+
   // There are no processes running at this point, so currentPCB=NULL
   currentPCB = NULL;
-  dbprintf ('p', "Leaving ProcessModuleInit\n");
+  dbprintf ('p', "ProcessModuleInit: Leaving\n");
 }
 
 //----------------------------------------------------------------------
@@ -133,7 +151,6 @@ void ProcessSetStatus (PCB *pcb, int status) {
 //----------------------------------------------------------------------
 void ProcessFreeResources (PCB *pcb) {
   int i = 0;
-  uint32 page = pcb->sysStackArea / MEM_PAGESIZE;
 
   // Allocate a new link for this pcb on the freepcbs queue
   if ((pcb->l = AQueueAllocLink(pcb)) == NULL) {
@@ -149,21 +166,26 @@ void ProcessFreeResources (PCB *pcb) {
   }
 
   //------------------------------------------------------------
-  // STUDENT: Free any memory resources on process death here. //TODO - Test
+  // STUDENT: Free any memory resources on process death here (Completed).
   //------------------------------------------------------------
 
   // Free Initial 4 Pages (Code and Global Data)
   for(i=0; i<4;i++){
-    MemoryFreePage((pcb->pagetable[i] & MEM_PTE_MASK4PAGE) / MEM_PAGESIZE);
+    dbprintf('p',"ProcessFreeResources: Freeing Page %d\n",i);
+    MemoryFreePage((pcb->pagetable[i] & MEM_PTE_MASK4PAGE) >> MEM_L1FIELD_FIRST_BITNUM);
   }
 
   // Free User's Stack
-  for(i=0; i<1;i++){ //TODO - adjust bounds
-    MemoryFreePage((pcb->pagetable[i] & MEM_PTE_MASK4PAGE) / MEM_PAGESIZE);
+  for(i=0; i<1;i++){
+    dbprintf('p',"ProcessFreeResources: Freeing User Page %d\n",i);
+    MemoryFreePage((pcb->pagetable[i] & MEM_PTE_MASK4PAGE) >> MEM_L1FIELD_FIRST_BITNUM);
   }
 
   // Free System's Stack (No Larger Than 1 Page)
-  MemoryFreePage(page);
+  for(i=0; i<1;i++){
+    dbprintf('p',"ProcessFreeResources: Freeing System Stack Page 1\n");
+    MemoryFreePage(pcb->sysStackArea >> MEM_L1FIELD_FIRST_BITNUM);
+  }
 
   //------------------------------------------------------------
 
@@ -385,42 +407,44 @@ static void ProcessExit () {
 //
 //----------------------------------------------------------------------
 int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
-  int i;                   // Loop index variable
-  int fd, n;               // Used for reading code from files.
-  int start, codeS, codeL; // Used for reading code from files.
-  int dataS, dataL;        // Used for reading code from files.
-  int addr = 0;            // Used for reading code from files.
-  unsigned char buf[100];  // Used for reading code from files.
-  uint32 *stackframe;      // Stores address of current stack frame.
-  PCB *pcb;                // Holds pcb while we build it for this process.
-  int intrs;               // Stores previous interrupt settings.
-  uint32  initial_user_params[MAX_ARGS+2]; // Initial memory for user parameters (argc, argv)
-                                           // initial_user_params[0] = argc
-                                           // initial_user_params[1] = argv, points to initial_user_params[2]
-                                           // initial_user_params[2] = address of string for argv[0]
-                                           // initial_user_params[3] = address of string for argv[1]
-                                           //                           ...
-  uint32 argc=0;           // running counter for number of arguments
-  uint32 offset;           // Used in parsing command line argument strings, holds offset (in bytes) from
-                           // beginning of the string to the current argument.
-  uint32 initial_user_params_bytes;  // total number of bytes in initial user parameters array
-  uint32 page;
+  int i;                                    // Loop index variable
+  int fd, n;                                // Used for reading code from files.
+  int start, codeS, codeL;                  // Used for reading code from files.
+  int dataS, dataL;                         // Used for reading code from files.
+  int addr = 0;                             // Used for reading code from files.
+  unsigned char buf[100];                   // Used for reading code from files.
+  uint32 *stackframe;                       // Stores address of current stack frame.
+  PCB *pcb;                                 // Holds pcb while we build it for this process.
+  int intrs;                                // Stores previous interrupt settings.
+  uint32  initial_user_params[MAX_ARGS+2];  // Initial memory for user parameters (argc, argv)
+                                            // initial_user_params[0] = argc
+                                            // initial_user_params[1] = argv, points to initial_user_params[2]
+                                            // initial_user_params[2] = address of string for argv[0]
+                                            // initial_user_params[3] = address of string for argv[1]
+                                            //                           ...
+  uint32 argc=0;                            // running counter for number of arguments
+  uint32 offset;                            // Used in parsing command line argument strings, holds offset (in bytes) from
+                                            // beginning of the string to the current argument.
+  uint32 initial_user_params_bytes;         // total number of bytes in initial user parameters array
 
   intrs = DisableIntrs ();
   dbprintf ('I', "Old interrupt value was 0x%x.\n", intrs);
-  dbprintf ('p', "Entering ProcessFork args=0x%x 0x%x %s %d\n", (int)func,
-	    param, name, isUser);
+  dbprintf ('p', "Entering ProcessFork args=0x%x 0x%x %s %d\n", (int)func, param, name, isUser);
+
   // Get a free PCB for the new process
   if (AQueueEmpty(&freepcbs)) {
     printf ("FATAL error: no free processes!\n");
     exitsim ();	// NEVER RETURNS!
   }
+
   pcb = (PCB *)AQueueObject(AQueueFirst ( &freepcbs));
   dbprintf ('p', "Got a link @ 0x%x\n", (int)(pcb->l));
+
   if (AQueueRemove (&(pcb->l)) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not remove link from freepcbsQueue in ProcessFork!\n");
     exitsim();
   }
+
   // This prevents someone else from grabbing this process
   ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
 
@@ -442,27 +466,24 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   // STUDENT: allocate pages for a new process here.  The
   // code below assumes that you set the "stackframe" variable
   // equal to the last 4-byte-aligned address in physical page
-  // for the system stack. (allocate for global, user, and system stacks)
+  // for the system stack. (allocate for global, user, and system stacks) (completed)
   //---------------------------------------------------------
+
+  MemoryPreAlloc(); //To be called before the first allocation to init static global vars
 
   //Global
   for(i=0; i<4;i++){
-    page = MemoryAllocPage();
-    pcb->pagetable[i] = MemorySetupPte(page);
+    pcb->pagetable[i] = MemorySetupPte(MemoryAllocPage());
     pcb->npages += 1;
   }
 
   //User (only 1)
-  page = MemoryAllocPage();
-  pcb->pagetable[MEM_MAX_VIRTUAL_ADDRESS >> MEM_L1FIELD_FIRST_BITNUM] = MemorySetupPte(page);
-
+  pcb->pagetable[MEM_MAX_VIRTUAL_ADDRESS >> MEM_L1FIELD_FIRST_BITNUM] = MemorySetupPte(MemoryAllocPage());
   pcb->npages += 1;
 
   //System (only 1)
-  page = MemoryAllocPage();
-  pcb->pagetable[MEM_MAX_VIRTUAL_ADDRESS >> MEM_L1FIELD_FIRST_BITNUM] = MemorySetupPte(page);
-  pcb->sysStackArea = page * MEM_PAGESIZE;
-  stackframe = (-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3);
+  pcb->sysStackArea = MemoryAllocPage() * MEM_PAGESIZE;
+  stackframe = (uint32 *)((-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3));
 
   // Now that the stack frame points at the bottom of the system stack memory area, we need to
   // move it up (decrement it) by one stack frame size because we're about to fill in the
@@ -490,17 +511,21 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
 
   //----------------------------------------------------------------------
   // STUDENT: setup the PTBASE, PTBITS, and PTSIZE here on the current
-  // stack frame.
+  // stack frame. (Completed)
   //----------------------------------------------------------------------
-  //TODO - test
-  stackframe[PROCESS_STACK_PTBASE] = 0;
-  stackframe[PROCESS_STACK_PTSIZE] = MEM_L1PTSIZE;
+  stackframe[PROCESS_STACK_PTBASE] = &pcb->pagetable[0]; //base address of the level 1 page table //warning: assignment makes integer from pointer without a cast
+  stackframe[PROCESS_STACK_PTSIZE] = MEM_L1PTSIZE; //maximum number of entries in the level 1 page table
   stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << MEM_FREEMAP_SIZE) | MEM_L1FIELD_FIRST_BITNUM;
 
+  dbprintf('m',"ProcessFork: PTBASE: %d\n", stackframe[PROCESS_STACK_PTBASE]);
+  dbprintf('m',"ProcessFork: PTSIZE: %d\n", stackframe[PROCESS_STACK_PTSIZE]);
+  dbprintf('m',"ProcessFork: PTBITS: %d\n", stackframe[PROCESS_STACK_PTBITS]);
 
   if (isUser) {
+
     dbprintf ('p', "About to load %s\n", name);
     fd = ProcessGetCodeInfo (name, &start, &codeS, &codeL, &dataS, &dataL);
+
     if (fd < 0) {
       // Free newpage and pcb so we don't run out...
       ProcessFreeResources (pcb);
@@ -508,10 +533,8 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     }
 
     dbprintf ('p', "File %s -> start=0x%08x\n", name, start);
-    dbprintf ('p', "File %s -> code @ 0x%08x (size=0x%08x)\n", name, codeS,
-	      codeL);
-    dbprintf ('p', "File %s -> data @ 0x%08x (size=0x%08x)\n", name, dataS,
-	      dataL);
+    dbprintf ('p', "File %s -> code @ 0x%08x (size=0x%08x)\n", name, codeS, codeL);
+    dbprintf ('p', "File %s -> data @ 0x%08x (size=0x%08x)\n", name, dataS, dataL);
 
     while ((n = ProcessGetFromFile (fd, buf, &addr, sizeof (buf))) > 0) {
       dbprintf ('p', "Placing %d bytes at vaddr %08x.\n", n, addr - n);
@@ -519,15 +542,16 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
       // have enough space so that this copy will succeed!
       MemoryCopySystemToUser (pcb, buf, (char *)(addr - n), n);
     }
+
     FsClose (fd);
     stackframe[PROCESS_STACK_ISR] = PROCESS_INIT_ISR_USER;
 
     //----------------------------------------------------------------------
     // STUDENT: setup the initial user stack pointer here as the top
-    // of the process's virtual address space (4-byte aligned).
+    // of the process's virtual address space (4-byte aligned). (Completed)
     //----------------------------------------------------------------------
-    //TODO - test (in current frame, never got quite right)
     stackframe[PROCESS_STACK_USER_STACKPOINTER] = MEM_MAX_VIRTUAL_ADDRESS & invert(0x3);
+    dbprintf ('p', "ProcessFork: User Stack Pointer Address: %d\n",stackframe[PROCESS_STACK_USER_STACKPOINTER]);
 
     //--------------------------------------------------------------------
     // This part is setting up the initial user stack with argc and argv.
@@ -540,6 +564,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     // can't figure out how long the set of strings actually is in this scenario,
     // we have to copy the maximum possible string length and parse things manually.
     stackframe[PROCESS_STACK_USER_STACKPOINTER] -= SIZE_ARG_BUFF;
+
     MemoryCopySystemToUser (pcb, (char *)param, (char *)stackframe[PROCESS_STACK_USER_STACKPOINTER], SIZE_ARG_BUFF);
 
     // Now that the main string is copied into the user space, we need to setup
@@ -555,12 +580,14 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
       // The address can be found as the current stack pointer (which points to the start of
       // the params list) plus the byte offset of the parameter from the beginning of
       // the list of parameters.
+
       initial_user_params[argc+2] = stackframe[PROCESS_STACK_USER_STACKPOINTER] + offset;
       offset = get_argument(NULL);
       if (offset == 0) {
         initial_user_params[argc+2+1] = 0; // last entry should be a null value
         break;
       }
+
     }
     // argc is currently the index of the last command line argument.  We need it to instead
     // be the number of command line arguments, so we increment it by 1.
@@ -581,7 +608,6 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     // we need to move the stack pointer first, then do the copy.  The "+2", as before, is
     // because initial_user_params[0] is argc, and initial_user_params[1] is argv.
     initial_user_params_bytes = (argc + 2) * sizeof(uint32);
-
     stackframe[PROCESS_STACK_USER_STACKPOINTER] -= initial_user_params_bytes;
     MemoryCopySystemToUser (pcb, (char *)initial_user_params, (char *)(stackframe[PROCESS_STACK_USER_STACKPOINTER]), initial_user_params_bytes);
 
@@ -590,6 +616,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
 
     // Flag this as a user process
     pcb->flags |= PROCESS_TYPE_USER;
+
   } else {
     // Don't worry about messing with any code here for kernel processes because
     // there aren't any kernel processes in DLXOS.
@@ -622,10 +649,12 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
     printf("FATAL ERROR: could not get link for forked PCB in ProcessFork!\n");
     exitsim();
   }
+
   if (AQueueInsertLast(&runQueue, pcb->l) != QUEUE_SUCCESS) {
     printf("FATAL ERROR: could not insert link into runQueue in ProcessFork!\n");
     exitsim();
   }
+
   RestoreIntrs (intrs);
 
   // If this is the first process, make it the current one
@@ -847,6 +876,7 @@ void main (int argc, char *argv[])
   }
 
   FsModuleInit ();
+
   for (i = 0; i < argc; i++)
   {
     if (argv[i][0] == '-')
@@ -896,13 +926,14 @@ void main (int argc, char *argv[])
         break;
     }
   }
+
   dbprintf ('i', "About to initialize queues.\n");
   AQueueModuleInit ();
   dbprintf ('i', "After initializing queues.\n");
   MemoryModuleInit ();
   dbprintf ('i', "After initializing memory.\n");
 
-  ProcessModuleInit ();
+  ProcessModuleInit (); //TODO - currently testing - sun
   dbprintf ('i', "After initializing processes.\n");
   SynchModuleInit ();
   dbprintf ('i', "After initializing synchronization tools.\n");
@@ -910,9 +941,11 @@ void main (int argc, char *argv[])
   dbprintf ('i', "After initializing keyboard.\n");
   ClkModuleInit ();
   dbprintf ('i', "After initializing clock.\n");
+
   for (i = 0; i < 100; i++) {
     buf[i] = 'a';
   }
+
   i = FsOpen ("vm", FS_MODE_WRITE);
   dbprintf ('i', "VM Descriptor is %d\n", i);
   FsSeek (i, 0, FS_SEEK_SET);
@@ -921,26 +954,30 @@ void main (int argc, char *argv[])
 
   // Setup command line arguments
   if (userprog != (char *)0) {
+
     numargs=0;
     allargs_offset = 0;
     // Move through each of the argv addresses
     for(i=0; i<argc-base; i++) {
+
       // At each argv address, copy the string into allargs, including the '\0'
       for(j=0; allargs_offset < SIZE_ARG_BUFF; j++) {
         allargs[allargs_offset++] = argv[i+base][j];
         if (argv[i+base][j] == '\0') break; // end of this string
       }
       numargs++;
+
     }
+
     allargs[SIZE_ARG_BUFF-1] = '\0'; // set last char to NULL for safety
     ProcessFork(0, (uint32)allargs, userprog, 1);
-  } else {
-    dbprintf('i', "No user program passed!\n");
-  }
+
+  } else { dbprintf('i', "No user program passed!\n"); }
+
   ClkStart();
-  dbprintf ('i', "Set timer quantum to %d, about to run first process.\n",
-	    processQuantum);
+  dbprintf ('i', "Set timer quantum to %d, about to run first process.\n", processQuantum);
   intrreturn ();
+
   // Should never be called because the scheduler exits when there
   // are no runnable processes left.
   exitsim();	// NEVER RETURNS!

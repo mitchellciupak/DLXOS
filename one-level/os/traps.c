@@ -447,7 +447,7 @@ dointerrupt (unsigned int cause, unsigned int iar, unsigned int isr,
       handle = SemHandleSignal(ihandle);
       ProcessSetResult(currentPCB, handle); //Return 1 or 0
       break;
-    // case TRAP_MALLOC: //TODO - Temp Commented Out until later
+    // case TRAP_MALLOC:
     //   ihandle = GetIntFromTrapArg(trapArgs, isr & DLX_STATUS_SYSMODE);
     //   ihandle = (int)malloc(currentPCB, ihandle);
     //   ProcessSetResult(currentPCB, ihandle); //Return handle
