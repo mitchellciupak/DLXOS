@@ -18,7 +18,7 @@
 
 //--------------------------------------------------------
 // Put your constant definitions related to memory here.
-// Be sure to prepend any constant names with "MEM_" so 
+// Be sure to prepend any constant names with "MEM_" so
 // that the grader knows they are defined in this file.
 #define MEM_L1FIELD_FIRST_BITNUM 12
 #define MEM_MAX_VIRTUAL_ADDRESS 0xFFFFF //(1048576 - 1)
@@ -27,10 +27,12 @@
 #define MEM_PTE_VALID 0x1
 
 #define MEM_PAGESIZE (1<<MEM_L1FIELD_FIRST_BITNUM)
-#define MEM_ADDRESS_OFFSET_MASK (MEM_PAGESIZE - 1) 
-#define MEM_ADDRESS_PAGE_MASK 0xFF  
+#define MEM_ADDRESS_OFFSET_MASK (MEM_PAGESIZE - 1)
+#define MEM_ADDRESS_PAGE_MASK 0xFF
 #define MEM_PTSIZE ((MEM_MAX_VIRTUAL_ADDRESS + 1) >> MEM_L1FIELD_FIRST_BITNUM)
 #define MEM_PTE_MASK (~(MEM_PTE_READONLY | MEM_PTE_DIRTY | MEM_PTE_VALID))
+#define MEM_FREEMAP_SIZE (MEM_MAX_SIZE >> MEM_L1FIELD_FIRST_BITNUM) / MEM_SIZE_OF_ONE_PAGE //15 on a good day
+
 
 
 //--------------------------------------------------------
