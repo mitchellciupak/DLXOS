@@ -394,6 +394,144 @@ static void ProcessExit () {
 
 //----------------------------------------------------------------------
 //
+//	ProcessRealFork
+//
+//----------------------------------------------------------------------
+int ProcessRealFork(PCB *parent_pcb) {
+  int i;                    // Loop index variable
+  int intrs;
+
+  uint32 *stackframe;       // Stores address of current stack frame.
+  PCB *pcb;                 // Holds pcb while we build it for this process.
+  uint32 newPage;
+
+  intrs = DisableIntrs ();
+  dbprintf ('I', "Old interrupt value was 0x%x.\n", intrs);
+  dbprintf ('p', "Entering ProcessFork args=0x%x 0x%x %s %d\n", (int)func, param, name, isUser);
+
+  // Get a free PCB for the new process
+  if (AQueueEmpty(&freepcbs)) {
+    printf ("FATAL error: no free processes!\n");
+    exitsim ();	// NEVER RETURNS!
+  }
+
+  pcb = (PCB *)AQueueObject(AQueueFirst ( &freepcbs));
+  dbprintf ('p', "Got a link @ 0x%x\n", (int)(pcb->l));
+
+  if (AQueueRemove (&(pcb->l)) != QUEUE_SUCCESS) {
+    printf("FATAL ERROR: could not remove link from freepcbsQueue in ProcessFork!\n");
+    exitsim();
+  }
+
+  // This prevents someone else from grabbing this process
+  ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
+
+  //----------------------------------------------------------------------
+
+  if (parent_pcb->npages == 4) { pcb->npages = parent_pcb->npages;}
+
+  for (i = 0; i < parent_pcb->npages; ++i) {
+    parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
+    MemoryReferenceCount((parent_pcb->pagetable[i] & MEM_PTE_MASK4PAGE) / MEM_PAGESIZE);
+  }
+
+  bcopy((char *)parent_pcb, (char *)pcb, sizeof(PCB));
+
+  //----------------------------------------------------------------------
+
+  // At this point, the PCB is allocated and nobody else can get it.
+  // However, it's not in the run queue, so it won't be run.  Thus, we
+  // can turn on interrupts here.
+  RestoreIntrs (intrs);
+
+  // Copy the process name into the PCB.
+  dstrcpy(pcb->name, name);
+
+  //----------------------------------------------------------------------
+  // This section initializes the memory for this process
+  //----------------------------------------------------------------------
+  // Allocate 1 page for system stack, 1 page for user stack (at top of
+  // virtual address space), and 4 pages for user code and global data.
+
+  //---------------------------------------------------------
+  // STUDENT: allocate pages for a new process here.  The
+  // code below assumes that you set the "stackframe" variable
+  // equal to the last 4-byte-aligned address in physical page
+  // for the system stack. (allocate for global, user, and system stacks) (completed)
+  //---------------------------------------------------------
+
+  newPage = MemoryAllocPage();
+  pcb->sysStackArea = newPage * MEM_PAGE_SIZE;
+  bcopy((char *)(parent_pcb->sysStackArea), (char *)(pcb->sysStackArea),MEM_PAGESIZE);
+  stackframe = (uint32 *)((-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3));
+
+  // Now that the stack frame points at the bottom of the system stack memory area, we need to
+  // move it up (decrement it) by one stack frame size because we're about to fill in the
+  // initial stack frame that will be loaded for this PCB when it gets switched in by
+  // ProcessSchedule the first time.
+  stackframe -= PROCESS_STACK_FRAME_SIZE;
+
+  // The system stack pointer is set to the base of the current interrupt stack frame.
+  pcb->sysStackPtr = stackframe;
+  // The current stack frame pointer is set to the same thing.
+  pcb->currentSavedFrame = stackframe;
+
+  //----------------------------------------------------------------------
+  // This section sets up the stack frame for the process.  This is done
+  // so that the frame looks to the interrupt handler like the process
+  // was "suspended" right before it began execution.  The standard
+  // mechanism of swapping in the registers and returning to the place
+  // where it was "interrupted" will then work.
+  //----------------------------------------------------------------------
+
+  // The previous stack frame pointer is set to 0, meaning there is no
+  // previous frame.
+  dbprintf('m', "ProcessFork: stackframe = 0x%x\n", (int)stackframe);
+  stackframe[PROCESS_STACK_PREV_FRAME] = 0;
+
+  //----------------------------------------------------------------------
+  // STUDENT: setup the PTBASE, PTBITS, and PTSIZE here on the current
+  // stack frame. (Completed)
+  //----------------------------------------------------------------------
+  stackframe[PROCESS_STACK_PTBASE] = &pcb->pagetable[0]; //base address of the level 1 page table //warning: assignment makes integer from pointer without a cast
+  stackframe[PROCESS_STACK_PTSIZE] = MEM_L1PTSIZE; //maximum number of entries in the level 1 page table
+  stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << MEM_FREEMAP_SIZE) | MEM_L1FIELD_FIRST_BITNUM;
+
+  dbprintf('m',"ProcessFork: PTBASE: %d\n", stackframe[PROCESS_STACK_PTBASE]);
+  dbprintf('m',"ProcessFork: PTSIZE: %d\n", stackframe[PROCESS_STACK_PTSIZE]);
+  dbprintf('m',"ProcessFork: PTBITS: %d\n", stackframe[PROCESS_STACK_PTBITS]);
+
+  // Place the PCB onto the run queue.
+  intrs = DisableIntrs ();
+  if ((pcb->l = AQueueAllocLink(pcb)) == NULL) {
+    printf("FATAL ERROR: could not get link for forked PCB in ProcessFork!\n");
+    exitsim();
+  }
+
+  if (AQueueInsertLast(&runQueue, pcb->l) != QUEUE_SUCCESS) {
+    printf("FATAL ERROR: could not insert link into runQueue in ProcessFork!\n");
+    exitsim();
+  }
+
+
+  RestoreIntrs(intrs);
+
+  //Set
+  ProcessSetResult(pcb, 0);
+  ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
+
+  //Test
+  printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
+  printf("ProcessRealFork: Child = %d\n\n", GetPidFromAddress(child_pcb));
+  // Test1(parent_pcb); //TODO
+  // Test1(child_pcb);
+
+  dbprintf('p', "ProcessRealFork: Leaving (%s)\n", GetPidFromAddress(pcb));
+  return PROCESS_SUCCESS;
+}
+
+//----------------------------------------------------------------------
+//
 //	ProcessFork
 //
 //	Create a new process and make it runnable.  This involves the
