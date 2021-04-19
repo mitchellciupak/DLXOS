@@ -83,7 +83,6 @@ extern PCB	*currentPCB;
 // Existing function Prototypes
 //---------------------------------------------------------
 int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser);
-int ProcessRealFork (VoidFunc func, uint32 param, char *name, int isUser); //Added by Student
 void ProcessSchedule ();
 void ContextSwitch(void *, void *, int);
 void ProcessSuspend (PCB *);
@@ -95,5 +94,11 @@ void ProcessDestroy(PCB *pcb);
 extern unsigned GetCurrentPid();
 int GetPidFromAddress(PCB *pcb);
 void ProcessKill();
+
+//---------------------------------------------------------
+// Studetn: Added for fork()
+//---------------------------------------------------------
+int ProcessRealFork (VoidFunc func, uint32 param, char *name, int isUser);
+
 
 #endif	/* __process_h__ */
