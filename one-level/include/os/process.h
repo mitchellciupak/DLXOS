@@ -32,16 +32,16 @@
 
 typedef	void (*VoidFunc)();
 
-// Process Control Block
+// Process control block
 typedef struct PCB {
-  uint32	*currentSavedFrame;     // -> current saved frame.  MUST BE 1ST!
-  uint32	*sysStackPtr; 	        // Current system stack pointer.  MUST BE 2ND!
-  uint32	sysStackArea; 	        // System stack area for this process
-  unsigned int	flags;
-  char		name[80];	              // Process name
-  uint32	pagetable[MEM_L1PTSIZE];// Statically allocated page table
-  int		npages;		                // Number of pages allocated to this process
-  Link		*l;		                  // Used for keeping PCB in queues
+  uint32	*currentSavedFrame; // -> current saved frame.  MUST BE 1ST!
+  uint32	*sysStackPtr;	// Current system stack pointer.  MUST BE 2ND!
+  uint32	sysStackArea;	// System stack area for this process
+  unsigned int	flags; // Process status
+  char		name[80];	// Process name
+  uint32	pagetable[MEM_PTSIZE]; // Statically allocated page table
+  int		npages;		// Number of pages allocated to this process
+  Link		*l;		// Used for keeping PCB in queues
 } PCB;
 
 extern PCB	*currentPCB;
@@ -79,9 +79,12 @@ extern PCB	*currentPCB;
 // grader knows that they are defined in this file.
 //---------------------------------------------------------
 
+
+
 //---------------------------------------------------------
 // Existing function Prototypes
 //---------------------------------------------------------
+
 int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser);
 void ProcessSchedule ();
 void ContextSwitch(void *, void *, int);
@@ -94,5 +97,11 @@ void ProcessDestroy(PCB *pcb);
 extern unsigned GetCurrentPid();
 int GetPidFromAddress(PCB *pcb);
 void ProcessKill();
+
+//-------------------------------------------------------
+// Put any functions prototypes that you define here.
+//-------------------------------------------------------
+
+
 
 #endif	/* __process_h__ */

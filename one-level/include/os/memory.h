@@ -18,12 +18,12 @@ int MemoryCopySystemToUser (PCB *pcb, unsigned char *from, unsigned char *to, in
 int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from, unsigned char *to, int n);
 int MemoryPageFaultHandler(PCB *pcb);
 
+
 //---------------------------------------------------------
-// STUDENT: Put your function prototypes here
+// Put your function prototypes here
 //---------------------------------------------------------
-uint32 MemorySetupPte (uint32 page);
-void MemoryFreePage(uint32 page);
-void MemoryPreAlloc(void);
-int MemoryAllocPage(void);
+// All function prototypes including the malloc and mfree functions go here
+int MemoryAllocSysPage(void);
+int MemoryAllocUserPage(void);
 
 #endif	// _memory_h_

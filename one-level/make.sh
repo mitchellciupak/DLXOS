@@ -1,7 +1,5 @@
 #!/bin/bash
 
-## To Run the first test make.sh -R example/ run_test2
-
 << 'Flags'
     # ARG[0]
     * -C : Compile
@@ -29,7 +27,7 @@ function compile() {
 }
 
 function run() {
-    dlxsim -D p -x ./os/work/os.dlx.obj -a D p -u ./apps/work/userprog.dlx.obj
+    dlxsim -x ./os/work/os.dlx.obj -a -u ./apps/work/userprog.dlx.obj
 }
 
 function run_example(){
@@ -38,25 +36,39 @@ function run_example(){
     make clean -C ./os/
     make -C ./os/
     make -C ./apps/example/
-    # ee469_fixterminal
+    ee469_fixterminal
     make run -C ./apps/example/
 }
 
 function run_program(){
     if [ ${args[1]} ]
     then
-      echo '---STARTING---'
+      echo 'Compiling and running'
       echo ${args[1]}
 
-      echo '---CLEANING---'
       make clean -C ./os/
       make -C ./os/
       make clean -C ./apps/${args[1]}/
-      echo '---COMPILING---'
       make -C ./apps/${args[1]}/
       ee469_fixterminal
-      echo '---RUNNING---'
-      make ${args[2]} -C ./apps/${args[1]}/
+      make run -C ./apps/${args[1]}/
+    else
+      echo 'Nothing was Run, No Argment was Added'
+    fi
+}
+
+function run_program_debug(){
+    if [ ${args[1]} ]
+    then
+      echo 'Compiling and running'
+      echo ${args[1]}
+
+      make clean -C ./os/
+      make -C ./os/
+      make clean -C ./apps/${args[1]}/
+      make -C ./apps/${args[1]}/
+      ee469_fixterminal
+      make debug -C ./apps/${args[1]}/
     else
       echo 'Nothing was Run, No Argment was Added'
     fi
@@ -65,8 +77,6 @@ function run_program(){
 function clean_all(){
     make clean -C ./os
     make clean -C ./apps/example/
-    make clean -C ./apps/prio_test/
-    make clean -C ./apps/q2/
 
 }
 
@@ -78,7 +88,7 @@ function move() {
     else
         rm -rf /tmp/$USER/ee469/*
         cp -r . /tmp/$USER/ee469/ 2>/dev/null
-        echo 'This project has been copied to:' /tmp/$USER/ee469/
+        echo 'This project has been copied to:' /tmp/$USER/ee469
     fi
 }
 
@@ -90,8 +100,12 @@ case ${args[0]} in
     compile
     ;;
   -R)
-    # echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
+    echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
     run_program
+    ;;
+  -D)
+    echo 'Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!'
+    run_program_debug
     ;;
   -A)
     echo 'Compiling and Running'
