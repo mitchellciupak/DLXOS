@@ -241,7 +241,8 @@ dstrtol (char *c,  char **newpos, int base)
 //	bzero: Set all the bytes in a region to zero.
 //
 //----------------------------------------------------------------------
-void bcopy (char *src, char *dst, int count)
+void
+bcopy (char *src, char *dst, int count)
 {
   while (count-- > 0) {
     *(dst++) = *(src++);
