@@ -1,0 +1,2 @@
+work/p2.o: p2.c ../../../include/os/memory_constants.h \
+ ../../../include/usertraps.h ../../../include/misc.h
