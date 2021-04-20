@@ -15,7 +15,7 @@
 
 // Non-trap #defines:
 #define PRINTF_MAX_FORMAT_LENGTH 256       // Maximum length of any Printf format string
-#define PRINTF_MAX_ARGS 8                  // Maximum number of "%"'s in a Printf format string 
+#define PRINTF_MAX_ARGS 8                  // Maximum number of "%"'s in a Printf format string
                                            //    (note that one %f is actually 2 args worth of space)
                                            //    Also, you cannot make this greater than 8.  It seems that the
                                            //    the compiler will only pass up to 8 parameters on the stack
@@ -95,5 +95,8 @@
 #define	DLX_KBD_INTR		0xfff001c0
 
 #define	TRAP_STACK_SIZE		0x800	// interrupt stack is 2K words
+
+//STUDENT:
+#define	TRAP_ROP_ACCESS		0x8	// illegal memmory access interrupt
 
 #endif	/* _dlxtraps_h_ */

@@ -17,6 +17,7 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
 int MemoryCopySystemToUser (PCB *pcb, unsigned char *from, unsigned char *to, int n);
 int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from, unsigned char *to, int n);
 int MemoryPageFaultHandler(PCB *pcb);
+int MemoryROPHandler(PCB *pcb);
 
 
 //---------------------------------------------------------
