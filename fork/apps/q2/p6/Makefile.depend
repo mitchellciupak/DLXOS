@@ -1,2 +1,0 @@
-work/p6.o: p6.c ../../../include/os/memory_constants.h \
- ../../../include/usertraps.h ../../../include/misc.h

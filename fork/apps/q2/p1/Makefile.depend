@@ -1,2 +1,0 @@
-work/p1.o: p1.c ../../../include/usertraps.h ../../../include/misc.h \
- ../include/shared.h

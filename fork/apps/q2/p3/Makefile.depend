@@ -1,2 +1,0 @@
-work/p3.o: p3.c ../../../include/os/memory_constants.h \
- ../../../include/usertraps.h ../../../include/misc.h
