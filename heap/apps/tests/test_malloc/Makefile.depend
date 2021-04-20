@@ -1,0 +1,2 @@
+work/test_malloc.o: test_malloc.c ../../../include/usertraps.h \
+ ../../../include/misc.h

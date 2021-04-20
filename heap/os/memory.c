@@ -329,18 +329,13 @@ int makeIndex(int o, int* heap){
 
   // Either start at the optimal location, or you're going to have to look all the way
   idx = tiniest_idx < heap_max ? tiniest_idx : 0;
-  printf("tinites = %d\n", tiniest_idx);
+
   // Now iterate through and find one to split into a usable one
   while(idx < heap_max && heap[idx] != o){
-    printf("idx %d is %d inuse\n", idx, is_used(heap[idx]));
-    if(!is_used(heap[idx])) printf("triggered\n");
     if(!is_used(heap[idx]) && heap[idx] > o){
-      printf("\nSplitting heap idx %d into", idx);
       heap[idx] -= 1;
-      printf(" %d\n", heap[idx]);
-      buddy_idx = pow2(heap[idx]);
+      buddy_idx = pow2(heap[idx]) + idx;
       heap[buddy_idx] = heap[idx];
-      printf("also storing %d at %d\n", heap[buddy_idx], buddy_idx);
     }
     else idx += (pow2(heap[idx]) / 1);
   }
@@ -361,25 +356,105 @@ void printHeap(int* heap){
   }
 }
 
+void fancyPrint(int* heap){
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+  int i=0;
+  int j=0;
+  int inuse = 0;
+
+  while(i<heap_max){
+    inuse = is_used(heap[i]);
+    printf("%d |\t", heap[i] & 0xF);
+    for(j=0;j<(pow2(heap[i]));j++){
+      printf("%d  ",inuse);
+      if(j!=0 && !(j%12)) printf("\n\t");
+    }
+    printf("\n");
+    i += j;
+  }
+}
+
 // use a binary tree, but use the actual memory space to store information
 void* malloc(PCB* pcb, int memsize){
   int order;
   int idx;
+  if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
 
   order = log2(memsize/MEM_ORDER0);
-  printf("Order of memsize %d is %d\n", memsize, order);
-  printHeap(&pcb->heapNodes);
   idx = makeIndex(order, &pcb->heapNodes);
   if(idx == -1){
     printf("Process (%d) Heap full\n");
-    ProcessDestroy(pcb);
+    return NULL;
   }
   // mark as inuse
   pcb->heapNodes[idx] |= (1<<4);
 
-  return NULL;
+  // do printing
+  printf("Allocated the block: ");
+  printf("order = %d, ", order);
+  printf("addr = %d, ", idx*32);
+  printf("requested mem size = %d, ", memsize);
+  printf("block size = %d\n", pow2(order)*MEM_ORDER0);
+  return (pcb->pagetable[pcb->heap_idx] & MEM_PTE_MASK) | (idx*MEM_ORDER0);
+}
+
+void shrink(int* heap, int idx){
+  
+  int order = heap[idx];
+  int left = 0;
+  int right = 0;
+  int buddy;
+  int idx_copy = 0;
+
+  // first look left
+  while(idx_copy < idx){
+    if(heap[idx_copy] == order) left++;
+    else left = 0;
+    idx_copy += pow2(heap[idx_copy]);
+  }
+  // If there is an odd number to the left, merge left
+  if(left % 2){
+    heap[idx] = 0;
+    buddy = idx - pow2(order);
+    heap[buddy] = order + 1;
+    printf("Coalesced buddy nodes ");
+    printf("(order = %d, addr = %d, size = %d) & ", order, idx*32, pow2(idx)*32);
+    printf("(order = %d, addr = %d, size = %d)\n", order, buddy*32, pow2(order)*32);
+    printf("into the parent node ");
+    printf("order = %d, addr = %d, size = %d)\n", heap[buddy], buddy*32, pow2(heap[buddy])*32);
+    shrink(heap, buddy);
+    return;
+  }
+
+  // now see if there's one to the right
+  buddy = idx + pow2(order);
+  if(heap[buddy] == order && !is_used(heap[buddy])){
+    heap[buddy] = 0;
+    heap[idx] = order + 1;
+    printf("Coalesced buddy nodes ");
+    printf("(order = %d, addr = %d, size = %d) & ", order, buddy*32, pow2(buddy)*32);
+    printf("(order = %d, addr = %d, size = %d)\n", order, idx*32, pow2(order)*32);
+    printf("into the parent node ");
+    printf("order = %d, addr = %d, size = %d)\n", heap[idx], idx*32, pow2(heap[idx])*32);
+        shrink(heap, idx);
+  }
+  return;
 }
 
 int mfree(PCB* pcb, void *ptr){
+  int ptr_page = ((int)ptr >> MEM_L1FIELD_FIRST_BITNUM) & 0xFF;
+  int offset = (int)ptr & 0xFFF;
+  int idx = offset / MEM_ORDER0;
+  int order = pcb->heapNodes[idx]& 0xF;
+  int heap_loc = (pcb->pagetable[pcb->heap_idx] >> MEM_L1FIELD_FIRST_BITNUM) & 0xFF;
+  
+  if(!is_used(pcb->heapNodes[idx]) || ptr_page != heap_loc){
+    printf("Not a valid heap address\n");
+    return -1;
+  }
+  pcb->heapNodes[idx] &= ~(1<<4);
+  shrink(&pcb->heapNodes, idx);
+  printf("Freed the block: order = %d, addr = %d, size = %d)\n", order, offset, pow2(order)*32);
+
   return NULL;
 }
