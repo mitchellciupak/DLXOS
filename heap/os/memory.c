@@ -262,4 +262,124 @@ void MemoryFreePage(uint32 page) {
   bit = page % 32;
   freemap[idx] &= invert(1<<bit);
 }
+//---------------------------------------------------------------------
+// All heap management work goes here
+//---------------------------------------------------------------------
 
+// 2^a
+// Only for numbers 0-15
+int pow2(int a){
+  int i;
+  int b = 1;
+  a &= 0xF;
+  for(i=0; i<a;i++){
+    b *= 2;
+  }
+  return b;
+}
+
+// log(a) base 2
+int log2(int a){
+  int i = 0; 
+  int b = 1;
+  while(a > b){
+    b *= 2;
+    i++;
+  }
+  return i;
+}
+
+int is_used(int a){
+  return (a>>4 & 1);
+}
+
+/*int findIndex(int order, int* heap){
+  int idx = 0;
+  int left = 1;
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+
+  // traverse and look for index
+  while(idx < heap_max){
+    if(heap[idx] == order){
+      if(is_unused(heap[idx])) return idx;
+    }
+    idx += (pow2(heap[idx]) / MEM_ORDER0);
+  }
+  return -1;
+}*/
+
+void printHeap(int* heap);
+int makeIndex(int o, int* heap){
+  int idx = 0;
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+  int tiniest_idx = heap_max;
+  int buddy_idx;
+
+  // First look to see if we can find an unused one that's the right size
+  // Keep track of the smallest unused idx that's greater order than o
+  while(idx < heap_max){
+    if(heap[idx] == o && !is_used(heap[idx])){
+      return idx;
+    }
+    if(heap[idx] > o && idx < tiniest_idx && !is_used(heap[idx])) {
+    tiniest_idx = idx;
+    }
+    idx += (pow2(heap[idx]) / 1);
+  }
+
+  // Either start at the optimal location, or you're going to have to look all the way
+  idx = tiniest_idx < heap_max ? tiniest_idx : 0;
+  printf("tinites = %d\n", tiniest_idx);
+  // Now iterate through and find one to split into a usable one
+  while(idx < heap_max && heap[idx] != o){
+    printf("idx %d is %d inuse\n", idx, is_used(heap[idx]));
+    if(!is_used(heap[idx])) printf("triggered\n");
+    if(!is_used(heap[idx]) && heap[idx] > o){
+      printf("\nSplitting heap idx %d into", idx);
+      heap[idx] -= 1;
+      printf(" %d\n", heap[idx]);
+      buddy_idx = pow2(heap[idx]);
+      heap[buddy_idx] = heap[idx];
+      printf("also storing %d at %d\n", heap[buddy_idx], buddy_idx);
+    }
+    else idx += (pow2(heap[idx]) / 1);
+  }
+  if(idx == heap_max) return -1;
+  return idx;
+}
+
+void printHeap(int* heap){
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+  int i;
+  int j;
+  int num_cols=8;
+  for(i=0;i<num_cols;i++){
+    for(j=0;j<heap_max/num_cols;j++){
+      printf("%d\t", heap[i*(heap_max/num_cols) + j] & 0xF);
+    }
+    printf("\n");
+  }
+}
+
+// use a binary tree, but use the actual memory space to store information
+void* malloc(PCB* pcb, int memsize){
+  int order;
+  int idx;
+
+  order = log2(memsize/MEM_ORDER0);
+  printf("Order of memsize %d is %d\n", memsize, order);
+  printHeap(&pcb->heapNodes);
+  idx = makeIndex(order, &pcb->heapNodes);
+  if(idx == -1){
+    printf("Process (%d) Heap full\n");
+    ProcessDestroy(pcb);
+  }
+  // mark as inuse
+  pcb->heapNodes[idx] |= (1<<4);
+
+  return NULL;
+}
+
+int mfree(PCB* pcb, void *ptr){
+  return NULL;
+}

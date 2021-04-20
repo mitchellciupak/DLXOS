@@ -221,7 +221,7 @@ _main:
 	lw	r3,4(r30)
 	jal	___main
 	nop	; not filled.
-	addi	r5,r0,#31
+	addi	r5,r0,#30
 	snei	r1,r2,#1
 	beqz	r1,L30
 	nop	; not filled.
@@ -477,8 +477,8 @@ L56:
 	addi	r29,r29,#8
 L60:
 	addi	r29,r29,#-16
-	lhi	r6,((LC4)>>16)&0xffff
-	addui	r6,r6,(LC4)&0xffff
+	lhi	r6,((LC7)>>16)&0xffff
+	addui	r6,r6,(LC7)&0xffff
 	sw	(r29),r6
 	sw	4(r29),r2
 	addi	r6,r0,#0
@@ -510,77 +510,8 @@ L60:
 	addi	r29,r29,#8
 L59:
 	addi	r3,r3,#1
-	slti	r1,r3,#100
-	bnez	r1,L60
-	nop	; not filled.
-	addi	r29,r29,#-8
-	addi	r6,r0,#0
-	sw	(r29),r6
-	jal	_sem_create
-	nop	; not filled.
-	add	r4,r0,r1
-	addi	r29,r29,#8
-	seqi	r1,r4,#-1
-	beqz	r1,L64
-	nop	; not filled.
-	jal	_getpid
-	nop	; not filled.
-	addi	r29,r29,#-8
-	lhi	r6,((LC0)>>16)&0xffff
-	addui	r6,r6,(LC0)&0xffff
-	sw	(r29),r6
-	sw	4(r29),r1
-	jal	_Printf
-	nop	; not filled.
-	jal	_Exit
-	nop	; not filled.
-	addi	r29,r29,#8
-L64:
-	addi	r29,r29,#-8
-	sw	(r29),r4
-	addi	r2,r30,#-40
-	sw	4(r29),r2
-	jal	_ditoa
-	nop	; not filled.
-	addi	r3,r0,#0
-	addi	r29,r29,#8
-L68:
-	addi	r29,r29,#-16
-	lhi	r6,((LC7)>>16)&0xffff
-	addui	r6,r6,(LC7)&0xffff
-	sw	(r29),r6
-	sw	4(r29),r2
-	addi	r6,r0,#0
-	sw	8(r29),r6
-	jal	_process_create
-	nop	; not filled.
-	lhi	r6,((LC1)>>16)&0xffff
-	addui	r6,r6,(LC1)&0xffff
-	sw	(r29),r6
-	sw	4(r29),r3
-	jal	_Printf
-	nop	; not filled.
-	sw	(r29),r4
-	jal	_sem_wait
-	nop	; not filled.
-	addi	r29,r29,#16
-	snei	r1,r1,#1
-	beqz	r1,L67
-	nop	; not filled.
-	addi	r29,r29,#-8
-	lhi	r6,((LC2)>>16)&0xffff
-	addui	r6,r6,(LC2)&0xffff
-	sw	(r29),r6
-	sw	4(r29),r4
-	jal	_Printf
-	nop	; not filled.
-	jal	_Exit
-	nop	; not filled.
-	addi	r29,r29,#8
-L67:
-	addi	r3,r3,#1
 	slti	r1,r3,#1
-	bnez	r1,L68
+	bnez	r1,L60
 	nop	; not filled.
 	addi	r29,r29,#-8
 	addi	r1,r0,#1
@@ -591,7 +522,7 @@ L67:
 	add	r4,r0,r1
 	addi	r29,r29,#8
 	seqi	r1,r4,#-1
-	beqz	r1,L71
+	beqz	r1,L63
 	nop	; not filled.
 	jal	_getpid
 	nop	; not filled.
@@ -605,7 +536,7 @@ L67:
 	jal	_Exit
 	nop	; not filled.
 	addi	r29,r29,#8
-L71:
+L63:
 	addi	r29,r29,#-8
 	sw	(r29),r4
 	addi	r3,r30,#-24
@@ -615,9 +546,9 @@ L71:
 	addi	r2,r0,#0
 	addi	r29,r29,#8
 	slt	r1,r2,r5
-	beqz	r1,L73
+	beqz	r1,L65
 	nop	; not filled.
-L75:
+L67:
 	addi	r29,r29,#-16
 	lhi	r6,((LC8)>>16)&0xffff
 	addui	r6,r6,(LC8)&0xffff
@@ -630,16 +561,16 @@ L75:
 	addi	r29,r29,#16
 	addi	r2,r2,#1
 	slt	r1,r2,r5
-	bnez	r1,L75
+	bnez	r1,L67
 	nop	; not filled.
-L73:
+L65:
 	addi	r29,r29,#-8
 	sw	(r29),r4
 	jal	_sem_wait
 	nop	; not filled.
 	addi	r29,r29,#8
 	snei	r1,r1,#1
-	beqz	r1,L77
+	beqz	r1,L69
 	nop	; not filled.
 	addi	r29,r29,#-8
 	lhi	r6,((LC2)>>16)&0xffff
@@ -651,7 +582,7 @@ L73:
 	jal	_Exit
 	nop	; not filled.
 	addi	r29,r29,#8
-L77:
+L69:
 	addi	r29,r29,#-8
 	lhi	r6,((LC9)>>16)&0xffff
 	addui	r6,r6,(LC9)&0xffff
