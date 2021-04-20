@@ -205,13 +205,14 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 //---------------------------------------------------------------------
 int MemoryPageFaultHandler(PCB *pcb) {
   int attempt = pcb->currentSavedFrame[PROCESS_STACK_FAULT];
-  int i = 0;
+  int i = 0xFE;
   if(attempt < pcb->sysStackPtr) ProcessKill();
-  while(pcb->pagetable[i] != 0){
-    i++;
+  while(pcb->pagetable[i] != 0 && i > 0){
+    i--;
   }
-  if(i==0xFF) ProcessKill();
+  if(i==0) ProcessKill();
   pcb->pagetable[i] = MemoryAllocUserPage();
+  dbprintf("m", "Page table %d allocated\n", pcb->pagetable[i]);
   return MEM_SUCCESS;
 }
 
