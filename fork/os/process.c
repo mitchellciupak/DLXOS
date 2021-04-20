@@ -347,7 +347,7 @@ void ProcessDestroy (PCB *pcb) {
 static void ProcessExit () {
   exit ();
 }
-
+ProcessRealFork
 //----------------------------------------------------------------------
 //
 //	ProcessRealFork
@@ -430,9 +430,9 @@ int ProcessRealFork(PCB *parent_pcb) {
   // The system stack pointer is set to the base of the current interrupt stack frame.
   pcb->sysStackPtr = stackframe;
   // The current stack frame pointer is set to the same thing.
-  pcb->currentSavedFrame = stackframe;
+  pcb->ProcessRealFork = stackframe;
 
-  //----------------------------------------------------------------------
+  //----------ProcessPrintValidPTEs------------------------------------------------------------
   // This section sets up the stack frame for the process.  This is done
   // so that the frame looks to the interrupt handler like the process
   // was "suspended" right before it began execution.  The standard
@@ -476,14 +476,34 @@ int ProcessRealFork(PCB *parent_pcb) {
   ProcessSetResult(pcb, 0);
   ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
 
-  //Test
+  //TestProcessPrintValidPTEs
   printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
-  printf("ProcessRealFork: Child = %d\n\n", GetPidFromAddress(child_pcb));
-  // Test1(parent_pcb); //TODO
-  // Test1(child_pcb);
+  ProcessPrintValidPTEs(parent_pcb);
+  printf("ProcessRealFork: Child = %d\n\n", GetPidFromAddress(pcb));
+  ProcessPrintValidPTEs(pcb);
 
   dbprintf('p', "ProcessRealFork: Leaving (%s)\n", GetPidFromAddress(pcb));
   return PROCESS_SUCCESS;
+}
+
+
+//----------------------------------------------------------------------
+//
+//	ProcessPrintValidPTEs
+//    Created to past test code for 4.1: after fork(), print the valid page
+//    table entries for both the parent and the child.
+//----------------------------------------------------------------------
+void ProcessPrintValidPTEs(PCB *pcb) {
+  int i;
+
+  for(i=0;i< sizeof(pcb->pagetable) / sizeof(pcb->pagetable[0]); k++){
+    if(pcb->pagetable[i] & MEM_PTE_VALID){
+      printf("ProcessPrintValidPTEs: pcb->pagetable[%d] = 0x%x\n",i,pacb->pagetable[i]);
+    }      printf("ProcessPrintValidPTEs: pcb->pagetable[%d] = 0x%x\n",i,pacb->pagetable[i]);
+
+  }
+\n"
+  printf("ProcessPrintValidPTEs: Exiting (%s)\n", GetPidFromAddress(pcb));
 }
 
 
