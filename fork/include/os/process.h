@@ -17,7 +17,6 @@
 #define PROCESS_SUCCESS 1
 
 #define	PROCESS_MAX_PROCS	32	// Maximum number of active processes
-ProcessPrintValidPTEs
 #define	PROCESS_INIT_ISR_SYS	0x140	// Initial status reg value for system processes
 #define	PROCESS_INIT_ISR_USER	0x100	// Initial status reg value for user processes
 
@@ -43,7 +42,7 @@ typedef struct PCB {
   int		npages;		// Number of pages allocated to this process
   Link		*l;		// Used for keeping PCB in queues
 } PCB;
-ProcessPrintValidPTEs
+
 extern PCB	*currentPCB;
 
 // Offsets of various registers from the stack pointer in the register
@@ -104,6 +103,4 @@ void ProcessKill();
 int ProcessRealFork(PCB *parent_pcb);
 void ProcessPrintValidPTEs(PCB *pcb);
 
-ProcessPrintValidPTEs
 #endif	/* __process_h__ */
-ProcessPrintValidPTEs

@@ -53,6 +53,21 @@ int ProcessGetCodeInfo(const char *file, uint32 *startAddr, uint32 *codeStart, u
 int ProcessGetFromFile(int fd, unsigned char *buf, uint32 *addr, int max);
 uint32 get_argument(char *string);
 
+//----------------------------------------------------------------------
+//
+//	This silliness is required because the compiler believes that
+//	it can invert a number by subtracting it from zero and subtracting
+//	an additional 1.  This works unless you try to negate 0x80000000,
+//	which causes an overflow when subtracted from 0.  Simply
+//	trying to do an XOR with 0xffffffff results in the same code
+//	being emitted.
+//
+//----------------------------------------------------------------------
+static int negativeone = 0xFFFFFFFF;
+static inline uint32 invert (uint32 n) {
+  return (n ^ negativeone);
+}
+
 
 //----------------------------------------------------------------------
 //
@@ -347,7 +362,6 @@ void ProcessDestroy (PCB *pcb) {
 static void ProcessExit () {
   exit ();
 }
-ProcessRealFork
 //----------------------------------------------------------------------
 //
 //	ProcessRealFork
@@ -363,7 +377,6 @@ int ProcessRealFork(PCB *parent_pcb) {
 
   intrs = DisableIntrs ();
   dbprintf ('I', "Old interrupt value was 0x%x.\n", intrs);
-  dbprintf ('p', "Entering ProcessFork args=0x%x 0x%x %s %d\n", (int)func, param, name, isUser);
 
   // Get a free PCB for the new process
   if (AQueueEmpty(&freepcbs)) {
@@ -388,7 +401,6 @@ int ProcessRealFork(PCB *parent_pcb) {
 
   for (i = 0; i < parent_pcb->npages; ++i) {
     parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
-    MemoryReferenceCount((parent_pcb->pagetable[i] & MEM_PTE_MASK) / MEM_PAGESIZE);
   }
 
   bcopy((char *)parent_pcb, (char *)pcb, sizeof(PCB));
@@ -416,7 +428,7 @@ int ProcessRealFork(PCB *parent_pcb) {
   // for the system stack. (allocate for global, user, and system stacks) (completed)
   //---------------------------------------------------------
 
-  newPage = MemoryAllocPage();
+  newPage = findFreePage();
   pcb->sysStackArea = newPage * MEM_PAGESIZE;
   bcopy((char *)(parent_pcb->sysStackArea), (char *)(pcb->sysStackArea),MEM_PAGESIZE);
   stackframe = (uint32 *)((-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3));
@@ -430,7 +442,7 @@ int ProcessRealFork(PCB *parent_pcb) {
   // The system stack pointer is set to the base of the current interrupt stack frame.
   pcb->sysStackPtr = stackframe;
   // The current stack frame pointer is set to the same thing.
-  pcb->ProcessRealFork = stackframe;
+  pcb->currentSavedFrame = stackframe;
 
   //----------ProcessPrintValidPTEs------------------------------------------------------------
   // This section sets up the stack frame for the process.  This is done
@@ -450,8 +462,8 @@ int ProcessRealFork(PCB *parent_pcb) {
   // stack frame. (Completed)
   //----------------------------------------------------------------------
   stackframe[PROCESS_STACK_PTBASE] = &pcb->pagetable[0]; //base address of the level 1 page table //warning: assignment makes integer from pointer without a cast
-  stackframe[PROCESS_STACK_PTSIZE] = MEM_L1PTSIZE; //maximum number of entries in the level 1 page table
-  stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << MEM_FREEMAP_SIZE) | MEM_L1FIELD_FIRST_BITNUM;
+  stackframe[PROCESS_STACK_PTSIZE] = MEM_PTSIZE; //maximum number of entries in the level 1 page table
+  stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << 16) | MEM_L1FIELD_FIRST_BITNUM;
 
   dbprintf('m',"ProcessFork: PTBASE: %d\n", stackframe[PROCESS_STACK_PTBASE]);
   dbprintf('m',"ProcessFork: PTSIZE: %d\n", stackframe[PROCESS_STACK_PTSIZE]);
@@ -496,13 +508,11 @@ int ProcessRealFork(PCB *parent_pcb) {
 void ProcessPrintValidPTEs(PCB *pcb) {
   int i;
 
-  for(i=0;i< sizeof(pcb->pagetable) / sizeof(pcb->pagetable[0]); k++){
+  for(i=0;i< sizeof(pcb->pagetable) / sizeof(pcb->pagetable[0]); i++){
     if(pcb->pagetable[i] & MEM_PTE_VALID){
-      printf("ProcessPrintValidPTEs: pcb->pagetable[%d] = 0x%x\n",i,pacb->pagetable[i]);
-    }      printf("ProcessPrintValidPTEs: pcb->pagetable[%d] = 0x%x\n",i,pacb->pagetable[i]);
-
+      printf("ProcessPrintValidPTEs: pcb->pagetable[%d] = 0x%x\n",i,pcb->pagetable[i]);
+    }
   }
-\n"
   printf("ProcessPrintValidPTEs: Exiting (%s)\n", GetPidFromAddress(pcb));
 }
 

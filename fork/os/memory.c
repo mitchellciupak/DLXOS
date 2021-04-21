@@ -15,8 +15,8 @@
 #define NPAGES (MEM_SIZE / MEM_PAGESIZE)
 static uint32 freemap[NPAGES / 32];
 static uint32 pagestart;
-static int nfreepages;
-static int freemapmax;
+// static int nfreepages;
+// static int freemapmax;
 
 //----------------------------------------------------------------------
 //
@@ -78,7 +78,7 @@ void MemoryModuleInit() {
 
   printf("Freemap size = %d\nLastosaddress = %d\n", freemap_size, lastosaddress);
   for(i=0; i < freemap_size; i++){
-    printf("%d, ", freemap[i]);
+    // printf("%d, ", freemap[i]);
   }
   printf("\n");
 
@@ -224,7 +224,7 @@ int MemoryROPHandler(PCB *pcb) {
   pcb->pagetable[page] = MemoryAllocSysPage();
   bcopy((char *)(pcb->currentSavedFrame[PROCESS_STACK_FAULT]), (char *)((pcb->pagetable[page]) * MEM_PAGESIZE), MEM_PAGESIZE);
   pcb->pagetable[page] &= invert(MEM_PTE_READONLY);
-
+  return MEM_SUCCESS;
 }
 
 
@@ -232,7 +232,7 @@ int MemoryROPHandler(PCB *pcb) {
 // You may need to implement the following functions and access them from process.c
 // Feel free to edit/remove them
 //---------------------------------------------------------------------
-int findFreePage(void){
+int findFreePage(void) {
   int i;
   int j;
   for(i=0; i<(NPAGES/32);i++){
@@ -245,7 +245,8 @@ int findFreePage(void){
       }
     }
   }
-  printf("No free page found!\n");
+  dbprintf('m',"findFreePage: No free page found!\n");
+  return MEM_FAIL;
 }
 
 int MemoryAllocUserPage(void) {

@@ -18,8 +18,8 @@ typedef int mbox_t;
 #define SYNC_SUCCESS 1
 
 //---------------------------------------------------------------------
-// Function declarations for user traps defined in the assembly 
-// library are provided here.  User-level programs can use any of 
+// Function declarations for user traps defined in the assembly
+// library are provided here.  User-level programs can use any of
 // these functions, and any new traps need to have their declarations
 // listed here.
 //---------------------------------------------------------------------
@@ -66,6 +66,7 @@ void yield();                           //trap 0x466
 //Related to heap management
 void *malloc(int memsize);              //trap 0x467
 int mfree(void *ptr);                   //trap 0x468
+int fork();                             //trap 0x4430
 
 
 #ifndef NULL
