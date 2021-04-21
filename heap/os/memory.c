@@ -322,9 +322,9 @@ int makeIndex(int o, int* heap){
       buddy_idx = pow2(heap[idx]) + idx;
       heap[buddy_idx] = heap[idx];
       printf("Created a right child node (order = %d, addr = %d, size = %d) ", heap[buddy_idx], buddy_idx*MEM_ORDER0, pow2(heap[buddy_idx]));
-      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] - 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] + 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
       printf("Created a left child node (order = %d, addr = %d, size = %d) ", heap[idx], idx*MEM_ORDER0, pow2(heap[idx]));
-      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] - 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx]  + 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
     }
     else idx += (pow2(heap[idx]) / 1);
   }
@@ -384,6 +384,7 @@ void* malloc(PCB* pcb, int memsize){
   printf("addr = %d, ", idx*32);
   printf("requested mem size = %d, ", memsize);
   printf("block size = %d\n", pow2(order)*MEM_ORDER0);
+  fancyPrint(&pcb->heapNodes);
   return (pcb->pagetable[pcb->heap_idx] & MEM_PTE_MASK) | (idx*MEM_ORDER0);
 }
 
