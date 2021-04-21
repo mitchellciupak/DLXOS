@@ -7,6 +7,10 @@ void main (int argc, char *argv[])
   int test_num;
   int i;
   int* heap_idcs[128];
+  int* forty;
+  int* sixty;
+  int* onetwentynine;
+  int* onetwentyeight;
 
   if (argc != 3) { 
     Printf("Usage: %s <handle_to_procs_completed_semaphore>\n"); 
@@ -36,7 +40,7 @@ void main (int argc, char *argv[])
     heap_idcs[1] = malloc(2);
     
   }
-  else if (test_num == 0){
+  else if (test_num == 5){
     Printf("Test %d: making holes\n\n", test_num);
     heap_idcs[0] = malloc(32);
     heap_idcs[1] = malloc(64);
@@ -46,7 +50,37 @@ void main (int argc, char *argv[])
     mfree(heap_idcs[1]);
     mfree(heap_idcs[2]);
     mfree(heap_idcs[3]);
+  }
+  else if (test_num == 0){
+    Printf("seven %d: allocating 40, 60, 129, and 128 bytes!\n", getpid());
+    forty = malloc(40);
+    Printf("40 addr: %d\n", (int)forty);
+    sixty = malloc(60);
+    Printf("60 addr: %d\n", (int)sixty);
+    onetwentynine = malloc(129);
+    Printf("129 addr: %d\n", (int)onetwentynine);
+    onetwentyeight = malloc(128);
+    Printf("128 addr: %d\n", (int)onetwentyeight);
 
+    dstrcpy(onetwentynine, "Hello world!");
+    Printf("Hello world printed from heap memory: %s\n", onetwentynine);
+    dstrcpy(forty, "forty\n");
+    dstrcpy(sixty, "sixty\n");
+    Printf("String in 40: %s", forty);
+    Printf("String in 60: %s", sixty);
+    Printf("Freeing all the allocations\n");
+    if(mfree(forty) < 0) {
+        Printf("mfree failed!\n");
+    }
+    if(mfree(sixty) < 0) {
+        Printf("mfree failed!\n");
+     }
+    if(mfree(onetwentynine) < 0) {
+        Printf("mfree failed!\n");
+     }
+    if(mfree(onetwentyeight) < 0) {
+        Printf("mfree failed!\n");
+     }
   }
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {

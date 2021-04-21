@@ -321,10 +321,10 @@ int makeIndex(int o, int* heap){
       heap[idx] -= 1;
       buddy_idx = pow2(heap[idx]) + idx;
       heap[buddy_idx] = heap[idx];
-      printf("Created a right child node (order = %d, addr = %d, size = %d) ", heap[buddy_idx], buddy_idx*MEM_ORDER0, pow2(heap[buddy_idx]));
-      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] + 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
-      printf("Created a left child node (order = %d, addr = %d, size = %d) ", heap[idx], idx*MEM_ORDER0, pow2(heap[idx]));
-      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx]  + 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
+      printf("Created a right child node (order = %d, addr = %d, size = %d) ", heap[buddy_idx], buddy_idx*MEM_ORDER0, pow2(heap[buddy_idx])*MEM_ORDER0);
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] + 1, idx*MEM_ORDER0, pow2(heap[idx] + 1)*MEM_ORDER0);
+      printf("Created a left child node (order = %d, addr = %d, size = %d) ", heap[idx], idx*MEM_ORDER0, pow2(heap[idx])*MEM_ORDER0);
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx]  + 1, idx*MEM_ORDER0, pow2(heap[idx] + 1)*MEM_ORDER0);
     }
     else idx += (pow2(heap[idx]) / 1);
   }
@@ -369,7 +369,8 @@ void* malloc(PCB* pcb, int memsize){
   int idx;
   if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
 
-  order = log2(memsize/MEM_ORDER0);
+  order = log2(memsize);
+  order -= log2(MEM_ORDER0);
   idx = makeIndex(order, &pcb->heapNodes);
   if(idx == -1){
     printf("Process (%d) Heap full\n");
@@ -384,7 +385,7 @@ void* malloc(PCB* pcb, int memsize){
   printf("addr = %d, ", idx*32);
   printf("requested mem size = %d, ", memsize);
   printf("block size = %d\n", pow2(order)*MEM_ORDER0);
-  fancyPrint(&pcb->heapNodes);
+  //fancyPrint(&pcb->heapNodes);
   return (pcb->pagetable[pcb->heap_idx] & MEM_PTE_MASK) | (idx*MEM_ORDER0);
 }
 
@@ -408,10 +409,10 @@ void shrink(int* heap, int idx){
     buddy = idx - pow2(order);
     heap[buddy] = order + 1;
     printf("Coalesced buddy nodes ");
-    printf("(order = %d, addr = %d, size = %d) & ", order, idx*32, pow2(idx)*32);
-    printf("(order = %d, addr = %d, size = %d)\n", order, buddy*32, pow2(order)*32);
+    printf("(order = %d, addr = %d, size = %d) & ", order, idx*32, pow2(order)*MEM_ORDER0);
+    printf("(order = %d, addr = %d, size = %d)\n", order, buddy*32, pow2(order)*MEM_ORDER0);
     printf("into the parent node ");
-    printf("order = %d, addr = %d, size = %d)\n", heap[buddy], buddy*32, pow2(heap[buddy])*32);
+    printf("(order = %d, addr = %d, size = %d)\n", heap[buddy], buddy*32, pow2(heap[buddy])*MEM_ORDER0);
     shrink(heap, buddy);
     return;
   }
@@ -422,10 +423,10 @@ void shrink(int* heap, int idx){
     heap[buddy] = 0;
     heap[idx] = order + 1;
     printf("Coalesced buddy nodes ");
-    printf("(order = %d, addr = %d, size = %d) & ", order, buddy*32, pow2(buddy)*32);
-    printf("(order = %d, addr = %d, size = %d)\n", order, idx*32, pow2(order)*32);
+    printf("(order = %d, addr = %d, size = %d) & ", order, buddy*32, pow2(order)*MEM_ORDER0);
+    printf("(order = %d, addr = %d, size = %d)\n", order, idx*32, pow2(order)*MEM_ORDER0);
     printf("into the parent node ");
-    printf("order = %d, addr = %d, size = %d)\n", heap[idx], idx*32, pow2(heap[idx])*32);
+    printf("(order = %d, addr = %d, size = %d)\n", heap[idx], idx*32, pow2(heap[idx])*MEM_ORDER0);
         shrink(heap, idx);
   }
   return;
@@ -444,8 +445,8 @@ int mfree(PCB* pcb, void *ptr){
   }
   pcb->heapNodes[idx] &= ~(1<<4);
   shrink(&pcb->heapNodes, idx);
-  fancyPrint(&pcb->heapNodes);
-  printf("Freed the block: order = %d, addr = %d, size = %d)\n", order, offset, pow2(order)*32);
+  //fancyPrint(&pcb->heapNodes);
+  printf("Freed the block: order = %d, addr = %d, size = %d\n", order, offset, pow2(order)*MEM_ORDER0);
 
   return NULL;
 }

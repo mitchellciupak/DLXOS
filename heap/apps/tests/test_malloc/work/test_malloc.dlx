@@ -1,7 +1,7 @@
 ; Linked by DLX-LD.
 ; MemSize 24576
-; Data size: 233
-; Text size: 4824
+; Data size: 513
+; Text size: 5452
 ; Stack size: 8192
 .text 0x1000
 .data 0x3000
@@ -91,9 +91,48 @@ LC3_LF0:
 .ascii "Test %d: making holes\n\n\000"
 .align 2
 LC4_LF0:
-.ascii "hello_world (%d): Bad semaphore s_procs_completed (%d)!\n\000"
+.ascii "seven %d: allocating 40, 60, 129, and 128 bytes!\n\000"
 .align 2
 LC5_LF0:
+.ascii "40 addr: %d\n\000"
+.align 2
+LC6_LF0:
+.ascii "60 addr: %d\n\000"
+.align 2
+LC7_LF0:
+.ascii "129 addr: %d\n\000"
+.align 2
+LC8_LF0:
+.ascii "128 addr: %d\n\000"
+.align 2
+LC9_LF0:
+.ascii "Hello world!\000"
+.align 2
+LC10_LF0:
+.ascii "Hello world printed from heap memory: %s\n\000"
+.align 2
+LC11_LF0:
+.ascii "forty\n\000"
+.align 2
+LC12_LF0:
+.ascii "sixty\n\000"
+.align 2
+LC13_LF0:
+.ascii "String in 40: %s\000"
+.align 2
+LC14_LF0:
+.ascii "String in 60: %s\000"
+.align 2
+LC15_LF0:
+.ascii "Freeing all the allocations\n\000"
+.align 2
+LC16_LF0:
+.ascii "mfree failed!\n\000"
+.align 2
+LC17_LF0:
+.ascii "hello_world (%d): Bad semaphore s_procs_completed (%d)!\n\000"
+.align 2
+LC18_LF0:
 .ascii "test_malloc (%d): Done!\n\000"
 .text
 .align 2
@@ -113,9 +152,9 @@ _main:
 	beqz	r1,L14_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r5,((LC0_LF0)>>16)&0xffff
-	addui	r5,r5,(LC0_LF0)&0xffff
-	sw	(r29),r5
+	lhi	r7,((LC0_LF0)>>16)&0xffff
+	addui	r7,r7,(LC0_LF0)&0xffff
+	sw	(r29),r7
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
@@ -123,21 +162,21 @@ _main:
 	addi	r29,r29,#8
 L14_LF0:
 	addi	r29,r29,#-16
-	lw	r5,4(r3)
-	sw	(r29),r5
-	addi	r5,r0,#0
-	sw	4(r29),r5
-	addi	r5,r0,#10
-	sw	8(r29),r5
+	lw	r7,4(r3)
+	sw	(r29),r7
+	addi	r7,r0,#0
+	sw	4(r29),r7
+	addi	r7,r0,#10
+	sw	8(r29),r7
 	jal	_dstrtol
 	nop; not filled.
-	add	r4,r0,r1
+	add	r6,r0,r1
 	lw	r3,8(r3)
 	sw	(r29),r3
-	addi	r5,r0,#0
-	sw	4(r29),r5
-	addi	r5,r0,#10
-	sw	8(r29),r5
+	addi	r7,r0,#0
+	sw	4(r29),r7
+	addi	r7,r0,#10
+	sw	8(r29),r7
 	jal	_dstrtol
 	nop; not filled.
 	add	r2,r0,r1
@@ -146,9 +185,9 @@ L14_LF0:
 	beqz	r1,L15_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r5,((LC1_LF0)>>16)&0xffff
-	addui	r5,r5,(LC1_LF0)&0xffff
-	sw	(r29),r5
+	lhi	r7,((LC1_LF0)>>16)&0xffff
+	addui	r7,r7,(LC1_LF0)&0xffff
+	sw	(r29),r7
 	sw	4(r29),r2
 	jal	_Printf
 	nop; not filled.
@@ -157,8 +196,8 @@ L14_LF0:
 	addi	r3,r30,#500
 L19_LF0:
 	addi	r29,r29,#-8
-	addi	r5,r0,#32
-	sw	(r29),r5
+	addi	r7,r0,#32
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-512(r2),r1
@@ -168,8 +207,8 @@ L19_LF0:
 	bnez	r1,L19_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	addi	r5,r0,#1
-	sw	(r29),r5
+	addi	r7,r0,#1
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	addi	r2,r0,#0
@@ -177,8 +216,8 @@ L19_LF0:
 	addi	r3,r30,#-8
 L24_LF0:
 	addi	r29,r29,#-8
-	lw	r5,-512(r3)
-	sw	(r29),r5
+	lw	r7,-512(r3)
+	sw	(r29),r7
 	jal	_mfree
 	nop; not filled.
 	addi	r29,r29,#8
@@ -194,104 +233,265 @@ L15_LF0:
 	beqz	r1,L27_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r5,((LC2_LF0)>>16)&0xffff
-	addui	r5,r5,(LC2_LF0)&0xffff
-	sw	(r29),r5
+	lhi	r7,((LC2_LF0)>>16)&0xffff
+	addui	r7,r7,(LC2_LF0)&0xffff
+	sw	(r29),r7
 	sw	4(r29),r2
 	jal	_Printf
 	nop; not filled.
-	addi	r5,r0,#4096
-	sw	(r29),r5
+	addi	r7,r0,#4096
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-520(r30),r1
 	sw	(r29),r1
 	jal	_mfree
 	nop; not filled.
-	addi	r5,r0,#2
-	sw	(r29),r5
+	addi	r7,r0,#2
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-516(r30),r1
-	j	L31_LF0
+	j	L37_LF0
 	nop; not filled.
 L27_LF0:
-	snei	r1,r2,#0
-	bnez	r1,L26_LF0
+	seqi	r1,r2,#5
+	beqz	r1,L29_LF0
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r5,((LC3_LF0)>>16)&0xffff
-	addui	r5,r5,(LC3_LF0)&0xffff
-	sw	(r29),r5
+	lhi	r7,((LC3_LF0)>>16)&0xffff
+	addui	r7,r7,(LC3_LF0)&0xffff
+	sw	(r29),r7
 	sw	4(r29),r2
 	jal	_Printf
 	nop; not filled.
-	addi	r5,r0,#32
-	sw	(r29),r5
+	addi	r7,r0,#32
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-520(r30),r1
-	addi	r5,r0,#64
-	sw	(r29),r5
+	addi	r7,r0,#64
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-516(r30),r1
-	sw	(r29),r5
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-512(r30),r1
-	addi	r5,r0,#128
-	sw	(r29),r5
+	addi	r7,r0,#128
+	sw	(r29),r7
 	jal	_malloc
 	nop; not filled.
 	sw	-508(r30),r1
-	lw	r5,-520(r30)
+	lw	r7,-520(r30)
+	sw	(r29),r7
+	jal	_mfree
+	nop; not filled.
+	lw	r7,-516(r30)
+	sw	(r29),r7
+	jal	_mfree
+	nop; not filled.
+	lw	r7,-512(r30)
+	sw	(r29),r7
+	jal	_mfree
+	nop; not filled.
+	lw	r7,-508(r30)
+	sw	(r29),r7
+	jal	_mfree
+	nop; not filled.
+	j	L37_LF0
+	nop; not filled.
+L29_LF0:
+	snei	r1,r2,#0
+	bnez	r1,L26_LF0
+	nop; not filled.
+	jal	_getpid
+	nop; not filled.
+	addi	r29,r29,#-8
+	lhi	r7,((LC4_LF0)>>16)&0xffff
+	addui	r7,r7,(LC4_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r1
+	jal	_Printf
+	nop; not filled.
+	addi	r7,r0,#40
+	sw	(r29),r7
+	jal	_malloc
+	nop; not filled.
+	add	r2,r0,r1
+	lhi	r7,((LC5_LF0)>>16)&0xffff
+	addui	r7,r7,(LC5_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r2
+	jal	_Printf
+	nop; not filled.
+	addi	r7,r0,#60
+	sw	(r29),r7
+	jal	_malloc
+	nop; not filled.
+	add	r3,r0,r1
+	lhi	r7,((LC6_LF0)>>16)&0xffff
+	addui	r7,r7,(LC6_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r3
+	jal	_Printf
+	nop; not filled.
+	addi	r7,r0,#129
+	sw	(r29),r7
+	jal	_malloc
+	nop; not filled.
+	add	r4,r0,r1
+	lhi	r7,((LC7_LF0)>>16)&0xffff
+	addui	r7,r7,(LC7_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r4
+	jal	_Printf
+	nop; not filled.
+	addi	r7,r0,#128
+	sw	(r29),r7
+	jal	_malloc
+	nop; not filled.
+	add	r5,r0,r1
+	lhi	r7,((LC8_LF0)>>16)&0xffff
+	addui	r7,r7,(LC8_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r5
+	jal	_Printf
+	nop; not filled.
+	sw	(r29),r4
+	lhi	r1,((LC9_LF0)>>16)&0xffff
+	addui	r1,r1,(LC9_LF0)&0xffff
+	sw	4(r29),r1
+	jal	_dstrcpy
+	nop; not filled.
+	lhi	r7,((LC10_LF0)>>16)&0xffff
+	addui	r7,r7,(LC10_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r4
+	jal	_Printf
+	nop; not filled.
+	sw	(r29),r2
+	lhi	r1,((LC11_LF0)>>16)&0xffff
+	addui	r1,r1,(LC11_LF0)&0xffff
+	sw	4(r29),r1
+	jal	_dstrcpy
+	nop; not filled.
+	sw	(r29),r3
+	lhi	r1,((LC12_LF0)>>16)&0xffff
+	addui	r1,r1,(LC12_LF0)&0xffff
+	sw	4(r29),r1
+	jal	_dstrcpy
+	nop; not filled.
+	lhi	r7,((LC13_LF0)>>16)&0xffff
+	addui	r7,r7,(LC13_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r2
+	jal	_Printf
+	nop; not filled.
+	lhi	r7,((LC14_LF0)>>16)&0xffff
+	addui	r7,r7,(LC14_LF0)&0xffff
+	sw	(r29),r7
+	sw	4(r29),r3
+	jal	_Printf
+	nop; not filled.
+	lhi	r7,((LC15_LF0)>>16)&0xffff
+	addui	r7,r7,(LC15_LF0)&0xffff
+	sw	(r29),r7
+	jal	_Printf
+	nop; not filled.
+	sw	(r29),r2
+	jal	_mfree
+	nop; not filled.
+	addi	r29,r29,#8
+	slti	r1,r1,#0
+	beqz	r1,L32_LF0
+	nop; not filled.
+	addi	r29,r29,#-8
+	lhi	r7,((LC16_LF0)>>16)&0xffff
+	addui	r7,r7,(LC16_LF0)&0xffff
+	sw	(r29),r7
+	jal	_Printf
+	nop; not filled.
+	addi	r29,r29,#8
+L32_LF0:
+	addi	r29,r29,#-8
+	sw	(r29),r3
+	jal	_mfree
+	nop; not filled.
+	addi	r29,r29,#8
+	slti	r1,r1,#0
+	beqz	r1,L33_LF0
+	nop; not filled.
+	addi	r29,r29,#-8
+	lhi	r7,((LC16_LF0)>>16)&0xffff
+	addui	r7,r7,(LC16_LF0)&0xffff
+	sw	(r29),r7
+	jal	_Printf
+	nop; not filled.
+	addi	r29,r29,#8
+L33_LF0:
+	addi	r29,r29,#-8
+	sw	(r29),r4
+	jal	_mfree
+	nop; not filled.
+	addi	r29,r29,#8
+	slti	r1,r1,#0
+	beqz	r1,L34_LF0
+	nop; not filled.
+	addi	r29,r29,#-8
+	lhi	r7,((LC16_LF0)>>16)&0xffff
+	addui	r7,r7,(LC16_LF0)&0xffff
+	sw	(r29),r7
+	jal	_Printf
+	nop; not filled.
+	addi	r29,r29,#8
+L34_LF0:
+	addi	r29,r29,#-8
 	sw	(r29),r5
 	jal	_mfree
 	nop; not filled.
-	lw	r5,-516(r30)
-	sw	(r29),r5
-	jal	_mfree
+	addi	r29,r29,#8
+	slti	r1,r1,#0
+	beqz	r1,L26_LF0
 	nop; not filled.
-	lw	r5,-512(r30)
-	sw	(r29),r5
-	jal	_mfree
+	addi	r29,r29,#-8
+	lhi	r7,((LC16_LF0)>>16)&0xffff
+	addui	r7,r7,(LC16_LF0)&0xffff
+	sw	(r29),r7
+	jal	_Printf
 	nop; not filled.
-	lw	r5,-508(r30)
-	sw	(r29),r5
-	jal	_mfree
-	nop; not filled.
-L31_LF0:
+L37_LF0:
 	addi	r29,r29,#8
 L26_LF0:
 	addi	r29,r29,#-8
-	sw	(r29),r4
+	sw	(r29),r6
 	jal	_sem_signal
 	nop; not filled.
 	addi	r29,r29,#8
 	snei	r1,r1,#1
-	beqz	r1,L30_LF0
+	beqz	r1,L36_LF0
 	nop; not filled.
 	jal	_getpid
 	nop; not filled.
 	addi	r29,r29,#-16
-	lhi	r5,((LC4_LF0)>>16)&0xffff
-	addui	r5,r5,(LC4_LF0)&0xffff
-	sw	(r29),r5
+	lhi	r7,((LC17_LF0)>>16)&0xffff
+	addui	r7,r7,(LC17_LF0)&0xffff
+	sw	(r29),r7
 	sw	4(r29),r1
-	sw	8(r29),r4
+	sw	8(r29),r6
 	jal	_Printf
 	nop; not filled.
 	jal	_Exit
 	nop; not filled.
 	addi	r29,r29,#16
-L30_LF0:
+L36_LF0:
 	jal	_getpid
 	nop; not filled.
 	addi	r29,r29,#-8
-	lhi	r5,((LC5_LF0)>>16)&0xffff
-	addui	r5,r5,(LC5_LF0)&0xffff
-	sw	(r29),r5
+	lhi	r7,((LC18_LF0)>>16)&0xffff
+	addui	r7,r7,(LC18_LF0)&0xffff
+	sw	(r29),r7
 	sw	4(r29),r1
 	jal	_Printf
 	nop; not filled.
