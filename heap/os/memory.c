@@ -293,21 +293,6 @@ int is_used(int a){
   return (a>>4 & 1);
 }
 
-/*int findIndex(int order, int* heap){
-  int idx = 0;
-  int left = 1;
-  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
-
-  // traverse and look for index
-  while(idx < heap_max){
-    if(heap[idx] == order){
-      if(is_unused(heap[idx])) return idx;
-    }
-    idx += (pow2(heap[idx]) / MEM_ORDER0);
-  }
-  return -1;
-}*/
-
 void printHeap(int* heap);
 int makeIndex(int o, int* heap){
   int idx = 0;
@@ -336,6 +321,10 @@ int makeIndex(int o, int* heap){
       heap[idx] -= 1;
       buddy_idx = pow2(heap[idx]) + idx;
       heap[buddy_idx] = heap[idx];
+      printf("Created a right child node (order = %d, addr = %d, size = %d) ", heap[buddy_idx], buddy_idx*MEM_ORDER0, pow2(heap[buddy_idx]));
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] - 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
+      printf("Created a left child node (order = %d, addr = %d, size = %d) ", heap[idx], idx*MEM_ORDER0, pow2(heap[idx]));
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] - 1, idx*MEM_ORDER0, pow2(heap[idx] - 1));
     }
     else idx += (pow2(heap[idx]) / 1);
   }
