@@ -17,7 +17,7 @@
 	.align 2
 .proc _Open
 .global _Open
-_Open:		
+_Open:
 ;;; Note that trap #0x213 actually causes a trap vector in the OS of
 ;;; 0x1213.  The same is true for other user traps.  Thus, a user trap
 ;;; with trap #0x240 will result in a trap vector of 0x1240 in the OS.
@@ -28,7 +28,7 @@ _Open:
 
 .proc _Close
 .global _Close
-_Close:		
+_Close:
 	trap	#0x214
 	jr	r31
 	nop
@@ -36,7 +36,7 @@ _Close:
 
 .proc _Read
 .global _Read
-_Read:		
+_Read:
 	trap	#0x210
 	jr	r31
 	nop
@@ -44,7 +44,7 @@ _Read:
 
 .proc _Write
 .global _Write
-_Write:		
+_Write:
 	trap	#0x211
 	jr	r31
 	nop
@@ -52,7 +52,7 @@ _Write:
 
 .proc _Lseek
 .global _Lseek
-_Lseek:		
+_Lseek:
 	trap	#0x212
 	jr	r31
 	nop
@@ -60,7 +60,7 @@ _Lseek:
 
 .proc _Putchar
 .global _Putchar
-_Putchar:		
+_Putchar:
 	trap	#0x280
 	jr	r31
 	nop
@@ -68,7 +68,7 @@ _Putchar:
 
 .proc _Printf
 .global _Printf
-_Printf:		
+_Printf:
 	trap	#0x201
 	jr	r31
 	nop
@@ -266,3 +266,10 @@ _mfree:
         trap    #0x468
         jr      r31
 .endproc _mfree
+
+.proc _fork
+.global _fork
+_fork:
+        trap    #0x430
+        jr      r31
+.endproc _fork

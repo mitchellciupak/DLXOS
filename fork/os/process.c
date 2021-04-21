@@ -393,6 +393,7 @@ int ProcessRealFork(PCB *parent_pcb) {
   }
 
   // This prevents someone else from grabbing this process
+  printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
   ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
 
   //----------------------------------------------------------------------
@@ -403,6 +404,9 @@ int ProcessRealFork(PCB *parent_pcb) {
     parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
   }
 
+  // ProcessSetResult(pcb, 0);
+  // ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
+  printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
   bcopy((char *)parent_pcb, (char *)pcb, sizeof(PCB));
 
   //----------------------------------------------------------------------
@@ -428,8 +432,11 @@ int ProcessRealFork(PCB *parent_pcb) {
   // for the system stack. (allocate for global, user, and system stacks) (completed)
   //---------------------------------------------------------
 
-  newPage = findFreePage();
+  newPage = MemoryAllocSysPage();
   pcb->sysStackArea = newPage * MEM_PAGESIZE;
+  // ProcessSetResult(pcb, 0);
+  // ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
+   printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
   bcopy((char *)(parent_pcb->sysStackArea), (char *)(pcb->sysStackArea),MEM_PAGESIZE);
   stackframe = (uint32 *)((-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3));
 
@@ -465,9 +472,9 @@ int ProcessRealFork(PCB *parent_pcb) {
   stackframe[PROCESS_STACK_PTSIZE] = MEM_PTSIZE; //maximum number of entries in the level 1 page table
   stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << 16) | MEM_L1FIELD_FIRST_BITNUM;
 
-  dbprintf('m',"ProcessFork: PTBASE: %d\n", stackframe[PROCESS_STACK_PTBASE]);
-  dbprintf('m',"ProcessFork: PTSIZE: %d\n", stackframe[PROCESS_STACK_PTSIZE]);
-  dbprintf('m',"ProcessFork: PTBITS: %d\n", stackframe[PROCESS_STACK_PTBITS]);
+  // dbprintf('m',"ProcessFork: PTBASE: %d\n", stackframe[PROCESS_STACK_PTBASE]);
+  // dbprintf('m',"ProcessFork: PTSIZE: %d\n", stackframe[PROCESS_STACK_PTSIZE]);
+  // dbprintf('m',"ProcessFork: PTBITS: %d\n", stackframe[PROCESS_STACK_PTBITS]);
 
   // Place the PCB onto the run queue.
   intrs = DisableIntrs ();
