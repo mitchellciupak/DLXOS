@@ -75,15 +75,18 @@ LC0:
 	.ascii "Usage: %s <handle_to_procs_completed_semaphore>\n\000"
 	.align 2
 LC1:
-	.ascii "Test %d: filling the heap\n\000"
+	.ascii "Test %d: filling the heap to the brim\n\n\000"
 	.align 2
 LC2:
-	.ascii "Test %d: freeing full heap\n\000"
+	.ascii "Test %d: freeing full heap\n\n\000"
 	.align 2
 LC3:
-	.ascii "hello_world (%d): Bad semaphore s_procs_completed (%d)!\n\000"
+	.ascii "Test %d: making holes\n\n\000"
 	.align 2
 LC4:
+	.ascii "hello_world (%d): Bad semaphore s_procs_completed (%d)!\n\000"
+	.align 2
+LC5:
 	.ascii "test_malloc (%d): Done!\n\000"
 .text
 	.align 2
@@ -132,7 +135,7 @@ L14:
 	nop	; not filled.
 	add	r2,r0,r1
 	addi	r29,r29,#16
-	seqi	r1,r2,#1
+	seqi	r1,r2,#2
 	beqz	r1,L15
 	nop	; not filled.
 	addi	r29,r29,#-8
@@ -180,8 +183,8 @@ L24:
 	j	L24
 	nop	; not filled.
 L15:
-	snei	r1,r2,#0
-	bnez	r1,L26
+	seqi	r1,r2,#1
+	beqz	r1,L27
 	nop	; not filled.
 	addi	r29,r29,#-8
 	lhi	r5,((LC2)>>16)&0xffff
@@ -203,6 +206,55 @@ L15:
 	jal	_malloc
 	nop	; not filled.
 	sw	-516(r30),r1
+	j	L31
+	nop	; not filled.
+L27:
+	snei	r1,r2,#0
+	bnez	r1,L26
+	nop	; not filled.
+	addi	r29,r29,#-8
+	lhi	r5,((LC3)>>16)&0xffff
+	addui	r5,r5,(LC3)&0xffff
+	sw	(r29),r5
+	sw	4(r29),r2
+	jal	_Printf
+	nop	; not filled.
+	addi	r5,r0,#32
+	sw	(r29),r5
+	jal	_malloc
+	nop	; not filled.
+	sw	-520(r30),r1
+	addi	r5,r0,#64
+	sw	(r29),r5
+	jal	_malloc
+	nop	; not filled.
+	sw	-516(r30),r1
+	sw	(r29),r5
+	jal	_malloc
+	nop	; not filled.
+	sw	-512(r30),r1
+	addi	r5,r0,#128
+	sw	(r29),r5
+	jal	_malloc
+	nop	; not filled.
+	sw	-508(r30),r1
+	lw	r5,-520(r30)
+	sw	(r29),r5
+	jal	_mfree
+	nop	; not filled.
+	lw	r5,-516(r30)
+	sw	(r29),r5
+	jal	_mfree
+	nop	; not filled.
+	lw	r5,-512(r30)
+	sw	(r29),r5
+	jal	_mfree
+	nop	; not filled.
+	lw	r5,-508(r30)
+	sw	(r29),r5
+	jal	_mfree
+	nop	; not filled.
+L31:
 	addi	r29,r29,#8
 L26:
 	addi	r29,r29,#-8
@@ -211,13 +263,13 @@ L26:
 	nop	; not filled.
 	addi	r29,r29,#8
 	snei	r1,r1,#1
-	beqz	r1,L28
+	beqz	r1,L30
 	nop	; not filled.
 	jal	_getpid
 	nop	; not filled.
 	addi	r29,r29,#-16
-	lhi	r5,((LC3)>>16)&0xffff
-	addui	r5,r5,(LC3)&0xffff
+	lhi	r5,((LC4)>>16)&0xffff
+	addui	r5,r5,(LC4)&0xffff
 	sw	(r29),r5
 	sw	4(r29),r1
 	sw	8(r29),r4
@@ -226,12 +278,12 @@ L26:
 	jal	_Exit
 	nop	; not filled.
 	addi	r29,r29,#16
-L28:
+L30:
 	jal	_getpid
 	nop	; not filled.
 	addi	r29,r29,#-8
-	lhi	r5,((LC4)>>16)&0xffff
-	addui	r5,r5,(LC4)&0xffff
+	lhi	r5,((LC5)>>16)&0xffff
+	addui	r5,r5,(LC5)&0xffff
 	sw	(r29),r5
 	sw	4(r29),r1
 	jal	_Printf

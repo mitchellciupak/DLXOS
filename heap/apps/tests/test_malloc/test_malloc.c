@@ -18,8 +18,8 @@ void main (int argc, char *argv[])
   test_num = dstrtol(argv[2], NULL, 10);
 
   // Now test based on number
-  if(test_num == 1){
-    Printf("Test %d: filling the heap\n", test_num);
+  if(test_num == 2){
+    Printf("Test %d: filling the heap to the brim\n\n", test_num);
     for(i=0;i<128;i++){
       heap_idcs[i] = malloc(32);
     }
@@ -29,12 +29,24 @@ void main (int argc, char *argv[])
     }
   }
   // Now test based on number
-  else if(test_num == 0){
-    Printf("Test %d: freeing full heap\n", test_num);
+  else if(test_num == 1){
+    Printf("Test %d: freeing full heap\n\n", test_num);
     heap_idcs[0] = malloc(4096);
     mfree(heap_idcs[0]);
     heap_idcs[1] = malloc(2);
     
+  }
+  else if (test_num == 0){
+    Printf("Test %d: making holes\n\n", test_num);
+    heap_idcs[0] = malloc(32);
+    heap_idcs[1] = malloc(64);
+    heap_idcs[2] = malloc(64);
+    heap_idcs[3] = malloc(128);
+    mfree(heap_idcs[0]);
+    mfree(heap_idcs[1]);
+    mfree(heap_idcs[2]);
+    mfree(heap_idcs[3]);
+
   }
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {

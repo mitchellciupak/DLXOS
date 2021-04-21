@@ -454,6 +454,7 @@ int mfree(PCB* pcb, void *ptr){
   }
   pcb->heapNodes[idx] &= ~(1<<4);
   shrink(&pcb->heapNodes, idx);
+  fancyPrint(&pcb->heapNodes);
   printf("Freed the block: order = %d, addr = %d, size = %d)\n", order, offset, pow2(order)*32);
 
   return NULL;
