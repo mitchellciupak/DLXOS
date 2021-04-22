@@ -279,9 +279,9 @@ int pow2(int a){
 }
 
 // log(a) base 2
-int log2(int a){
+int log2(float a){
   int i = 0; 
-  int b = 1;
+  float b = 1;
   while(a > b){
     b *= 2;
     i++;
@@ -369,8 +369,7 @@ void* malloc(PCB* pcb, int memsize){
   int idx;
   if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
 
-  order = log2(memsize);
-  order -= log2(MEM_ORDER0);
+  order = log2((float)memsize / MEM_ORDER0);
   idx = makeIndex(order, &pcb->heapNodes);
   if(idx == -1){
     printf("Process (%d) Heap full\n");
@@ -385,7 +384,7 @@ void* malloc(PCB* pcb, int memsize){
   printf("addr = %d, ", idx*32);
   printf("requested mem size = %d, ", memsize);
   printf("block size = %d\n", pow2(order)*MEM_ORDER0);
-  //fancyPrint(&pcb->heapNodes);
+  fancyPrint(&pcb->heapNodes);
   return (pcb->pagetable[pcb->heap_idx] & MEM_PTE_MASK) | (idx*MEM_ORDER0);
 }
 
@@ -399,14 +398,16 @@ void shrink(int* heap, int idx){
 
   // first look left
   while(idx_copy < idx){
-    if(heap[idx_copy] == order) left++;
+    if((heap[idx_copy] & 0xF) == order) left++;
     else left = 0;
     idx_copy += pow2(heap[idx_copy]);
   }
-  // If there is an odd number to the left, merge left
+
+  // If there is an odd number to the left, you have to merge left
   if(left % 2){
-    heap[idx] = 0;
     buddy = idx - pow2(order);
+    if(is_used(heap[buddy])) return;
+    heap[idx] = 0;
     heap[buddy] = order + 1;
     printf("Coalesced buddy nodes ");
     printf("(order = %d, addr = %d, size = %d) & ", order, idx*32, pow2(order)*MEM_ORDER0);
@@ -427,7 +428,7 @@ void shrink(int* heap, int idx){
     printf("(order = %d, addr = %d, size = %d)\n", order, idx*32, pow2(order)*MEM_ORDER0);
     printf("into the parent node ");
     printf("(order = %d, addr = %d, size = %d)\n", heap[idx], idx*32, pow2(heap[idx])*MEM_ORDER0);
-        shrink(heap, idx);
+    shrink(heap, idx);
   }
   return;
 }
@@ -445,7 +446,7 @@ int mfree(PCB* pcb, void *ptr){
   }
   pcb->heapNodes[idx] &= ~(1<<4);
   shrink(&pcb->heapNodes, idx);
-  //fancyPrint(&pcb->heapNodes);
+  fancyPrint(&pcb->heapNodes);
   printf("Freed the block: order = %d, addr = %d, size = %d\n", order, offset, pow2(order)*MEM_ORDER0);
 
   return NULL;

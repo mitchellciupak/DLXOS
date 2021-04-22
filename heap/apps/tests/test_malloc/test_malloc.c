@@ -6,7 +6,7 @@ void main (int argc, char *argv[])
   sem_t s_procs_completed; // Semaphore to signal the original process that we're done
   int test_num;
   int i;
-  int* heap_idcs[128];
+  int* heap[128];
   int* forty;
   int* sixty;
   int* onetwentynine;
@@ -25,33 +25,33 @@ void main (int argc, char *argv[])
   if(test_num == 2){
     Printf("Test %d: filling the heap to the brim\n\n", test_num);
     for(i=0;i<128;i++){
-      heap_idcs[i] = malloc(32);
+      heap[i] = malloc(32);
     }
     malloc(1);
     for(i=0;i<128;i++){
-      mfree(heap_idcs[i]);
+      mfree(heap[i]);
     }
   }
   // Now test based on number
-  else if(test_num == 1){
+  else if(test_num == -1){
     Printf("Test %d: freeing full heap\n\n", test_num);
-    heap_idcs[0] = malloc(4096);
-    mfree(heap_idcs[0]);
-    heap_idcs[1] = malloc(2);
+    heap[0] = malloc(4096);
+    mfree(heap[0]);
+    heap[1] = malloc(2);
     
   }
-  else if (test_num == 5){
+  else if (test_num == -1){
     Printf("Test %d: making holes\n\n", test_num);
-    heap_idcs[0] = malloc(32);
-    heap_idcs[1] = malloc(64);
-    heap_idcs[2] = malloc(64);
-    heap_idcs[3] = malloc(128);
-    mfree(heap_idcs[0]);
-    mfree(heap_idcs[1]);
-    mfree(heap_idcs[2]);
-    mfree(heap_idcs[3]);
+    heap[0] = malloc(32);
+    heap[1] = malloc(64);
+    heap[2] = malloc(64);
+    heap[3] = malloc(128);
+    mfree(heap[0]);
+    mfree(heap[1]);
+    mfree(heap[2]);
+    mfree(heap[3]);
   }
-  else if (test_num == 0){
+  else if (test_num == -1){
     Printf("seven %d: allocating 40, 60, 129, and 128 bytes!\n", getpid());
     forty = malloc(40);
     Printf("40 addr: %d\n", (int)forty);
@@ -81,6 +81,23 @@ void main (int argc, char *argv[])
     if(mfree(onetwentyeight) < 0) {
         Printf("mfree failed!\n");
      }
+  }
+  else if(test_num == 0){
+    heap[0] = malloc(1);
+    heap[1] = malloc(12);
+    heap[2] = malloc(15);
+    heap[3] = malloc(31);
+    heap[4] = malloc(2);
+    heap[5] = malloc(1);
+    mfree(heap[4]);
+    mfree(heap[3]);
+    mfree(heap[5]);
+    mfree(heap[1]);
+    mfree(heap[2]);
+    mfree(heap[0]);
+  }
+  else if(test_num == 0){
+    heap[0] = malloc(40);
   }
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
