@@ -348,15 +348,16 @@ void fancyPrint(int* heap){
   int i=0;
   int j=0;
   int inuse = 0;
+  dbprintf('h', "Printing heap:\n");
 
   while(i<heap_max){
     inuse = is_used(heap[i]);
-    printf("%d |\t", heap[i] & 0xF);
+    dbprintf('h', "%d |\t", heap[i] & 0xF);
     for(j=0;j<(pow2(heap[i]));j++){
-      printf("%d  ",inuse);
-      if(j!=0 && !(j%12)) printf("\n\t");
+      dbprintf('h', "%d  ",inuse);
+      if(j!=0 && !(j%12)) dbprintf('h', "\n\t");
     }
-    printf("\n");
+    dbprintf('h', "\n");
     i += j;
   }
 }
@@ -367,8 +368,11 @@ void* malloc(PCB* pcb, int memsize){
   int idx;
   if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
 
+  
   order = log2((float)memsize / MEM_ORDER0);
   idx = makeIndex(order, &(pcb->heapNodes));
+
+  printf("\nProcess (%d) allocating block\n", GetCurrentPid());
   if(idx == -1){
     printf("Process (%d) Heap full\n", GetCurrentPid());
     return NULL;
@@ -438,6 +442,7 @@ int mfree(PCB* pcb, void *ptr){
     printf("Not a valid heap address\n");
     return -1;
   }
+  printf("\nProcess (%d) freeing block of size (%d)\n", GetCurrentPid(), pow2(order)*MEM_ORDER0);
   pcb->heapNodes[idx] &= ~(1<<4);
   shrink(&pcb->heapNodes, idx);
   fancyPrint(&pcb->heapNodes);

@@ -1,0 +1,26 @@
+Is Your Kernel R*U*N*N*I*N*G? Well.....you better go catch it!
+Compiling and running
+tests
+make: Entering directory `/tmp/ckemmet/DLXOS/heap/os'
+rm -rf work ../bin/os.dlx.obj ../lib/usertraps.aso ../lib/misc.o Makefile.depend ../bin/vm
+make: Leaving directory `/tmp/ckemmet/DLXOS/heap/os'
+make: Entering directory `/tmp/ckemmet/DLXOS/heap/os'
+gcc-dlx -I../include -I../include/os -MM filesys.c memory.c misc.c process.c queue.c synch.c traps.c sysproc.c clock.c osend.s trap_random.s dlxos.s | sed "s/^\(.*\):/work\/\1:/" > Makefile.depend
+usleep 50000
+make: Leaving directory `/tmp/ckemmet/DLXOS/heap/os'
+make: Entering directory `/tmp/ckemmet/DLXOS/heap/os'
+mkdir -p work
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/filesys.o filesys.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/memory.o memory.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/misc.o misc.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/process.o process.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/queue.o queue.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/synch.o synch.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/traps.o traps.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/sysproc.o sysproc.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/clock.o clock.c
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/osend.aso osend.s
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/trap_random.aso trap_random.s
+gcc-dlx -mtraps -Wall -I../include -I../include/os -c -o work/dlxos.aso dlxos.s
+gcc-dlx -mtraps -Wall -I../include -I../include/os -o work/os.dlx work/filesys.o work/memory.o work/misc.o work/process.o work/queue.o work/synch.o work/traps.o work/sysproc.o work/clock.o work/osend.aso work/trap_random.aso work/dlxos.aso 
+dlxasm -i _osinit -l work/os.lst work/os.dlx
