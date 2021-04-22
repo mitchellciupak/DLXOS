@@ -82,13 +82,13 @@ void main (int argc, char *argv[])
         Printf("mfree failed!\n");
      }
   }
-  else if(test_num == -1){
-    heap[0] = malloc(1);
-    heap[1] = malloc(12);
-    heap[2] = malloc(15);
-    heap[3] = malloc(31);
-    heap[4] = malloc(2);
-    heap[5] = malloc(1);
+  else if(test_num == 0){
+    heap[0] = malloc(40);
+    heap[1] = malloc(40);
+    heap[2] = malloc(40);
+    heap[3] = malloc(40);
+    heap[4] = malloc(40);
+    heap[5] = malloc(40);
     mfree(heap[4]);
     mfree(heap[3]);
     mfree(heap[5]);
@@ -96,7 +96,7 @@ void main (int argc, char *argv[])
     mfree(heap[2]);
     mfree(heap[0]);
   }
-  else if(test_num == 0){
+  else if(test_num == -1){
     heap[0] = malloc(40);
     heap[0] = malloc(160);
     heap[0] = malloc(340);

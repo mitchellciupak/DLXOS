@@ -15,8 +15,6 @@
 #define NPAGES (MEM_SIZE / MEM_PAGESIZE)
 static uint32 freemap[NPAGES / 32];
 static uint32 pagestart;
-static int nfreepages;
-static int freemapmax;
 
 //----------------------------------------------------------------------
 //
@@ -206,13 +204,13 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 int MemoryPageFaultHandler(PCB *pcb) {
   int attempt = pcb->currentSavedFrame[PROCESS_STACK_FAULT];
   int i = 0xFE;
-  if(attempt < pcb->sysStackPtr) ProcessKill();
+  if(attempt < (int)pcb->sysStackPtr) ProcessKill();
   while(pcb->pagetable[i] != 0 && i > 0){
     i--;
   }
   if(i==0) ProcessKill();
   pcb->pagetable[i] = MemoryAllocUserPage();
-  dbprintf("m", "Page table %d allocated\n", pcb->pagetable[i]);
+  dbprintf("m", "Page table %d allocated\n", (int)pcb->pagetable[i]);
   return MEM_SUCCESS;
 }
 
@@ -370,7 +368,7 @@ void* malloc(PCB* pcb, int memsize){
   if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
 
   order = log2((float)memsize / MEM_ORDER0);
-  idx = makeIndex(order, &pcb->heapNodes);
+  idx = makeIndex(order, &(pcb->heapNodes));
   if(idx == -1){
     printf("Process (%d) Heap full\n", GetCurrentPid());
     return NULL;
@@ -391,20 +389,16 @@ void* malloc(PCB* pcb, int memsize){
 void shrink(int* heap, int idx){
   
   int order = heap[idx];
-  int left = 0;
-  int right = 0;
   int buddy;
   int idx_copy = 0;
+  int right;
 
-  // first look left
-  while(idx_copy < idx){
-    if((heap[idx_copy] & 0xF) == order) left++;
-    else left = 0;
-    idx_copy += pow2(heap[idx_copy]);
-  }
+  // Idx/order indicates number of that order that could fit to the left
+  // If an even number is to the left, than it's a left node, otherwise it's a right node
+  right = (idx / pow2(order)) % 2;
 
   // If there is an odd number to the left, you have to merge left
-  if(left % 2){
+  if(right){
     buddy = idx - pow2(order);
     if(is_used(heap[buddy])) return;
     heap[idx] = 0;

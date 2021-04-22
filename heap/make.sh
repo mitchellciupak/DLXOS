@@ -70,7 +70,7 @@ function run_program_debug(){
       ee469_fixterminal
       make debug -C ./apps/${args[1]}/
     else
-      echo 'Nothing was Run, No Argment was Added'
+      echo 'Nothing was Run, No Argument was Added'
     fi
 }
 
