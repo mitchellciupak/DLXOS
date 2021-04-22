@@ -82,7 +82,7 @@ void main (int argc, char *argv[])
         Printf("mfree failed!\n");
      }
   }
-  else if(test_num == 0){
+  else if(test_num == -1){
     heap[0] = malloc(1);
     heap[1] = malloc(12);
     heap[2] = malloc(15);
@@ -98,7 +98,12 @@ void main (int argc, char *argv[])
   }
   else if(test_num == 0){
     heap[0] = malloc(40);
+    heap[0] = malloc(160);
+    heap[0] = malloc(340);
+    heap[0] = malloc(2020);
+    heap[0] = malloc(22240);
   }
+
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
     Printf("hello_world (%d): Bad semaphore s_procs_completed (%d)!\n", getpid(), s_procs_completed);

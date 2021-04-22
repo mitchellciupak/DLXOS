@@ -372,7 +372,7 @@ void* malloc(PCB* pcb, int memsize){
   order = log2((float)memsize / MEM_ORDER0);
   idx = makeIndex(order, &pcb->heapNodes);
   if(idx == -1){
-    printf("Process (%d) Heap full\n");
+    printf("Process (%d) Heap full\n", GetCurrentPid());
     return NULL;
   }
   // mark as inuse

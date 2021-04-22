@@ -77,6 +77,7 @@ function run_program_debug(){
 function clean_all(){
     make clean -C ./os
     make clean -C ./apps/example/
+    make clean -C ./apps/tests/
 
 }
 
