@@ -438,8 +438,6 @@ int ProcessRealFork(PCB *parent_pcb) {
   pcb->currentSavedFrame = ((int)parent_pcb->currentSavedFrame & MEM_ADDRESS_OFFSET_MASK) / 4 + stackframe;
   printf("The current frame is at 0x%x for parent and 0x%x for child\n", parent_pcb->currentSavedFrame, pcb->currentSavedFrame);
   pcb->currentSavedFrame[PROCESS_STACK_PTBASE] = pcb->pagetable;
-  //pcb->currentSavedFrame[PROCESS_STACK_PTSIZE] = MEM_PTSIZE;
-  //pcb->currentSavedFrame[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << 16) | MEM_L1FIELD_FIRST_BITNUM;
   
   //----------------------------------------------------------------------
   // This section sets up the stack frame for the process.  This is done

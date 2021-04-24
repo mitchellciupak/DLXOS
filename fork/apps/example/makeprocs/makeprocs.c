@@ -3,6 +3,7 @@
 
 void main(int argc, char *argv[]) {
   int c;
+  int b;
   int x = 1111;
 
   Printf("Makeprocs: Starting (%d)\n", getpid());
@@ -16,6 +17,14 @@ void main(int argc, char *argv[]) {
     Printf("Makeprocs: BEFORE CHILD: x is %d (%d)\n", x, getpid());
     x = 2222;
     Printf("Makeprocs: AFTER CHILD: x is %d (%d)\n", x, getpid());
+    b = fork();
+    if(b == 0){
+      Printf("A grandchild.\n");
+      x = 2;
+    }
+    else{
+      Printf("I'm getting old\n");
+    }
   } else {
     Printf("Makeprocs: BEFORE PARENT: x is %d (%d)\n", x, getpid());
     x = 3333;
