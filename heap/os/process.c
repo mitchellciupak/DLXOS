@@ -372,6 +372,7 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   int addr = 0;            // Used for reading code from files.
   unsigned char buf[100];  // Used for reading code from files.
   uint32 *stackframe;      // Stores address of current stack frame.
+  uint32 *heap;
   PCB *pcb;                // Holds pcb while we build it for this process.
   int intrs;               // Stores previous interrupt settings.
   uint32  initial_user_params[MAX_ARGS+2]; // Initial memory for user parameters (argc, argv)
@@ -437,6 +438,10 @@ int ProcessFork (VoidFunc func, uint32 param, char *name, int isUser) {
   for(i=0;i<=4;i++){
     pcb->pagetable[i] = MemoryAllocUserPage();
   }
+  heap = MemoryAllocUserPage();
+  pcb->pagetable[5] = heap;
+  pcb->heap_idx = 5;
+  pcb->heapNodes[0] = 7;
 
   // Now that the stack frame points at the bottom of the system stack memory area, we need to
   // move it up (decrement it) by one stack frame size because we're about to fill in the

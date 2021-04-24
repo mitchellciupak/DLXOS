@@ -1,0 +1,41 @@
+seven 30: allocating 40, 60, 129, and 128 bytes!
+Created a right child node (order = 6, addr = 2048, size = 2048) of parent (order = 7, addr = 0, size = 4096)
+Created a left child node (order = 6, addr = 0, size = 2048) of parent (order = 7, addr = 0, size = 4096)
+Created a right child node (order = 5, addr = 1024, size = 1024) of parent (order = 6, addr = 0, size = 2048)
+Created a left child node (order = 5, addr = 0, size = 1024) of parent (order = 6, addr = 0, size = 2048)
+Created a right child node (order = 4, addr = 512, size = 512) of parent (order = 5, addr = 0, size = 1024)
+Created a left child node (order = 4, addr = 0, size = 512) of parent (order = 5, addr = 0, size = 1024)
+Created a right child node (order = 3, addr = 256, size = 256) of parent (order = 4, addr = 0, size = 512)
+Created a left child node (order = 3, addr = 0, size = 256) of parent (order = 4, addr = 0, size = 512)
+Created a right child node (order = 2, addr = 128, size = 128) of parent (order = 3, addr = 0, size = 256)
+Created a left child node (order = 2, addr = 0, size = 128) of parent (order = 3, addr = 0, size = 256)
+Created a right child node (order = 1, addr = 64, size = 64) of parent (order = 2, addr = 0, size = 128)
+Created a left child node (order = 1, addr = 0, size = 64) of parent (order = 2, addr = 0, size = 128)
+Allocated the block: order = 1, addr = 0, requested mem size = 40, block size = 64
+40 addr: 225280
+Allocated the block: order = 1, addr = 64, requested mem size = 60, block size = 64
+60 addr: 225344
+Allocated the block: order = 3, addr = 256, requested mem size = 129, block size = 256
+129 addr: 225536
+Allocated the block: order = 2, addr = 128, requested mem size = 128, block size = 128
+128 addr: 225408
+Hello world printed from heap memory: Hello world!
+String in 40: forty
+String in 60: sixty
+Freeing all the allocations
+Freed the block: order = 1, addr = 0, size = 64
+Coalesced buddy nodes (order = 1, addr = 64, size = 64) & (order = 1, addr = 0, size = 64)
+into the parent node (order = 2, addr = 0, size = 128)
+Freed the block: order = 1, addr = 64, size = 64
+Freed the block: order = 3, addr = 256, size = 256
+Coalesced buddy nodes (order = 2, addr = 128, size = 128) & (order = 2, addr = 0, size = 128)
+into the parent node (order = 3, addr = 0, size = 256)
+Coalesced buddy nodes (order = 3, addr = 256, size = 256) & (order = 3, addr = 0, size = 256)
+into the parent node (order = 4, addr = 0, size = 512)
+Coalesced buddy nodes (order = 4, addr = 512, size = 512) & (order = 4, addr = 0, size = 512)
+into the parent node (order = 5, addr = 0, size = 1024)
+Coalesced buddy nodes (order = 5, addr = 1024, size = 1024) & (order = 5, addr = 0, size = 1024)
+into the parent node (order = 6, addr = 0, size = 2048)
+Coalesced buddy nodes (order = 6, addr = 2048, size = 2048) & (order = 6, addr = 0, size = 2048)
+into the parent node (order = 7, addr = 0, size = 4096)
+Freed the block: order = 2, addr = 128, size = 128
