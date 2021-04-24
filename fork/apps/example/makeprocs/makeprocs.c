@@ -34,6 +34,3 @@ void main(int argc, char *argv[]) {
   Printf("Makeprocs: AFTER: x is %d (%d)\n", x, getpid());
   Printf("Makeprocs: Forked Successfully!\n");
 }
-
-
-//TODO - add another test for ROP
