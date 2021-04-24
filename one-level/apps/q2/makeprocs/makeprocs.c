@@ -8,7 +8,7 @@ int run_test(char file[15], int num){
   sem_t s_procs_completed;             // Semaphore used to wait until all spawned processes have completed
   char s_procs_completed_str[10];      // Used as command-line argument to pass page_mapped handle to new processes
 
-  // Create semaphore to not exit this process until all other processes 
+  // Create semaphore to not exit this process until all other processes
   // have signalled that they are complete.
   if ((s_procs_completed = sem_create(0)) == SYNC_FAIL) {
     Printf("makeprocs (%d): Bad sem_create\n", getpid());
@@ -42,17 +42,25 @@ void main (int argc, char *argv[])
     Exit();
   }
 
+  Printf("Part 1 - Starting");
   run_test(P1_FILE, 1);
+  Printf("Part 1 - Ending\n");
+
   run_test(P2_FILE, 1);
+
   run_test(P3_FILE, 1);
-  //run_test(P1_FILE, 100);
+
   run_test(P4_FILE, 1);
+
+  Printf("Part 5 - Startin\n");
+  run_test(P1_FILE, 100);
+  Printf("Part 5 - Ending\n");
 
   if ((s_procs_completed = sem_create(-(numprocs - 1))) == SYNC_FAIL) {
     Printf("makeprocs (%d): Bad sem_create\n", getpid());
     Exit();
   }
-  
+
   ditoa(s_procs_completed, s_procs_completed_str);
   for(i=0; i<numprocs; i++) {
     process_create(P6_FILE, s_procs_completed_str, NULL);

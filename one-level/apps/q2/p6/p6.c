@@ -30,9 +30,9 @@ void main (int argc, char *argv[])
 
   // Signal the semaphore to tell the original process that we're done
   if(sem_signal(s_procs_completed) != SYNC_SUCCESS) {
-    Printf("Test 2 (%d): Bad semaphore s_procs_completed (%d)!\n", getpid(), s_procs_completed);
+    Printf("Test 6 (%d): Bad semaphore s_procs_completed (%d)!\n", getpid(), s_procs_completed);
     Exit();
   }
 
-  Printf("Test 2 (%d): Done!\n", getpid());
+  Printf("Test 6 (%d): Done!\n", getpid());
 }
