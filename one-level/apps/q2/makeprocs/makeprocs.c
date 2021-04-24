@@ -32,7 +32,7 @@ int run_test(char file[15], int num){
 
 void main (int argc, char *argv[])
 {
-  int numprocs = 31;             // Used to store number of processes to create
+  int numprocs = 30;             // Used to store number of processes to create
   int i;                               // Loop index variable
   sem_t s_procs_completed;             // Semaphore used to wait until all spawned processes have completed
   char s_procs_completed_str[10];
@@ -45,7 +45,7 @@ void main (int argc, char *argv[])
   run_test(P1_FILE, 1);
   run_test(P2_FILE, 1);
   run_test(P3_FILE, 1);
-  run_test(P1_FILE, 100);
+  //run_test(P1_FILE, 100);
   run_test(P4_FILE, 1);
 
   if ((s_procs_completed = sem_create(-(numprocs - 1))) == SYNC_FAIL) {

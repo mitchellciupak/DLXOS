@@ -15,8 +15,6 @@
 #define NPAGES (MEM_SIZE / MEM_PAGESIZE)
 static uint32 freemap[NPAGES / 32];
 static uint32 pagestart;
-static int nfreepages;
-static int freemapmax;
 
 //----------------------------------------------------------------------
 //
@@ -206,13 +204,13 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 int MemoryPageFaultHandler(PCB *pcb) {
   int attempt = pcb->currentSavedFrame[PROCESS_STACK_FAULT];
   int i = 0xFE;
-  if(attempt < pcb->sysStackPtr) ProcessKill();
+  if(attempt < (int)pcb->sysStackPtr) ProcessKill();
   while(pcb->pagetable[i] != 0 && i > 0){
     i--;
   }
   if(i==0) ProcessKill();
   pcb->pagetable[i] = MemoryAllocUserPage();
-  dbprintf("m", "Page table %d allocated\n", pcb->pagetable[i]);
+  dbprintf("m", "Page table %d allocated\n", (int)pcb->pagetable[i]);
   return MEM_SUCCESS;
 }
 
@@ -262,4 +260,193 @@ void MemoryFreePage(uint32 page) {
   bit = page % 32;
   freemap[idx] &= invert(1<<bit);
 }
+//---------------------------------------------------------------------
+// All heap management work goes here
+//---------------------------------------------------------------------
 
+// 2^a
+// Only for numbers 0-15
+int pow2(int a){
+  int i;
+  int b = 1;
+  a &= 0xF;
+  for(i=0; i<a;i++){
+    b *= 2;
+  }
+  return b;
+}
+
+// log(a) base 2
+int log2(float a){
+  int i = 0; 
+  float b = 1;
+  while(a > b){
+    b *= 2;
+    i++;
+  }
+  return i;
+}
+
+int is_used(int a){
+  return (a>>4 & 1);
+}
+
+void printHeap(int* heap);
+int makeIndex(int o, int* heap){
+  int idx = 0;
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+  int tiniest_idx = heap_max;
+  int buddy_idx;
+
+  // First look to see if we can find an unused one that's the right size
+  // Keep track of the smallest unused idx that's greater order than o
+  while(idx < heap_max){
+    if(heap[idx] == o && !is_used(heap[idx])){
+      return idx;
+    }
+    if(heap[idx] > o && idx < tiniest_idx && !is_used(heap[idx])) {
+    tiniest_idx = idx;
+    }
+    idx += (pow2(heap[idx]) / 1);
+  }
+
+  // Either start at the optimal location, or you're going to have to look all the way
+  idx = tiniest_idx < heap_max ? tiniest_idx : 0;
+
+  // Now iterate through and find one to split into a usable one
+  while(idx < heap_max && heap[idx] != o){
+    if(!is_used(heap[idx]) && heap[idx] > o){
+      heap[idx] -= 1;
+      buddy_idx = pow2(heap[idx]) + idx;
+      heap[buddy_idx] = heap[idx];
+      printf("Created a right child node (order = %d, addr = %d, size = %d) ", heap[buddy_idx], buddy_idx*MEM_ORDER0, pow2(heap[buddy_idx])*MEM_ORDER0);
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx] + 1, idx*MEM_ORDER0, pow2(heap[idx] + 1)*MEM_ORDER0);
+      printf("Created a left child node (order = %d, addr = %d, size = %d) ", heap[idx], idx*MEM_ORDER0, pow2(heap[idx])*MEM_ORDER0);
+      printf("of parent (order = %d, addr = %d, size = %d)\n", heap[idx]  + 1, idx*MEM_ORDER0, pow2(heap[idx] + 1)*MEM_ORDER0);
+    }
+    else idx += (pow2(heap[idx]) / 1);
+  }
+  if(idx == heap_max) return -1;
+  return idx;
+}
+
+void printHeap(int* heap){
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+  int i;
+  int j;
+  int num_cols=8;
+  for(i=0;i<num_cols;i++){
+    for(j=0;j<heap_max/num_cols;j++){
+      printf("%d\t", heap[i*(heap_max/num_cols) + j] & 0xF);
+    }
+    printf("\n");
+  }
+}
+
+void fancyPrint(int* heap){
+  int heap_max = MEM_PAGESIZE / MEM_ORDER0;
+  int i=0;
+  int j=0;
+  int inuse = 0;
+  dbprintf('h', "Printing heap:\n");
+
+  while(i<heap_max){
+    inuse = is_used(heap[i]);
+    dbprintf('h', "%d |\t", heap[i] & 0xF);
+    for(j=0;j<(pow2(heap[i]));j++){
+      dbprintf('h', "%d  ",inuse);
+      if(j!=0 && !(j%12)) dbprintf('h', "\n\t");
+    }
+    dbprintf('h', "\n");
+    i += j;
+  }
+}
+
+// use a binary tree, but use the actual memory space to store information
+void* malloc(PCB* pcb, int memsize){
+  int order;
+  int idx;
+  if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
+
+  
+  order = log2((float)memsize / MEM_ORDER0);
+  idx = makeIndex(order, &(pcb->heapNodes));
+
+  printf("\nProcess (%d) allocating block\n", GetCurrentPid());
+  if(idx == -1){
+    printf("Process (%d) Heap full\n", GetCurrentPid());
+    return NULL;
+  }
+  // mark as inuse
+  pcb->heapNodes[idx] |= (1<<4);
+
+  // do printing
+  printf("Allocated the block: ");
+  printf("order = %d, ", order);
+  printf("addr = %d, ", idx*32);
+  printf("requested mem size = %d, ", memsize);
+  printf("block size = %d\n", pow2(order)*MEM_ORDER0);
+  fancyPrint(&pcb->heapNodes);
+  return (pcb->pagetable[pcb->heap_idx] & MEM_PTE_MASK) | (idx*MEM_ORDER0);
+}
+
+void shrink(int* heap, int idx){
+  
+  int order = heap[idx];
+  int buddy;
+  int idx_copy = 0;
+  int right;
+
+  // Idx/order indicates number of that order that could fit to the left
+  // If an even number is to the left, than it's a left node, otherwise it's a right node
+  right = (idx / pow2(order)) % 2;
+
+  // If there is an odd number to the left, you have to merge left
+  if(right){
+    buddy = idx - pow2(order);
+    if(is_used(heap[buddy])) return;
+    heap[idx] = 0;
+    heap[buddy] = order + 1;
+    printf("Coalesced buddy nodes ");
+    printf("(order = %d, addr = %d, size = %d) & ", order, idx*32, pow2(order)*MEM_ORDER0);
+    printf("(order = %d, addr = %d, size = %d)\n", order, buddy*32, pow2(order)*MEM_ORDER0);
+    printf("into the parent node ");
+    printf("(order = %d, addr = %d, size = %d)\n", heap[buddy], buddy*32, pow2(heap[buddy])*MEM_ORDER0);
+    shrink(heap, buddy);
+    return;
+  }
+
+  // now see if there's one to the right
+  buddy = idx + pow2(order);
+  if(heap[buddy] == order && !is_used(heap[buddy])){
+    heap[buddy] = 0;
+    heap[idx] = order + 1;
+    printf("Coalesced buddy nodes ");
+    printf("(order = %d, addr = %d, size = %d) & ", order, buddy*32, pow2(order)*MEM_ORDER0);
+    printf("(order = %d, addr = %d, size = %d)\n", order, idx*32, pow2(order)*MEM_ORDER0);
+    printf("into the parent node ");
+    printf("(order = %d, addr = %d, size = %d)\n", heap[idx], idx*32, pow2(heap[idx])*MEM_ORDER0);
+    shrink(heap, idx);
+  }
+  return;
+}
+
+int mfree(PCB* pcb, void *ptr){
+  int ptr_page = ((int)ptr >> MEM_L1FIELD_FIRST_BITNUM) & 0xFF;
+  int offset = (int)ptr & 0xFFF;
+  int idx = offset / MEM_ORDER0;
+  int order = pcb->heapNodes[idx]& 0xF;
+  int heap_loc = (pcb->pagetable[pcb->heap_idx] >> MEM_L1FIELD_FIRST_BITNUM) & 0xFF;
+  
+  if(!is_used(pcb->heapNodes[idx]) || ptr_page != heap_loc){
+    printf("Not a valid heap address\n");
+    return -1;
+  }
+  printf("\nProcess (%d) freeing block of size (%d)\n", GetCurrentPid(), pow2(order)*MEM_ORDER0);
+  pcb->heapNodes[idx] &= ~(1<<4);
+  shrink(&pcb->heapNodes, idx);
+  fancyPrint(&pcb->heapNodes);
+  printf("Freed the block: order = %d, addr = %d, size = %d\n", order, offset, pow2(order)*MEM_ORDER0);
+
+  return NULL;
+}
