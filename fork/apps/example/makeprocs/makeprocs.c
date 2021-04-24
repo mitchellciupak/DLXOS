@@ -6,7 +6,7 @@ void main(int argc, char *argv[]) {
   int x = 1111;
 
   Printf("Makeprocs: Starting (%d)\n", getpid());
-  Printf("Makeprocs: BEFORE FORK: x is %d (%d)\n", x, getpid());
+  Printf("Makeprocs: BEFORE FORK: x is %d Process (%d)\n", x, getpid());
 
   c = fork();
 

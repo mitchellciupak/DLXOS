@@ -394,16 +394,17 @@ int ProcessRealFork(PCB *parent_pcb) {
 
   //----------------------------------------------------------------------
 
-  if (parent_pcb->npages == 4) { pcb->npages = parent_pcb->npages;}
+  //if (parent_pcb->npages == 4) { pcb->npages = parent_pcb->npages;}
 
-  for (i = 0; i < 256; i++) {
+  for (i = 0; i < NPAGES; i++) {
     if(parent_pcb->pagetable[i] & MEM_PTE_VALID){
       parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
     }
   }
 
   bcopy((char *)parent_pcb, (char *)pcb, sizeof(PCB));
-
+  printf("pcb->name = %s, status = %d\n", pcb->name, pcb->flags);
+  
   //----------------------------------------------------------------------
 
   // At this point, the PCB is allocated and nobody else can get it.
@@ -411,40 +412,41 @@ int ProcessRealFork(PCB *parent_pcb) {
   // can turn on interrupts here.
   RestoreIntrs (intrs);
 
-  // Copy the process name into the PCB.
-  // dstrcpy(pcb->name, name);
-
   //----------------------------------------------------------------------
   // This section initializes the memory for this process
   //----------------------------------------------------------------------
-  // Allocate 1 page for system stack, 1 page for user stack (at top of
-  // virtual address space), and 4 pages for user code and global data.
-
+  // Allocate 1 page for system stack (at top of
+  // virtual address space) user stack page and 
+  // code and data pages are already copied over
+  
   //---------------------------------------------------------
   // STUDENT: allocate pages for a new process here.  The
   // code below assumes that you set the "stackframe" variable
   // equal to the last 4-byte-aligned address in physical page
   // for the system stack. (allocate for global, user, and system stacks) (completed)
   //---------------------------------------------------------
-  // printf("TEST 1\n");
-  newPage = MemoryAllocSysPage();
-  pcb->sysStackArea = newPage;
-  bcopy((char *)(parent_pcb->sysStackArea), (char *)(pcb->sysStackArea),MEM_PAGESIZE);
+ 
+  stackframe = MemoryAllocSysPage();
 
-  //TODO CASTING CORRECTYLY
-  // The system stack pointer is set to the base of the current interrupt stack frame.
-  pcb->sysStackPtr = (uint32 *)((uint32)pcb->sysStackPtr + ((uint32)parent_pcb->sysStackPtr - parent_pcb->sysStackArea));
+  // Now set variables for new stack offset
+  pcb->sysStackPtr = ((int)parent_pcb->sysStackPtr & MEM_ADDRESS_OFFSET_MASK) + stackframe;
+  pcb->currentSavedFrame = ((int)parent_pcb->currentSavedFrame & MEM_ADDRESS_OFFSET_MASK) + stackframe;
+  pcb->currentSavedFrame[PROCESS_STACK_PTBASE] = pcb->pagetable;
 
-  // The current stack frame pointer is set to the same thing.
-  pcb->currentSavedFrame = (uint32 *)((uint32)pcb->currentSavedFrame + ((uint32)parent_pcb->currentSavedFrame - parent_pcb->sysStackArea));
-
+  
   //----------------------------------------------------------------------
-  // STUDENT: setup the PTBASE, PTBITS, and PTSIZE here on the current
-  // stack frame. (Completed)
+  // This section sets up the stack frame for the process.  This is done
+  // so that the frame looks to the interrupt handler like the process
+  // was "suspended" right before it began execution.  The standard
+  // mechanism of swapping in the registers and returning to the place
+  // where it was "interrupted" will then work.
   //----------------------------------------------------------------------
-  stackframe[PROCESS_STACK_PTBASE] = (uint32)pcb->pagetable; //base address of the level 1 page table //warning: assignment makes integer from pointer without a cast
-  stackframe[PROCESS_STACK_PTSIZE] = MEM_PTSIZE; //maximum number of entries in the level 1 page table
-  stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << 16) | MEM_L1FIELD_FIRST_BITNUM;
+
+  // The previous stack frame pointer is set to 0, meaning there is no
+  // previous frame.
+
+  dbprintf('m', "ProcessFork: stackframe = 0x%x\n", (int)stackframe);
+  stackframe[PROCESS_STACK_PREV_FRAME] = 0;
 
   // Place the PCB onto the run queue.
   intrs = DisableIntrs ();
@@ -475,6 +477,7 @@ int ProcessRealFork(PCB *parent_pcb) {
   ProcessPrintValidPTEs(pcb);
 
   dbprintf('p', "ProcessRealFork: Leaving (%s)\n", GetPidFromAddress(pcb));
+  
   return PROCESS_SUCCESS;
 }
 

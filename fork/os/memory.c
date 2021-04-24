@@ -12,7 +12,6 @@
 #include "queue.h"
 
 // num_pages = size_of_memory / size_of_one_page
-#define NPAGES (MEM_SIZE / MEM_PAGESIZE)
 static uint32 freemap[NPAGES / 32];
 static uint32 pagestart;
 // static int nfreepages;
@@ -221,10 +220,15 @@ int MemoryPageFaultHandler(PCB *pcb) {
 // access is made
 //---------------------------------------------------------------------
 int MemoryROPHandler(PCB *pcb) {
-  uint32 page = pcb->currentSavedFrame[PROCESS_STACK_FAULT] >> MEM_L1FIELD_FIRST_BITNUM;
-  pcb->pagetable[page] = MemoryAllocSysPage();
-  bcopy((char *)(pcb->currentSavedFrame[PROCESS_STACK_FAULT]), (char *)((pcb->pagetable[page]) * MEM_PAGESIZE), MEM_PAGESIZE);
-  pcb->pagetable[page] &= invert(MEM_PTE_READONLY);
+  uint32 page = pcb->currentSavedFrame[PROCESS_STACK_FAULT];// && MEM_ADDRESS_OFFSET_MASK;
+  int idx = page>>MEM_L1FIELD_FIRST_BITNUM;
+
+  printf("Rop called with page 0x%x\n", page);
+  printf("Old page was 0x%x ", pcb->pagetable[idx]);
+  pcb->pagetable[idx] = MemoryAllocUserPage();
+  printf("and new page is 0x%x (replacement idx %d)\n", pcb->pagetable[idx], idx);
+  bcopy((char *)page, (char *)((pcb->pagetable[idx])), MEM_PAGESIZE);
+  pcb->pagetable[idx] &= invert(MEM_PTE_READONLY);
   return MEM_SUCCESS;
 }
 
