@@ -405,7 +405,7 @@ int ProcessRealFork(PCB *parent_pcb) {
 
   bcopy((char *)parent_pcb, (char *)pcb, sizeof(PCB));
   printf("pcb->name = %s, status = %d\n", pcb->name, pcb->flags);
-  
+
   //----------------------------------------------------------------------
 
   // At this point, the PCB is allocated and nobody else can get it.
@@ -417,9 +417,9 @@ int ProcessRealFork(PCB *parent_pcb) {
   // This section initializes the memory for this process
   //----------------------------------------------------------------------
   // Allocate 1 page for system stack (at top of
-  // virtual address space) user stack page and 
+  // virtual address space) user stack page and
   // code and data pages are already copied over
-  
+
   //---------------------------------------------------------
   // STUDENT: allocate pages for a new process here.  The
   // code below assumes that you set the "stackframe" variable
@@ -438,7 +438,7 @@ int ProcessRealFork(PCB *parent_pcb) {
   pcb->currentSavedFrame = ((int)parent_pcb->currentSavedFrame & MEM_ADDRESS_OFFSET_MASK) / 4 + stackframe;
   printf("The current frame is at 0x%x for parent and 0x%x for child\n", parent_pcb->currentSavedFrame, pcb->currentSavedFrame);
   pcb->currentSavedFrame[PROCESS_STACK_PTBASE] = pcb->pagetable;
-  
+
   //----------------------------------------------------------------------
   // This section sets up the stack frame for the process.  This is done
   // so that the frame looks to the interrupt handler like the process
@@ -464,7 +464,7 @@ int ProcessRealFork(PCB *parent_pcb) {
     printf("FATAL ERROR: could not insert link into runQueue in ProcessFork!\n");
     exitsim();
   }
-  
+
 
   //Set
   ProcessSetResult(pcb, 0);
@@ -473,13 +473,15 @@ int ProcessRealFork(PCB *parent_pcb) {
   // This prevents someone else from grabbing this process
   ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
   RestoreIntrs(intrs);
-  //TestProcessPrintValidPTEs
+  printf("nProcessRealFork: TRAP_ROP_ACCESS exception generated\n")
   printf("\nProcessRealFork: Copying Parent = %d to Child = %d\n", GetPidFromAddress(parent_pcb), GetPidFromAddress(pcb));
+  printf("nProcessRealFork: Printing Valid PTEs for Parent (%s)\n", GetPidFromAddress(parent_pcb));
   ProcessPrintValidPTEs(parent_pcb);
+  printf("nProcessRealFork: Printing Valid PTEs for Child (%s)\n", GetPidFromAddress(pcb));
   ProcessPrintValidPTEs(pcb);
 
   dbprintf('p', "ProcessRealFork: Leaving (%s)\n\n", GetPidFromAddress(pcb));
-  
+
   return PROCESS_SUCCESS;
 }
 

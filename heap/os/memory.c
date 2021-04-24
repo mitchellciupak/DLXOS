@@ -73,11 +73,11 @@ void MemoryModuleInit() {
   }
 
   pagestart = lastos_page + 1;
-  
-  printf("Freemap size = %d\nLastosaddress = %d\n", freemap_size, lastosaddress);
-  for(i=0; i < freemap_size; i++){
-    printf("%d, ", freemap[i]);
-  }
+
+  // printf("Freemap size = %d\nLastosaddress = %d\n", freemap_size, lastosaddress);
+  // for(i=0; i < freemap_size; i++){
+  //   printf("%d, ", freemap[i]);
+  // }
   printf("\n");
 
 }
@@ -140,7 +140,7 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
     // Calculate the number of bytes to copy this time.  If we have more bytes
     // to copy than there are left in the current page, we'll have to just copy to the
     // end of the page and then go through the loop again with the next page.
-    // In other words, "bytesToCopy" is the minimum of the bytes left on this page 
+    // In other words, "bytesToCopy" is the minimum of the bytes left on this page
     // and the total number of bytes left to copy ("n").
 
     // First, compute number of bytes left in this page.  This is just
@@ -149,7 +149,7 @@ int MemoryMoveBetweenSpaces (PCB *pcb, unsigned char *system, unsigned char *use
     // MEM_ADDRESS_OFFSET_MASK should be the bit mask required to get just the
     // "offset" portion of an address.
     bytesToCopy = MEM_PAGESIZE - ((uint32)curUser & MEM_ADDRESS_OFFSET_MASK);
-    
+
     // Now find minimum of bytes in this page vs. total bytes left to copy
     if (bytesToCopy > n) {
       bytesToCopy = n;
@@ -188,17 +188,17 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from,unsigned char *to, int
 }
 
 //---------------------------------------------------------------------
-// MemoryPageFaultHandler is called in traps.c whenever a page fault 
+// MemoryPageFaultHandler is called in traps.c whenever a page fault
 // (better known as a "seg fault" occurs.  If the address that was
-// being accessed is on the stack, we need to allocate a new page 
+// being accessed is on the stack, we need to allocate a new page
 // for the stack.  If it is not on the stack, then this is a legitimate
 // seg fault and we should kill the process.  Returns MEM_SUCCESS
 // on success, and kills the current process on failure.  Note that
-// fault_address is the beginning of the page of the virtual address that 
+// fault_address is the beginning of the page of the virtual address that
 // caused the page fault, i.e. it is the vaddr with the offset zero-ed
 // out.
 //
-// Note: The existing code is incomplete and only for reference. 
+// Note: The existing code is incomplete and only for reference.
 // Feel free to edit.
 //---------------------------------------------------------------------
 int MemoryPageFaultHandler(PCB *pcb) {
@@ -278,7 +278,7 @@ int pow2(int a){
 
 // log(a) base 2
 int log2(float a){
-  int i = 0; 
+  int i = 0;
   float b = 1;
   while(a > b){
     b *= 2;
@@ -367,12 +367,10 @@ void* malloc(PCB* pcb, int memsize){
   int order;
   int idx;
   if(memsize > MEM_PAGESIZE || memsize < 0) return NULL;
+  printf("\nProcess (%d) allocating block of size %d\n", GetCurrentPid(), memsize);
 
-  
   order = log2((float)memsize / MEM_ORDER0);
   idx = makeIndex(order, &(pcb->heapNodes));
-
-  printf("\nProcess (%d) allocating block\n", GetCurrentPid());
   if(idx == -1){
     printf("Process (%d) Heap full\n", GetCurrentPid());
     return NULL;
@@ -391,7 +389,7 @@ void* malloc(PCB* pcb, int memsize){
 }
 
 void shrink(int* heap, int idx){
-  
+
   int order = heap[idx];
   int buddy;
   int idx_copy = 0;
@@ -437,7 +435,7 @@ int mfree(PCB* pcb, void *ptr){
   int idx = offset / MEM_ORDER0;
   int order = pcb->heapNodes[idx]& 0xF;
   int heap_loc = (pcb->pagetable[pcb->heap_idx] >> MEM_L1FIELD_FIRST_BITNUM) & 0xFF;
-  
+
   if(!is_used(pcb->heapNodes[idx]) || ptr_page != heap_loc){
     printf("Not a valid heap address\n");
     return -1;

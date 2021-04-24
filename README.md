@@ -14,7 +14,7 @@
 
 ---
 
-<p align="center"> Lab 3 by Kempak Kernels (Team No. 24)
+<p align="center"> Lab 4 by Kempak Kernels (Team No. 24)
     <br>
 </p>
 
@@ -42,27 +42,31 @@ These instructions will get you a copy of the project up and running on your loc
 Simply, unzip and run given you have the required programs
 
 ```
-unzip ee469lab3_g24.zip
+unzip ee469lab4_g24.zip
 
 ```
 
 ## 🔧 Running the tests <a name = "tests"></a>
-This repository actually contains three OS's. The first OS deals with questions 1 and 2 of lab 4.
-  To run these tests, cd into one-level and execute the following commands:
+This repository actually contains three OS's. The first OS deals with questions 1 and 2 of lab 4. To run these tests, change directories (cd) into one-level and execute the following commands:
 
+### Running One-level
 ```
-chmod u+x
+chmod u+x make.sh
 make.sh -R q2
 ```
 This will run the tests for question 2 on a one-level system.
 
+### Running Fork
 To run the test for fork, cd into fork and execute the following commands:
-...
-
-To run the test for heap, cd into heap and execute the following commands:
-
 ```
-chmod u+x
+chmod u+x make.sh
+make.sh -R q2
+```
+
+### Running Heap
+To run the test for heap, cd into heap and execute the following commands:
+```
+chmod u+x make.sh
 make.sh -R tests
 ```
 To view the heap after each allocation and free, enter debug mode by executing:
@@ -71,6 +75,7 @@ make.sh -D tests
 ```
 The flag "-D h" will run the fancyPrint function and display heaps.
 
+### Additional Information
 
 Note that in any OS, you can always cd into the os folder and run
 ```
@@ -104,11 +109,6 @@ Add additional notes about how to deploy this on a live system.
 ## ✍️ Authors <a name = "authors"></a>
 - [@mitchellciupak](https://github.com/mitchellciupak) - Teammate
 - [@ckemmet](https://github.com/ckemmet) - Teammate
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
 
 ## 🔎 Appendix <a name = "appendix"></a>
 
