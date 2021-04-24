@@ -43,25 +43,47 @@ Simply, unzip and run given you have the required programs
 
 ```
 unzip ee469lab3_g24.zip
-gcc-dlx -mtraps -O3 -Wall -c -o foo.o foo.c #TODO-is this correct Compiling Step
-#TODO-is this correct run (dlxsim) Step
+
 ```
 
 ## 🔧 Running the tests <a name = "tests"></a>
-Explain how to run the automated tests for this system.
+This repository actually contains three OS's. The first OS deals with questions 1 and 2 of lab 4.
+  To run these tests, cd into one-level and execute the following commands:
 
 ```
 chmod u+x
 make.sh -R q2
 ```
+This will run the tests for question 2 on a one-level system.
+
+To run the test for fork, cd into fork and execute the following commands:
+...
+
+To run the test for heap, cd into heap and execute the following commands:
 
 ```
-//cd to apps and os and do the following
+chmod u+x
+make.sh -R tests
+```
+To view the heap after each allocation and free, enter debug mode by executing:
+```
+make.sh -D tests
+```
+The flag "-D h" will run the fancyPrint function and display heaps.
+
+
+Note that in any OS, you can always cd into the os folder and run
+```
+make
+make run
+```
+and then cd into the folder of the application you wish to run and run
+```
 make
 make run
 ```
 
-To clean, run "make clean" from any project folder, or simply run "make.sh -c" from the DLXOS folder.
+To clean, run "make clean" from any project folder, or simply run "make.sh -c" from the heap, fork, or one-level folders.
 
 ## 🎈 Usage <a name="usage"></a>
 Add notes about how to use the system.
