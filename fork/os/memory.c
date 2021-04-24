@@ -286,14 +286,14 @@ int MemoryUpdateReference(uint32 page){
 void MemoryFreePage(uint32 page) {
   int idx;
   int bit;
-  
+
   page /= MEM_PAGESIZE;
-  printf("Freeing page 0x%x, %d {%d}!\n", page, refCtr[page], GetCurrentPid());
+  // printf("Freeing page 0x%x, %d {%d}!\n", page, refCtr[page], GetCurrentPid());
   if(refCtr[page] > 0){
     refCtr[page]--;
   }
   else{
-    printf("Free\n");
+    // printf("Free\n");
     idx = (int)(page / 32);
     bit = page % 32;
     freemap[idx] &= invert(1<<bit);
