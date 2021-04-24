@@ -473,7 +473,7 @@ int ProcessRealFork(PCB *parent_pcb) {
   // This prevents someone else from grabbing this process
   ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
   RestoreIntrs(intrs);
-  printf("nProcessRealFork: TRAP_ROP_ACCESS exception generated\n")
+  printf("nProcessRealFork: TRAP_ROP_ACCESS exception generated\n");
   printf("\nProcessRealFork: Copying Parent = %d to Child = %d\n", GetPidFromAddress(parent_pcb), GetPidFromAddress(pcb));
   printf("nProcessRealFork: Printing Valid PTEs for Parent (%s)\n", GetPidFromAddress(parent_pcb));
   ProcessPrintValidPTEs(parent_pcb);
