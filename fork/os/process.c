@@ -392,21 +392,16 @@ int ProcessRealFork(PCB *parent_pcb) {
     exitsim();
   }
 
-  // This prevents someone else from grabbing this process
-  printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
-  ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
-
   //----------------------------------------------------------------------
 
   if (parent_pcb->npages == 4) { pcb->npages = parent_pcb->npages;}
 
-  for (i = 0; i < parent_pcb->npages; ++i) {
-    parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
+  for (i = 0; i < 256; i++) {
+    if(parent_pcb->pagetable[i] & MEM_PTE_VALID){
+      parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
+    }
   }
 
-  // ProcessSetResult(pcb, 0);
-  // ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
-  printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
   bcopy((char *)parent_pcb, (char *)pcb, sizeof(PCB));
 
   //----------------------------------------------------------------------
@@ -431,50 +426,25 @@ int ProcessRealFork(PCB *parent_pcb) {
   // equal to the last 4-byte-aligned address in physical page
   // for the system stack. (allocate for global, user, and system stacks) (completed)
   //---------------------------------------------------------
-
+  // printf("TEST 1\n");
   newPage = MemoryAllocSysPage();
-  pcb->sysStackArea = newPage * MEM_PAGESIZE;
-  // ProcessSetResult(pcb, 0);
-  // ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
-   printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
+  pcb->sysStackArea = newPage;
   bcopy((char *)(parent_pcb->sysStackArea), (char *)(pcb->sysStackArea),MEM_PAGESIZE);
-  stackframe = (uint32 *)((-1 + pcb->sysStackArea + MEM_PAGESIZE) & invert(0x3));
 
-  // Now that the stack frame points at the bottom of the system stack memory area, we need to
-  // move it up (decrement it) by one stack frame size because we're about to fill in the
-  // initial stack frame that will be loaded for this PCB when it gets switched in by
-  // ProcessSchedule the first time.
-  stackframe -= PROCESS_STACK_FRAME_SIZE;
-
+  //TODO CASTING CORRECTYLY
   // The system stack pointer is set to the base of the current interrupt stack frame.
-  pcb->sysStackPtr = stackframe;
+  pcb->sysStackPtr = (uint32 *)((uint32)pcb->sysStackPtr + ((uint32)parent_pcb->sysStackPtr - parent_pcb->sysStackArea));
+
   // The current stack frame pointer is set to the same thing.
-  pcb->currentSavedFrame = stackframe;
-
-  //----------ProcessPrintValidPTEs------------------------------------------------------------
-  // This section sets up the stack frame for the process.  This is done
-  // so that the frame looks to the interrupt handler like the process
-  // was "suspended" right before it began execution.  The standard
-  // mechanism of swapping in the registers and returning to the place
-  // where it was "interrupted" will then work.
-  //----------------------------------------------------------------------
-
-  // The previous stack frame pointer is set to 0, meaning there is no
-  // previous frame.
-  dbprintf('m', "ProcessFork: stackframe = 0x%x\n", (int)stackframe);
-  stackframe[PROCESS_STACK_PREV_FRAME] = 0;
+  pcb->currentSavedFrame = (uint32 *)((uint32)pcb->currentSavedFrame + ((uint32)parent_pcb->currentSavedFrame - parent_pcb->sysStackArea));
 
   //----------------------------------------------------------------------
   // STUDENT: setup the PTBASE, PTBITS, and PTSIZE here on the current
   // stack frame. (Completed)
   //----------------------------------------------------------------------
-  stackframe[PROCESS_STACK_PTBASE] = &pcb->pagetable[0]; //base address of the level 1 page table //warning: assignment makes integer from pointer without a cast
+  stackframe[PROCESS_STACK_PTBASE] = (uint32)pcb->pagetable; //base address of the level 1 page table //warning: assignment makes integer from pointer without a cast
   stackframe[PROCESS_STACK_PTSIZE] = MEM_PTSIZE; //maximum number of entries in the level 1 page table
   stackframe[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << 16) | MEM_L1FIELD_FIRST_BITNUM;
-
-  // dbprintf('m',"ProcessFork: PTBASE: %d\n", stackframe[PROCESS_STACK_PTBASE]);
-  // dbprintf('m',"ProcessFork: PTSIZE: %d\n", stackframe[PROCESS_STACK_PTSIZE]);
-  // dbprintf('m',"ProcessFork: PTBITS: %d\n", stackframe[PROCESS_STACK_PTBITS]);
 
   // Place the PCB onto the run queue.
   intrs = DisableIntrs ();
@@ -495,6 +465,9 @@ int ProcessRealFork(PCB *parent_pcb) {
   ProcessSetResult(pcb, 0);
   ProcessSetResult(parent_pcb, GetPidFromAddress(parent_pcb));
 
+  // This prevents someone else from grabbing this process
+  ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
+
   //TestProcessPrintValidPTEs
   printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
   ProcessPrintValidPTEs(parent_pcb);
@@ -514,6 +487,8 @@ int ProcessRealFork(PCB *parent_pcb) {
 //----------------------------------------------------------------------
 void ProcessPrintValidPTEs(PCB *pcb) {
   int i;
+
+  printf("ProcessPrintValidPTEs: Starting (%s)\n", GetPidFromAddress(pcb));
 
   for(i=0;i< sizeof(pcb->pagetable) / sizeof(pcb->pagetable[0]); i++){
     if(pcb->pagetable[i] & MEM_PTE_VALID){
