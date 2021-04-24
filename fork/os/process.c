@@ -396,9 +396,10 @@ int ProcessRealFork(PCB *parent_pcb) {
 
   //if (parent_pcb->npages == 4) { pcb->npages = parent_pcb->npages;}
 
-  for (i = 0; i < NPAGES; i++) {
+  for (i = 0; i < MEM_PTSIZE; i++) {
     if(parent_pcb->pagetable[i] & MEM_PTE_VALID){
       parent_pcb->pagetable[i] |= MEM_PTE_READONLY;
+      MemoryUpdateReference(parent_pcb->pagetable[i]);
     }
   }
 
@@ -425,14 +426,20 @@ int ProcessRealFork(PCB *parent_pcb) {
   // equal to the last 4-byte-aligned address in physical page
   // for the system stack. (allocate for global, user, and system stacks) (completed)
   //---------------------------------------------------------
- 
+  printf("the parent stack frame is 0x%x\n", (int)pcb->sysStackPtr & invert(MEM_ADDRESS_OFFSET_MASK));
   stackframe = MemoryAllocSysPage();
+  printf("the child stack frame is 0x%x\n", stackframe);
+
+  // Copy system stack over
+  bcopy((char *)((int)parent_pcb->sysStackPtr & invert(MEM_ADDRESS_OFFSET_MASK)), (char*) stackframe, MEM_PAGESIZE);
 
   // Now set variables for new stack offset
-  pcb->sysStackPtr = ((int)parent_pcb->sysStackPtr & MEM_ADDRESS_OFFSET_MASK) + stackframe;
-  pcb->currentSavedFrame = ((int)parent_pcb->currentSavedFrame & MEM_ADDRESS_OFFSET_MASK) + stackframe;
+  pcb->sysStackPtr = ((int)parent_pcb->sysStackPtr & MEM_ADDRESS_OFFSET_MASK) / 4 + stackframe;
+  pcb->currentSavedFrame = ((int)parent_pcb->currentSavedFrame & MEM_ADDRESS_OFFSET_MASK) / 4 + stackframe;
+  printf("The current frame is at 0x%x for parent and 0x%x for child\n", parent_pcb->currentSavedFrame, pcb->currentSavedFrame);
   pcb->currentSavedFrame[PROCESS_STACK_PTBASE] = pcb->pagetable;
-
+  //pcb->currentSavedFrame[PROCESS_STACK_PTSIZE] = MEM_PTSIZE;
+  //pcb->currentSavedFrame[PROCESS_STACK_PTBITS] = (MEM_L1FIELD_FIRST_BITNUM << 16) | MEM_L1FIELD_FIRST_BITNUM;
   
   //----------------------------------------------------------------------
   // This section sets up the stack frame for the process.  This is done
@@ -459,9 +466,7 @@ int ProcessRealFork(PCB *parent_pcb) {
     printf("FATAL ERROR: could not insert link into runQueue in ProcessFork!\n");
     exitsim();
   }
-
-
-  RestoreIntrs(intrs);
+  
 
   //Set
   ProcessSetResult(pcb, 0);
@@ -469,14 +474,13 @@ int ProcessRealFork(PCB *parent_pcb) {
 
   // This prevents someone else from grabbing this process
   ProcessSetStatus (pcb, PROCESS_STATUS_RUNNABLE);
-
+  RestoreIntrs(intrs);
   //TestProcessPrintValidPTEs
-  printf("ProcessRealFork: Parent = %d\n\n", GetPidFromAddress(parent_pcb));
+  printf("\nProcessRealFork: Copying Parent = %d to Child = %d\n", GetPidFromAddress(parent_pcb), GetPidFromAddress(pcb));
   ProcessPrintValidPTEs(parent_pcb);
-  printf("ProcessRealFork: Child = %d\n\n", GetPidFromAddress(pcb));
   ProcessPrintValidPTEs(pcb);
 
-  dbprintf('p', "ProcessRealFork: Leaving (%s)\n", GetPidFromAddress(pcb));
+  dbprintf('p', "ProcessRealFork: Leaving (%s)\n\n", GetPidFromAddress(pcb));
   
   return PROCESS_SUCCESS;
 }
@@ -493,9 +497,9 @@ void ProcessPrintValidPTEs(PCB *pcb) {
 
   printf("ProcessPrintValidPTEs: Starting (%s)\n", GetPidFromAddress(pcb));
 
-  for(i=0;i< sizeof(pcb->pagetable) / sizeof(pcb->pagetable[0]); i++){
+  for(i=0;i< MEM_PTSIZE; i++){
     if(pcb->pagetable[i] & MEM_PTE_VALID){
-      printf("ProcessPrintValidPTEs: pcb->pagetable[%d] = 0x%x\n",i,pcb->pagetable[i]);
+      printf("PTE: pcb->pagetable[%d] = 0x%x\n",i,pcb->pagetable[i]);
     }
   }
   printf("ProcessPrintValidPTEs: Exiting (%s)\n", GetPidFromAddress(pcb));

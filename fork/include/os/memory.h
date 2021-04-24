@@ -19,6 +19,7 @@ int MemoryCopyUserToSystem (PCB *pcb, unsigned char *from, unsigned char *to, in
 int MemoryPageFaultHandler(PCB *pcb);
 int MemoryROPHandler(PCB *pcb);
 int findFreePage(void);
+int MemoryUpdateReference(uint32 page);
 void MemoryFreePage(uint32 page);
 
 

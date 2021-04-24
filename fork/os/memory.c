@@ -14,6 +14,7 @@
 // num_pages = size_of_memory / size_of_one_page
 static uint32 freemap[NPAGES / 32];
 static uint32 pagestart;
+static int refCtr[NPAGES]; // reference counter for each physical page (addr/4KB)
 // static int nfreepages;
 // static int freemapmax;
 
@@ -226,9 +227,13 @@ int MemoryROPHandler(PCB *pcb) {
   printf("Rop called with page 0x%x\n", page);
   printf("Old page was 0x%x ", pcb->pagetable[idx]);
   pcb->pagetable[idx] = MemoryAllocUserPage();
-  printf("and new page is 0x%x (replacement idx %d)\n", pcb->pagetable[idx], idx);
+  printf("and new page for process %d is 0x%x\n", GetCurrentPid(), pcb->pagetable[idx]);
   bcopy((char *)page, (char *)((pcb->pagetable[idx])), MEM_PAGESIZE);
   pcb->pagetable[idx] &= invert(MEM_PTE_READONLY);
+
+  // Update ref counter for old page
+  refCtr[page/MEM_PAGESIZE]--;
+
   return MEM_SUCCESS;
 }
 
@@ -255,14 +260,17 @@ int findFreePage(void) {
 }
 
 int MemoryAllocUserPage(void) {
-  int addr = findFreePage()*MEM_PAGESIZE;
-  addr &= ~MEM_ADDRESS_PAGE_MASK;
+  int page = findFreePage();
+  int addr = page*MEM_PAGESIZE;
+  addr &= invert(MEM_ADDRESS_PAGE_MASK);
+  refCtr[page] = 1;
   return addr | MEM_PTE_VALID;
 }
 
 int MemoryAllocSysPage(void) {
   int page = findFreePage();
   int addr = page*MEM_PAGESIZE;
+  refCtr[page] = 1;
   return addr;
 }
 
@@ -270,12 +278,24 @@ uint32 MemorySetupPte (uint32 page) {
   return -1;
 }
 
+// Just increments counter for when pages are copied in RealFork
+int MemoryUpdateReference(uint32 page){
+  refCtr[page/MEM_PAGESIZE]++;
+}
 
 void MemoryFreePage(uint32 page) {
   int idx;
   int bit;
+  
   page /= MEM_PAGESIZE;
-  idx = (int)(page / 32);
-  bit = page % 32;
-  freemap[idx] &= invert(1<<bit);
+  printf("Freeing page 0x%x, %d {%d}!\n", page, refCtr[page], GetCurrentPid());
+  if(refCtr[page] > 0){
+    refCtr[page]--;
+  }
+  else{
+    printf("Free\n");
+    idx = (int)(page / 32);
+    bit = page % 32;
+    freemap[idx] &= invert(1<<bit);
+  }
 }
